@@ -428,7 +428,7 @@ function showEqDetail(id){
   var d=document.getElementById("epdetail");
   if(!d)return;
   var sp="";
-  if(eq.sp)sp='<div style=color:#ff6644>🔥'+eq.sp.n+':'+eq.sp.v+'</div>';
+  if(eq.sp)sp='<div style=color:#ff6644>'+eq.sp.n+':'+eq.sp.v+'</div>';
   var lv=eq.eqLevel||1;
   var maxLv=G.lv*2;
   var cost=lv*50+(eq.q+1)*20;
@@ -436,16 +436,13 @@ function showEqDetail(id){
   var isEq=G.eq[sk]&&G.eq[sk].id===eq.id;
   var btn;
   if(isEq){
-    btn='<button class="bt bs br" onclick="EQ_UNEQUIP('+eq.id+')">⬇卸下</button>';
+    btn='<button class="bt bs br" onclick="Q('+id+',0)">\u2b07\u5378\u4e0b</button>';
   }else{
-    btn='<button class="bt bs bg" onclick="EQ_EQUIP('+eq.id+')">⚔装备</button>';
+    btn='<button class="bt bs bg" onclick="Q('+id+',1)">\u2694\u88c5\u5907</button>';
   }
-  d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>⚔攻击:'+eq.atk+'<br>❤生命:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+btn+'<button class="bt bs" onclick="EQ_STRENGTHEN('+eq.id+')" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">⬆强化 ['+cost+'💰]</button><button class="bt bs br" onclick="DECOMPOSE('+eq.id+')">🗑分解</button></div></div>';
+  d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>\u2694\u653b\u51fb:'+eq.atk+'<br>\u2764\u751f\u547d:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+btn+'<button class="bt bs" onclick="Q('+id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">\u2b06\u5f3a\u5316 ['+cost+'\ud83d\udcb0]</button><button class="bt bs br" onclick="Q('+id+',3)">\ud83d\uddd1\u5206\u89e3</button></div></div>';
   d.dataset.eqid=eq.id;
-}function EQ2(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(ei<0)return;var eq=G.eqb[ei];var sk=["w","a","h","b","r","p"][eq.ti];if(G.eq[sk]){ST("该部位已有装备，请先卸下",1500);return}G.eq[sk]=eq;G.eqb.splice(ei,1);ST("装备了"+eq.n,1500);SV();UEQ();PE()}
-function EQ_SLOT_CLICK(sk){var eq=G.eq[sk];if(!eq){ST("空槽",1500);return}EQ_DIALOG(eq,"slot")}
-
-function EQ_EQUIP(id){
+}function EQ_EQUIP(id){
   var ei=G.eqb.findIndex(function(e){return e.id===id});
   if(ei<0){ST('装备不存在',2000);return}
   var eq=G.eqb[ei];
@@ -468,6 +465,50 @@ function EQ_UNEQUIP(id){
     }
   }
   ST('装备不存在',2000);
+}
+
+function Q(id,t){
+  if(t===1){
+    var ei=G.eqb.findIndex(function(e){return e.id===id});
+    if(ei<0){ST("no",2000);return}
+    var eq=G.eqb[ei];
+    var sk=["w","a","h","b","r","p"][eq.ti];
+    if(G.eq[sk]){G.eqb.push(G.eq[sk])}
+    G.eq[sk]=eq;
+    G.eqb.splice(ei,1);
+    ST("ok"+eq.n,1500);SV();UEQ();UA();
+  }else if(t===0){
+    var ks=["w","a","h","b","r","p"];
+    for(var zi=0;zi<ks.length;zi++){
+      if(G.eq[ks[zi]]&&G.eq[ks[zi]].id===id){
+        G.eqb.push(G.eq[ks[zi]]);G.eq[ks[zi]]=null;
+        ST("uneq",1500);SV();UEQ();UA();return;
+      }
+    }
+    ST("no",2000);
+  }else if(t===2){
+    var ei=G.eqb.findIndex(function(e){return e.id===id});
+    if(ei<0)return;
+    var eq=G.eqb[ei];
+    if(!eq.eqLevel)eq.eqLevel=1;
+    var maxLv=G.lv*2;
+    if(eq.eqLevel>=maxLv){ST("max"+maxLv,1500);return}
+    var cost=eq.eqLevel*50+(eq.q+1)*20;
+    if(G.g<cost){ST("need"+cost,1500);return}
+    G.g-=cost;eq.eqLevel++;
+    eq.atk=Math.floor(eq.atk*1.15);
+    eq.hp=Math.floor(eq.hp*1.15);
+    ST("up"+eq.n+"Lv"+eq.eqLevel,1500);
+    SV();UA();UEQ();showEqDetail(eq.id);
+  }else if(t===3){
+    var ei=G.eqb.findIndex(function(e){return e.id===id});
+    if(ei<0)return;
+    var eq=G.eqb[ei];
+    var g=[5,15,30,50,80][eq.q];
+    G.g+=g;G.eqb.splice(ei,1);
+    ST("decom"+g,1500);SV();UEQ();
+    var d=document.getElementById("epdetail");if(d)d.innerHTML="";
+  }
 }
 init();
 
