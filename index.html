@@ -421,7 +421,8 @@ function init(){
   }
 
 function EQ_STRENGTHEN(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(ei<0)return;var eq=G.eqb[ei];if(!eq.eqLevel)eq.eqLevel=1;var maxLv=G.lv*2;if(eq.eqLevel>=maxLv){ST("已达等级上限Lv."+maxLv,1500);return}var cost=eq.eqLevel*50+(eq.q+1)*20;if(G.g<cost){ST("金币不足，需"+cost+"💰",1500);return}G.g-=cost;eq.eqLevel++;eq.atk=Math.floor(eq.atk*1.15);eq.hp=Math.floor(eq.hp*1.15);ST("⬆"+eq.n+"强化至Lv."+eq.eqLevel,1500);SV();UA();UEQ();showEqDetail(eq.id)}
-function DECOMPOSE(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(ei<0)return;var eq=G.eqb[ei];var g=[5,15,30,50,80][eq.q];G.g+=g;G.eqb.splice(ei,1);ST(QN[eq.q]+"装备已分解，获得"+g+"金币",1500);SV();UEQ();PE();var d=document.getElementById("epdetail");if(d)d.innerHTML=""}
+function DECOMPOSE(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(ei<0)return;var eq=G.eqb[ei];var g=[5,15,30,50,80][eq.q];G.g+=g;G.eqb.splice(ei,1);ST(QN[eq.q]+"装备已分解，获得"+g+"金币",1500);SV();UEQ();;var d=document.getElementById("epdetail");if(d)d.innerHTML=""}
+
 function showEqDetail(id){
   var eq=G.eqb.find(function(e){return e.id===id});
   if(!eq)return;
@@ -435,70 +436,42 @@ function showEqDetail(id){
   var sk=["w","a","h","b","r","p"][eq.ti];
   var isEq=G.eq[sk]&&G.eq[sk].id===eq.id;
   var btn;
-  if(isEq){
-    btn='<button class="bt bs br" onclick="Q('+id+',0)">\u2b07\u5378\u4e0b</button>';
-  }else{
-    btn='<button class="bt bs bg" onclick="Q('+id+',1)">\u2694\u88c5\u5907</button>';
-  }
-  d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>\u2694\u653b\u51fb:'+eq.atk+'<br>\u2764\u751f\u547d:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+btn+'<button class="bt bs" onclick="Q('+id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">\u2b06\u5f3a\u5316 ['+cost+'\ud83d\udcb0]</button><button class="bt bs br" onclick="Q('+id+',3)">\ud83d\uddd1\u5206\u89e3</button></div></div>';
+  if(isEq){btn='<button class="bt bs br" onclick=Q('+id+',0)>⬇卸下</button>'}
+  else{btn='<button class="bt bs bg" onclick=Q('+id+',1)>⚔装备</button>'}
+  d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>⚔攻击:'+eq.atk+'<br>❤生命:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+btn+'<button class="bt bs" onclick=Q('+id+',2) style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">⬆强化 ['+cost+'💰]</button><button class="bt bs br" onclick=Q('+id+',3)>🗑分解</button></div></div>';
   d.dataset.eqid=eq.id;
-}function EQ_EQUIP(id){
-  var ei=G.eqb.findIndex(function(e){return e.id===id});
-  if(ei<0){ST('装备不存在',2000);return}
-  var eq=G.eqb[ei];
-  var sk=["w","a","h","b","r","p"][eq.ti];
-  if(G.eq[sk]){G.eqb.push(G.eq[sk])}
-  G.eq[sk]=eq;
-  G.eqb.splice(ei,1);
-  ST('装备了'+eq.n,1500);
-  SV();UEQ();UA();
 }
-function EQ_UNEQUIP(id){
-  var ks=["w","a","h","b","r","p"];
-  for(var zi=0;zi<ks.length;zi++){
-    if(G.eq[ks[zi]]&&G.eq[ks[zi]].id===id){
-      G.eqb.push(G.eq[ks[zi]]);
-      G.eq[ks[zi]]=null;
-      ST('已卸下',1500);
-      SV();UEQ();UA();
-      return;
-    }
-  }
-  ST('装备不存在',2000);
-}
-
 function Q(id,t){
   if(t===1){
     var ei=G.eqb.findIndex(function(e){return e.id===id});
-    if(ei<0){ST("no",2000);return}
+    if(ei<0){ST('no',2000);return}
     var eq=G.eqb[ei];
     var sk=["w","a","h","b","r","p"][eq.ti];
     if(G.eq[sk]){G.eqb.push(G.eq[sk])}
     G.eq[sk]=eq;
     G.eqb.splice(ei,1);
-    ST("ok"+eq.n,1500);SV();UEQ();UA();
+    ST('ok'+eq.n,1500);SV();UEQ();UA();
   }else if(t===0){
     var ks=["w","a","h","b","r","p"];
     for(var zi=0;zi<ks.length;zi++){
       if(G.eq[ks[zi]]&&G.eq[ks[zi]].id===id){
         G.eqb.push(G.eq[ks[zi]]);G.eq[ks[zi]]=null;
-        ST("uneq",1500);SV();UEQ();UA();return;
+        ST('uneq',1500);SV();UEQ();UA();return;
       }
     }
-    ST("no",2000);
+    ST('no',2000);
   }else if(t===2){
     var ei=G.eqb.findIndex(function(e){return e.id===id});
     if(ei<0)return;
     var eq=G.eqb[ei];
     if(!eq.eqLevel)eq.eqLevel=1;
     var maxLv=G.lv*2;
-    if(eq.eqLevel>=maxLv){ST("max"+maxLv,1500);return}
+    if(eq.eqLevel>=maxLv){ST('max'+maxLv,1500);return}
     var cost=eq.eqLevel*50+(eq.q+1)*20;
-    if(G.g<cost){ST("need"+cost,1500);return}
+    if(G.g<cost){ST('need'+cost,1500);return}
     G.g-=cost;eq.eqLevel++;
-    eq.atk=Math.floor(eq.atk*1.15);
-    eq.hp=Math.floor(eq.hp*1.15);
-    ST("up"+eq.n+"Lv"+eq.eqLevel,1500);
+    eq.atk=Math.floor(eq.atk*1.15);eq.hp=Math.floor(eq.hp*1.15);
+    ST('up'+eq.n+'Lv'+eq.eqLevel,1500);
     SV();UA();UEQ();showEqDetail(eq.id);
   }else if(t===3){
     var ei=G.eqb.findIndex(function(e){return e.id===id});
@@ -506,9 +479,25 @@ function Q(id,t){
     var eq=G.eqb[ei];
     var g=[5,15,30,50,80][eq.q];
     G.g+=g;G.eqb.splice(ei,1);
-    ST("decom"+g,1500);SV();UEQ();
-    var d=document.getElementById("epdetail");if(d)d.innerHTML="";
+    ST('decom'+g,1500);SV();UEQ();
+    var d=document.getElementById('epdetail');if(d)d.innerHTML='';
   }
+}
+function init(){
+  LD();OA();CE=ME(G.s);UA();
+  document.querySelectorAll("#tb button").forEach(function(b){b.onclick=function(){document.querySelectorAll("#tb button").forEach(function(x){x.classList.remove("a")});document.querySelectorAll(".pn").forEach(function(p){p.classList.remove("a")});this.classList.add("a");document.getElementById("p"+this.dataset.tab).classList.add("a");if(this.dataset.tab==="f")UF()}});
+  document.getElementById("bob").onclick=SB;
+  document.getElementById("boa").onclick=function(){G.auto=!G.auto;this.textContent=G.auto?"⏹️自动":"⏹️停止";if(G.auto)SB()};
+  document.getElementById("br1").onclick=function(){DR(1)};document.getElementById("br10").onclick=function(){DR(10)};
+  document.getElementById("bom").onclick=DM;document.getElementById("bad").onclick=AD;document.getElementById("bcf").onclick=CF;
+  document.getElementById("sb1").onclick=B1;document.getElementById("sb2").onclick=B2;document.getElementById("scg").onclick=CG;
+  document.getElementById("sua").onclick=UA2;document.getElementById("suh").onclick=UH2;
+  document.getElementById("mcc").onclick=function(){document.getElementById("md").classList.remove("s")};
+  document.getElementById("dgClose").onclick=function(){document.getElementById("dgModal").classList.remove("s")};
+  document.getElementById("dgFight").onclick=DG_START;
+  document.getElementById("dgModal").onclick=function(e){if(e.target===document.getElementById("dgModal"))document.getElementById("dgModal").classList.remove("s")};
+  document.getElementById("md").onclick=function(e){if(e.target===document.getElementById("md"))document.getElementById("md").classList.remove("s")};
+  AS();IL();setInterval(UA,3000);
 }
 init();
 
