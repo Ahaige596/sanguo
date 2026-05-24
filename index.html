@@ -426,19 +426,27 @@ function DECOMPOSE(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(
 function showEqDetail(id){
   var eq=G.eqb.find(function(e){return e.id===id});
   if(!eq)return;
-  var d=document.getElementById("epdetail");
+  var d=document.getElementById('epdetail');
   if(!d)return;
-  var sp="";
+  var sp='';
   if(eq.sp)sp='<div style=color:#ff6644>'+eq.sp.n+':'+eq.sp.v+'</div>';
   var lv=eq.eqLevel||1;
   var maxLv=G.lv*2;
   var cost=lv*50+(eq.q+1)*20;
-  var sk=["w","a","h","b","r","p"][eq.ti];
+  var sk=['w','a','h','b','r','p'][eq.ti];
   var isEq=G.eq[sk]&&G.eq[sk].id===eq.id;
-  var btn;
-  if(isEq){btn='<button class="bt bs br" onclick="Q('+id+',0)">\u2b07\u5378\u4e0b</button>'}
-  else{btn='<button class="bt bs bg" onclick="Q('+id+',1)">\u2694\u88c5\u5907</button>'}
-  d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>\u2694\u653b\u51fb:'+eq.atk+'<br>\u2764\u751f\u547d:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+btn+'<button class="bt bs" onclick="Q('+id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">\u2b06\u5f3a\u5316 ['+cost+'\ud83d\udcb0]</button><button class="bt bs br" onclick="Q('+id+',3)">\ud83d\uddd1\u5206\u89e3</button></div></div>';
+  var btn=isEq?
+    '<button class="bt bs br" onclick="Q('+id+',0)">&#11015;&#33073;&#19979;</button>':
+    '<button class="bt bs bg" onclick="Q('+id+',1)">&#9876;&#35013;&#22791;</button>';
+  d.innerHTML='<div class=epdetail-card>'+
+    '<div class=eicon>'+eq.i+'</div>'+
+    '<div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div>'+
+    '<div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div>'+
+    '<div class=estats>&#9876;&#25915;&#20987;:'+eq.atk+'<br>&#10084;&#29983;&#21629;:'+eq.hp+(sp?'<br>'+sp:'')+'</div>'+
+    '<div class=fc style="flex-wrap:wrap">'+btn+
+      '<button class="bt bs" onclick="Q('+id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">&#11014;&#24378;&#21270; ['+cost+'&#128176;]</button>'+
+      '<button class="bt bs br" onclick="Q('+id+',3)">&#128465;&#20998;&#35299;</button>'+
+    '</div></div>';
   d.dataset.eqid=eq.id;
 }function Q(id,t){
   if(t===1){
