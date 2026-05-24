@@ -275,9 +275,7 @@ function SWEEP(mode){
 
 // 2.秘境副本 - 专门刷经验和装备
 var DG={}; // {started:0, stage:1, maxStage:1, energy:5, maxEnergy:5}
-function DG_INIT(){G.dg=G.dg||{stage:1,started:0,energy:5}
-  //{started:0,stage:1,maxStage:1,energy:5,maxEnergy:5}}
-}
+function DG_INIT(){try{G.dg=G.dg||{stage:1,started:0,energy:5};}catch(e){G.dg={stage:1,started:0,energy:5}}}
 
 
 
@@ -433,7 +431,43 @@ init();
 
 
 
-document.addEventListener('click',function(e){var btn=e.target.closest('button[data-act]');if(!btn)return;var act=btn.dataset.act;var id=parseInt(btn.dataset.id);if(act==='eq')EQ2(id);else if(act==='uneq')EQ_SLOT_CLICK(['w','a','h','b','r','p'][G.eqb.find(function(eq){return eq.id===id}).ti]);else if(act==='strengthen')EQ_STRENGTHEN(id);else if(act==='decompose')DECOMPOSE(id);});
+document.addEventListener('click',function(e){
+  var btn=e.target.closest('button[data-act]');
+  if(!btn)return;
+  var act=btn.dataset.act;
+  var id=parseInt(btn.dataset.id);
+  if(act==='eq'){
+    var ei = G.eqb.findIndex(function(eq){return eq.id===id});
+    if(ei>=0){
+      var eq=G.eqb[ei];
+      var sk=['w','a','h','b','r','p'][eq.ti];
+      if(G.eq[sk]){G.eqb.push(G.eq[sk])}
+      G.eq[sk]=eq;
+      G.eqb.splice(ei,1);
+      ST('装备了'+eq.n,1500);
+      SV();UEQ();UA();
+    } else {
+      ST('装备不存在',2000);
+    }
+  }
+  else if(act==='uneq'){
+    var ks=['w','a','h','b','r','p'];
+    var found=false;
+    for(var zi=0;zi<ks.length;zi++){
+      if(G.eq[ks[zi]]&&G.eq[ks[zi]].id===id){
+        G.eqb.push(G.eq[ks[zi]]);
+        G.eq[ks[zi]]=null;
+        ST('已卸下',1500);
+        found=true;
+        SV();UEQ();UA();
+        break;
+      }
+    }
+    if(!found)ST('装备不存在',2000);
+  }
+  else if(act==='strengthen')EQ_STRENGTHEN(id);
+  else if(act==='decompose')DECOMPOSE(id);
+});
 </script><div class="md" id="dgModal" onclick="if(event.target===this)this.classList.remove('s')">
   <div class="mbx" style="max-width:420px;background:linear-gradient(145deg,#0a0a1a,#1a0a2a);border-color:#6040a0">
     <button class="mc" id="dgClose" onclick="document.getElementById('dgModal').classList.remove('s')">&times;</button>
