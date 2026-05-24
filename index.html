@@ -436,12 +436,11 @@ function showEqDetail(id){
   var sk=["w","a","h","b","r","p"][eq.ti];
   var isEq=G.eq[sk]&&G.eq[sk].id===eq.id;
   var btn;
-  if(isEq){btn='<button class="bt bs br" onclick=Q('+id+',0)>⬇卸下</button>'}
-  else{btn='<button class="bt bs bg" onclick=Q('+id+',1)>⚔装备</button>'}
-  d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>⚔攻击:'+eq.atk+'<br>❤生命:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+btn+'<button class="bt bs" onclick=Q('+id+',2) style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">⬆强化 ['+cost+'💰]</button><button class="bt bs br" onclick=Q('+id+',3)>🗑分解</button></div></div>';
+  if(isEq){btn='<button class="bt bs br" onclick="X('+id+',0)">\u2b07\u5378\u4e0b</button>'}
+  else{btn='<button class="bt bs bg" onclick="X('+id+',1)">\u2694\u88c5\u5907</button>'}
+  d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>\u2694\u653b\u51fb:'+eq.atk+'<br>\u2764\u751f\u547d:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+btn+'<button class="bt bs" onclick="X('+id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">\u2b06\u5f3a\u5316 ['+cost+'\ud83d\udcb0]</button><button class="bt bs br" onclick="X('+id+',3)">\ud83d\uddd1\u5206\u89e3</button></div></div>';
   d.dataset.eqid=eq.id;
-}
-function Q(id,t){
+}function X(id,t){
   if(t===1){
     var ei=G.eqb.findIndex(function(e){return e.id===id});
     if(ei<0){ST('no',2000);return}
