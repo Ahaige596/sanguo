@@ -440,9 +440,12 @@ function showEqDetail(id){
   var cost=lv*50+(eq.q+1)*20;
   var sk=['w','a','h','b','r','p'][eq.ti];
   var isEq=G.eq[sk]&&G.eq[sk].id===eq.id;
-  var btn=isEq?
-    '<button class="bt bs br" onclick="Q('+id+',0)">&#11015;&#33073;&#19979;</button>':
-    '<button class="bt bs bg" onclick="Q('+id+',1)">&#9876;&#35013;&#22791;</button>';
+  var lkBtn=eq.lk?
+    '<button class="bt bs" style="background:linear-gradient(135deg,#6a6a2a,#8a8a3a);font-size:10px" onclick="Q('+id+',4)">🔓解锁</button>':
+    '<button class="bt bs" style="background:linear-gradient(135deg,#3a3a2a,#5a5a3a);font-size:10px" onclick="Q('+id+',4)">🔒上锁</button>';
+var btn=isEq?
+    '<button class="bt bs br" onclick="Q('+id+',0)">⬇卸下</button>':
+    '<button class="bt bs bg" onclick="Q('+id+',1)">⚔装备</button>';
   d.innerHTML='<div class=epdetail-card>'+
     '<div class=eicon>'+eq.i+'</div>'+
     '<div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div>'+
@@ -489,10 +492,19 @@ function showEqDetail(id){
     var ei=G.eqb.findIndex(function(e){return e.id===id});
     if(ei<0)return;
     var eq=G.eqb[ei];
+    if(eq.lk){ST("已锁定，请先解锁",2e3);return}
     var g=[5,15,30,50,80][eq.q];
     G.g+=g;G.eqb.splice(ei,1);
     ST('decom'+g,1500);SV();UEQ();
     var d=document.getElementById('epdetail');if(d)d.innerHTML='';
+  }
+
+  }else if(t===4){
+    var ei=G.eqb.findIndex(function(e){return e.id===id});
+    if(ei<0)return;
+    G.eqb[ei].lk=!G.eqb[ei].lk;
+    SV();showEqDetail(id);
+    ST(G.eqb[ei].lk?"锁定了":"已解锁",1500);
   }
 }
 function init(){
