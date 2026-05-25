@@ -339,13 +339,23 @@ function TB(){
 function SF(t,c){var el=document.createElement("div");el.className="fdm "+(c==="c"?"fdd":"fd");el.textContent=t;var a=document.getElementById("ba");el.style.left=(30+Math.random()*40)+"%";el.style.top="25%";a.appendChild(el);setTimeout(function(){el.remove()},700)}
 function UBU(){
   var c=document.getElementById("fhs");c.innerHTML="";
+  var frontIds=[],backIds=[];
   for(var i=0;i<G.fm.length;i++){
-    var id=G.fm[i];var h=GH(id);var fh=FH[id];if(!h)continue;
-    var p=fh?Math.max(0,Math.floor((fh.hp/fh.mhp)*100)):100;
-    var an=fh?fh.an||0:0;
-    var cs='';if(h.cls!==void 0)cs=CLASS_EMOJI[h.cls]||'';else cs=CLASS_EMOJI[assignClass(h)]||'';
-    c.innerHTML+='<div class="fb"><div class=fi>'+h.i+'</div><div class=fn>'+cs+h.n+'</div><div class=fbar style="margin-bottom:1px"><div class=ff style=width:'+p+'%></div></div><div class=fbar style=height:3px><div class=ff style=width:'+an+'%;background:linear-gradient(90deg,#d4a017,#ffcc44);border-radius:2px></div></div></div>';
+    var id=G.fm[i];var h=GH(id);if(!h)continue;
+    var hc=h.cls!==void 0?h.cls:assignClass(h);
+    if(hc===0)frontIds.push(id);else backIds.push(id);
   }
+  function _renderIds(ids){
+    ids.forEach(function(id){
+      var h=GH(id);var fh=FH[id];if(!h)return;
+      var p=fh?Math.max(0,Math.floor((fh.hp/fh.mhp)*100)):100;
+      var an=fh?fh.an||0:0;
+      var cs='';if(h.cls!==void 0)cs=CLASS_EMOJI[h.cls]||'';else cs=CLASS_EMOJI[assignClass(h)]||'';
+      c.innerHTML+='<div class="fb" style=min-width:56px><div class=fi>'+h.i+'</div><div class=fn>'+cs+h.n+'</div><div class=fbar style=margin-bottom:1px><div class=ff style=width:'+p+'%></div></div><div class=fbar style=height:3px><div class=ff style=width:'+an+'%;background:linear-gradient(90deg,#d4a017,#ffcc44);border-radius:2px></div></div></div>';
+    });
+  }
+  c.innerHTML+='<div style=display:flex;flex-direction:column;align-items:center;gap:4px><div style=font-size:10px;color:#d4a017>🛡️肉盾</div><div style=display:flex;flex-direction:column;gap:4px>';_renderIds(frontIds);c.innerHTML+='</div></div>';
+  c.innerHTML+='<div style=display:flex;flex-direction:column;align-items:center;gap:4px><div style=font-size:10px;color:#60c0ff>⚔️输出</div><div style=display:flex;flex-direction:column;gap:4px>';_renderIds(backIds);c.innerHTML+='</div></div>';
   if(CE){
     var eic=document.getElementById("eic");eic.textContent=CE.i;eic.className="eic"+(CE.isBoss?" b":"");
     var en=document.getElementById("enm");en.textContent=CE.n+" ("+SR(G.s,G.ss)+")";en.className="enm"+(CE.isBoss?" b":"");
