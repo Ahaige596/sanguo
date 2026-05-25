@@ -200,6 +200,7 @@ function SAVE_NICKNAME(){
   if(!i)return;
   var v=i.value.trim().substring(0,6);
   if(!v){ST("昵称不能为空");return}
+  var badwords=["毛泽东","习近平","共产党","共党","法轮功","六四","天安门","郓小平","江泽民","胡锦涛","温家宝","周永康","薄熙来","令计划","赵紫阳","李克强","王岐山","惟尼","包子","独裁","专制","共匪","暴政","fuck","草你妈","操你妈","傻逼","傻B","妈的","他妈的","去死","垃圾","废物","死全家","尼玛","滚蛋","nmsl","cnm","wcnm","沙逼","烢笔","狗日","日你","狗屁","蠢货","脑残","疯子","变态","恶心","贱人","妓女","畜生","杂种","婁子","狗娘"];  for(var bi=0;bi<badwords.length;bi++){if(v.indexOf(badwords[bi])>=0){ST("昵称包含不当内容");return}}
   var ts=G.nrn||0;
   if(ts>0&&Date.now()-ts<259200000){
     var left=259200000-(Date.now()-ts);
