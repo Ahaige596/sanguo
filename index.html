@@ -835,7 +835,7 @@ function BACKPACK_RENDER(heroId){
   for(var ti=0;ti<6;ti++){html+='<span class="bptab" onclick="window._eqFilter='+ti+';UEQ()">'+icons[ti]+' '+types[ti]+'</span>'}
   html+='</div>';
  
-html+='<div class="eqbtns">';
+html+='<div class="eqbtns" style="display:flex;gap:5px;flex-wrap:wrap;margin:5px 0;justify-content:center">';
 for(var qi=0;qi<5;qi++){html+='<span style="border:1px solid '+QC[qi]+';color:'+QC[qi]+';padding:3px 8px;font-size:11px;cursor:pointer;border-radius:4px" onclick="SALVAGE_ALL('+qi+')">🗑️'+QN[qi]+'</span>'}
 html+='</div>';
 
