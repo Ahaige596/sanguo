@@ -101,23 +101,23 @@ function ARENA_REFRESH(){
 }
 function ARENA_FIGHT(rnk){
   if(G.af<=0){ST("挑战次数已用完！每日刷新");return}
-  var ranks=[];
+  var rankList=[];
   var myIdx=-1;
   for(var i=0;i<100;i++){
     var ri=G.ar&&G.ar[i]?G.ar[i]:null;
     if(ri&&ri.p&&ri.p.indexOf("你")>=0)myIdx=i;
-    var ranks={r:i+1};
-    if(ri&&!(ri.isNPC))ranks.isPlayer=true;
+    var rItem={r:i+1};
+    if(ri&&!(ri.isNPC))rItem.isPlayer=true;
     if(!ri||myIdx<0){
       var n=ARENA_GEN_NPC(i,ARENA_SEED);
-      ranks.n=n.n;ranks.q=n.q;ranks.lv=n.lv;ranks.a=n.a;ranks.h=n.h;
-      ranks.pw=n.pw;ranks.sk=n.sk;ranks.isNPC=true;ranks.title=n.title
+      rItem.n=n.n;rItem.q=n.q;rItem.lv=n.lv;rItem.a=n.a;rItem.h=n.h;
+      rItem.pw=n.pw;rItem.sk=n.sk;rItem.isNPC=true;rItem.title=n.title
     }else{
-      ranks.n=ri.n||ri.nome||"未知";ranks.pw=ri.pw||0
+      rItem.n=ri.n||ri.nome||"未知";rItem.pw=ri.pw||0
     }
-    ranks.push(ranks)
+    rankList.push(rItem)
   }
-  var target=ranks[rnk-1];
+  var target=rankList[rnk-1];
   if(!target){ST("目标无效");return}
   G.af--;
   var n=target;
