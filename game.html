@@ -37,7 +37,7 @@ function BACKPACK_RENDER(heroId){
   for(var ti=0;ti<6;ti++){html+='<span class="bptab" onclick="window._eqFilter='+ti+';UEQ()">'+icons[ti]+' '+types[ti]+'</span>'}
   html+='</div>';
   
-html+='<div class="fc" style="margin:4px 0;gap:4px">';
+html+='<div class="eqbtns">';
 for(var qi=0;qi<5;qi++){html+='<button class="bt" onclick="SALVAGE_ALL('+qi+')">🗑️分解'+QN[qi]+'</button>'}
 html+='</div>';
 html+='<div class="bpgrid">';
