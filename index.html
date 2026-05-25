@@ -1565,42 +1565,17 @@ function DECOMPOSE(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(
 
 function ESL_CLICK(heroId,eqId){var eq;var ks=["w","a","h","b","r","p"];for(var i=0;i<6;i++){if(G.eq[ks[i]]&&G.eq[ks[i]].id===id){eq=G.eq[ks[i]];break}}if(!eq)return;var d=document.getElementById("epdetail");if(!d)return;var sp='';if(eq.sp)sp='<div style=color:#ff6644>'+eq.sp.n+':'+eq.sp.v+'</div>';var lv=eq.eqLevel||1;var maxLv=G.lv*2;var cost=lv*50+(eq.q+1)*20;var htm='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>&#9876;&#25915;&#20987;:'+eq.atk+'<br>&#10084;&#29983;&#21629;:'+eq.hp+(sp?'<br>'+sp:'')+'</div>';htm+='<div class=fc style="flex-wrap:wrap"><button class="bt bs br" onclick="Q('+id+',0)">&#11015;&#33073;&#19979;</button><button class="bt bs" onclick="Q('+id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">&#11014;&#24378;&#21270; ['+cost+'&#128176;]</button><button class="bt bs br" onclick="Q('+id+',3)">&#128465;&#20998;&#35299;</button></div></div>';htm+='<div style=margin-top:12px;padding-top:8px;border-top:1px solid rgba(139,105,20,.15)><div style=font-size:13px;color:#f0d060;margin-bottom:6px>&#128073; \u540c\u7c7b\u578b\u80cc\u5305\u88c5\u5907\u5bf9\u6bd4:</div>';var bp=G.eqb.filter(function(e){return e.ti===eq.ti});if(!bp.length){htm+='<div style=font-size:12px;color:#605040>\u5305\u4e2d\u65e0\u540c\u7c7b\u578b\u88c5\u5907</div>'}else{for(var j=0;j<bp.length;j++){var be=bp[j];htm+='<div style="display:inline-flex;flex-direction:column;align-items:center;padding:8px 10px;margin:4px;border-radius:8px;border:1.5px solid '+QC[be.q]+';background:rgba(0,0,0,.3);cursor:pointer" onclick="showEqDetail('+be.id+')"><div style=font-size:20px>'+be.i+'</div><div style=font-size:11px;font-weight:700;color:'+QC[be.q]+'>'+be.n+'</div><div style=font-size:9px;color:#aaa>&#9876;'+be.atk+' &#10084;'+be.hp+'</div></div>'}}htm+='</div>';d.innerHTML=htm;d.dataset.eqid=eq.id;}
 function showEqDetail(heroId,eqId){var eq;if(eqId){eq=G.eqb.find(function(e){return e.id===eqId});}else{eq=G.eqb.find(function(e){return e.id===heroId});eqId=heroId;heroId=0;}
-  var eq=G.eqb.find(function(e){return e.id===id});
-  if(!eq)return;
   var d=document.getElementById('epdetail');
   if(!d)return;
-  var sp='';
-  if(eq.sp)sp='<div style=color:#ff6644>'+eq.sp.n+':'+eq.sp.v+'</div>';
-  var lv=eq.eqLevel||1;
-  var maxLv=G.lv*2;
-  var cost=lv*50+(eq.q+1)*20;
+  var sp='';if(eq.sp)sp='<div style=color:#ff6644>'+eq.sp.n+':'+eq.sp.v+'</div>';
+  var lv=eq.eqLevel||1;var maxLv=G.lv*2;var cost=lv*50+(eq.q+1)*20;
   var sk=['w','a','h','b','r','p'][eq.ti];
   var isEq=G.eq[sk]&&G.eq[sk].id===eq.id;
-  var btn=isEq?
-    '<button class="bt bs br" onclick="Q('+id+',0)">&#11015;&#33073;&#19979;</button>':
-    '<button class="bt bs bg" onclick="Q('+id+',1)">&#9876;&#35013;&#22791;</button>';
-  var lkBtn=eq.lk?
-    '<button class="bt bs" style="background:linear-gradient(135deg,#6a6a2a,#8a8a3a);font-size:10px" onclick="Q('+id+',4)">🔓解锁</button>':
-    '<button class="bt bs" style="background:linear-gradient(135deg,#3a3a2a,#5a5a3a);font-size:10px" onclick="Q('+id+',4)">🔒上锁</button>';
-  d.innerHTML='<div class=epdetail-card>'+
-    '<div class=eicon>'+eq.i+'</div>'+
-    '<div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div>'+
-    '<div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div>'+
-    '<div class=estats>&#9876;&#25915;&#20987;:'+eq.atk+'<br>&#10084;&#29983;&#21629;:'+eq.hp+(sp?'<br>'+sp:'')+'</div>'+
-    '<div class=fc style="flex-wrap:wrap">'+lkBtn+btn+
-      '<button class="bt bs" onclick="Q('+id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">&#11014;&#24378;&#21270; ['+cost+'&#128176;]</button>'+
-      '<button class="bt bs br" onclick="Q('+id+',3)">&#128465;&#20998;&#35299;</button>'+
-    '</div></div>';
+  var btn=isEq?'<button class="bt bs br" onclick="Q('+heroId+','+eq.id+',0)">⬇脱下</button>':'<button class="bt bs bg" onclick="Q('+heroId+','+eq.id+',1)">⚔装备</button>';
+  var lkBtn=eq.lk?'<button class="bt bs" style="background:linear-gradient(135deg,#6a6a2a,#8a8a3a);font-size:10px" onclick="Q('+heroId+','+eq.id+',4)">🔓解锁</button>':'<button class="bt bs" style="background:linear-gradient(135deg,#3a3a2a,#5a5a3a);font-size:10px" onclick="Q('+heroId+','+eq.id+',4)">🔒上锁</button>';
+  d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>⚔攻击:'+eq.atk+'<br>❤生命:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+lkBtn+btn+'<button class="bt bs" onclick="Q('+heroId+','+eq.id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">⬆强化 ['+cost+'💰]</button><button class="bt bs br" onclick="Q('+heroId+','+eq.id+',3)">🗑分解</button></div></div>';
   d.dataset.eqid=eq.id;
-
-
-
-
-  
-}
-
-
-function Q(heroId,eqId,action){
+}function Q(heroId,eqId,action){
   if(heroId===null||heroId===void 0){heroId=window._equipHero||0}
 
   var h=GH(heroId);if(!h){ST("武将不存在",1500);return}
