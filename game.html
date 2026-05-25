@@ -48,22 +48,18 @@ for(var ei=0;ei<ec;ei++){var e=p[isBoss?R(0,9):(ei+Math.floor((s_-1)/3))%10];var
 var ARENA_SEED=R(1,999999);
 function ARENA_SHA(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return Math.abs(h)}
 function ARENA_GEN_NPC(idx,seed){
+  var rankRatio=Math.max(0.1, 1 - idx * 0.009);
+  var basePW=G.s * 80 + 200;
+  var pw=Math.max(10, Math.floor(basePW * rankRatio));
   var h=ARENA_SHA("arena"+idx+seed);
-  var h2=ARENA_SHA("a2"+idx+seed);
-  var rankFactor=Math.max(0.2,1-idx*0.008); // 排名越靠前越强，100名时0.2
-  var q=Math.min(4,Math.floor(h%5));
-  var lv=Math.max(1,Math.floor(G.s*rankFactor+Math.floor(h%3)-1));
-  var baseAtk=G.s*4+20;
-  var baseHp=G.s*12+60;
-  var a=Math.floor(baseAtk*rankFactor+Math.floor(h%10)+q*15);
-  var h3=Math.floor(baseHp*rankFactor+Math.floor(h2%20)+q*25);
-  var at=Math.max(1,Math.floor(a*(1+(q||1)*0.1)));
-  var ht=Math.max(1,Math.floor(h3*(1+(q||1)*0.1)));
+  pw+=Math.floor(h%21)-10;
+  var q=idx<3?4:(idx<8?3:(idx<20?2:(idx<40?1:0)));
   var sk=null;
   var skp=SKILL_POOL[q];
-  if(skp&&skp.length&&h%3===0){sk=skp[R(0,skp.length-1)]}
-  var pw=PW({a:at,h:ht,q:q,lv:lv,st:q%2,sk:sk});
-  return{n:idx<4?"NPC"+(100+idx):"NPC"+(200+idx-4),q:q,lv:lv,a:at,h:ht,pw:pw,sk:sk,title:NPC_TITLE()}
+  if(skp&&skp.length&&h%4===0){sk=skp[Math.floor(h%skp.length)]}
+  var title=NPC_TITLE();
+  var lv=Math.max(1,Math.floor(G.s*rankRatio));
+  return{n:idx<3?"👑NPC"+(100+idx):"NPC"+(200+idx-4),q:q,lv:lv,a:Math.max(1,Math.floor(pw*0.3)),h:Math.max(1,Math.floor(pw*0.7)),pw:pw,sk:sk,title:title}
 }
 function ARENA_REFRESH(){
   var ls=document.getElementById("arl");if(!ls)return;
