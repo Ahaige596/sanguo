@@ -37,6 +37,10 @@ function BACKPACK_RENDER(heroId){
   var icons=["🗡️","🛡️","⛑️","👢","🪢","💎"];
   for(var ti=0;ti<6;ti++){html+='<span class="bptab" onclick="window._eqFilter='+ti+';UEQ()">'+icons[ti]+' '+types[ti]+'</span>'}
   html+='</div>';
+
+html+='<div class="fc" style="margin-top:6px;gap:4px">';
+for(var qi=0;qi<5;qi++){html+='<button class="bt" onclick="SALVAGE_ALL('+qi+')">🗑️分解'+QN[qi]+'</button>'}
+html+='</div>';
   html+='<div class="bpgrid">';
   var filtered=G.eqb;
   if(window._eqFilter>=0)filtered=G.eqb.filter(function(e){return e.ti===window._eqFilter});
@@ -1608,7 +1612,13 @@ function ADVICE(){
 }
 
 // Modified UA to include dungeon info
-
+var ua_orig=UA;
+UA=function(){
+  ua_orig();
+  // Update dungeon display
+  var di=document.getElementById("dginfo");
+  if(di){DG_INIT();di.textContent="秘境: 第"+(G.dg?G.dg.stage||1:1)+"层 | 今日"+(G.dg?G.dg.today||0:0)+"/3"}
+}
 
 
 
@@ -1667,20 +1677,6 @@ function showEqDetail(heroId,eqId){var eq;if(eqId){eq=G.eqb.find(function(e){ret
       '<button class="bt bs br" onclick="Q('+id+',3)">&#128465;&#20998;&#35299;</button>'+
     '</div></div>';
   d.dataset.eqid=eq.id;
-
-
-
-
-  if(t===4){
-    var ei=G.eqb.findIndex(function(e){return e.id===id});
-    if(ei<0)return;
-    G.eqb[ei].lk=!G.eqb[ei].lk;
-    SV();showEqDetail(0,id);
-    ST(G.eqb[ei].lk?'锁定了':'已解锁',1500);
-  }
-}
-
-
 function Q(heroId,eqId,action){
   if(heroId===null||heroId===void 0){heroId=window._equipHero||0}
 
@@ -1730,7 +1726,18 @@ function Q(heroId,eqId,action){
     ST(G.eqb[ei].lk?"已锁定":"已解锁",1500);SV();showEqDetail(heroId,eqId);
   }
 }
-init();</script><div class="md" id="dgModal" onclick="if(event.target===this)this.classList.remove('s')">
+
+
+
+  if(t===4){
+    var ei=G.eqb.findIndex(function(e){return e.id===id});
+    if(ei<0)return;
+    G.eqb[ei].lk=!G.eqb[ei].lk;
+    SV();showEqDetail(0,id);
+    ST(G.eqb[ei].lk?'锁定了':'已解锁',1500);
+  }
+}
+</script><div class="md" id="dgModal" onclick="if(event.target===this)this.classList.remove('s')">
   <div class="mbx" style="max-width:420px;background:linear-gradient(145deg,#0a0a1a,#1a0a2a);border-color:#6040a0">
     <button class="mc" id="dgClose" onclick="document.getElementById('dgModal').classList.remove('s')">&times;</button>
     <div id="dgBody" class="tc">
