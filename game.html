@@ -50,16 +50,20 @@ function ARENA_SHA(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCod
 function ARENA_GEN_NPC(idx,seed){
   var h=ARENA_SHA("arena"+idx+seed);
   var h2=ARENA_SHA("a2"+idx+seed);
+  var rankFactor=Math.max(0.2,1-idx*0.008); // 排名越靠前越强，100名时0.2
   var q=Math.min(4,Math.floor(h%5));
-  var lv=Math.max(1,G.s+Math.floor(h%3)-1);
-  var a=10+lv*3+Math.floor(h%10)+q*20;
-  var h3=50+lv*10+Math.floor(h2%20)+q*30;
-  var at=Math.max(1,Math.floor(a*(1+(q||1)*0.15)));
-  var ht=Math.max(1,Math.floor(h3*(1+(q||1)*0.15)));
+  var lv=Math.max(1,Math.floor(G.s*rankFactor+Math.floor(h%3)-1));
+  var baseAtk=G.s*4+20;
+  var baseHp=G.s*12+60;
+  var a=Math.floor(baseAtk*rankFactor+Math.floor(h%10)+q*15);
+  var h3=Math.floor(baseHp*rankFactor+Math.floor(h2%20)+q*25);
+  var at=Math.max(1,Math.floor(a*(1+(q||1)*0.1)));
+  var ht=Math.max(1,Math.floor(h3*(1+(q||1)*0.1)));
   var sk=null;
   var skp=SKILL_POOL[q];
   if(skp&&skp.length&&h%3===0){sk=skp[R(0,skp.length-1)]}
-  return{n:idx<4?"NPC"+(100+idx):"NPC"+(200+idx-4),q:q,lv:lv,a:at,h:ht,pw:PW({a:at,h:ht,q:q,lv:lv,st:q%2,sk:sk}),sk:sk,title:NPC_TITLE()}
+  var pw=PW({a:at,h:ht,q:q,lv:lv,st:q%2,sk:sk});
+  return{n:idx<4?"NPC"+(100+idx):"NPC"+(200+idx-4),q:q,lv:lv,a:at,h:ht,pw:pw,sk:sk,title:NPC_TITLE()}
 }
 function ARENA_REFRESH(){
   var ls=document.getElementById("arl");if(!ls)return;
@@ -130,34 +134,18 @@ function ARENA_FIGHT(rnk){
   var d=document.getElementById("tt");
   if(d){
     var title=target.isNPC?(target.title?target.title+" ": "")+target.n:(target.n||"对手");
-    if(win){
-      var newR=target.r;
-      var newAr=[];
-      for(var fi=0;fi<100;fi++){
-        if(fi+1===newR){
-          newAr.push({n:G.name||"我",p:"⚔️你·"+R(100,999),pw:myPW,sq:R(1,5),w:1});
-        }else{
-          var ri=G.ar&&G.ar[fi]?G.ar[fi]:null;
-          if(ri&&ri.p&&ri.p.indexOf("你")>=0){
-            // 旧玩家位置——跳过，因为已移到newR
-            newAr.push(null);
-          }else if(ri&&!ri.isNPC){
-            newAr.push({n:ri.n||"未知",p:ri.p||"",pw:ri.pw||0,sq:ri.sq||1,w:ri.w||0});
-          }else{
-            newAr.push(null);
-          }
-        }
+      if(win){
+        var newR=target.r;
+        var myIdx=-1;
+        for(var fi=0;fi<100;fi++){var ri=G.ar&&G.ar[fi]?G.ar[fi]:null;if(ri&&ri.p&&ri.p.indexOf("你")>=0){myIdx=fi;break}}
+        G.ar=G.ar||[];
+        while(G.ar.length<100)G.ar.push(null);
+        if(myIdx>=0)G.ar[myIdx]=null;
+        G.ar[newR-1]={n:G.name||"我",p:"⚔️你·"+R(100,999),pw:myPW,sq:R(1,5),w:1};
+        if(!G.abest||newR<G.abest)G.abest=newR;
+        d.textContent="✅ 胜利! 排名#"+(myIdx+1)+"→#"+newR;
+        ST("✅ 胜利! 排名上升到"+newR,2500);
       }
-      while(newAr.length>100)newAr.pop();
-      // 把null的NPC位置替换为生成的数据
-      G.ar=newAr;
-      if(!G.abest||newR<G.abest)G.abest=newR;
-      d.textContent="✅ 胜利! 击败 "+title+" 交换排名至#"+(newR);
-      ST("🎉排名 #"+newR,2000);
-    }else{
-      d.textContent="❌ 败给 "+title+"，提升实力再来";
-      ST("💪继续加油",2000);
-    }
     d.classList.add("s");
     setTimeout(function(){if(d)d.classList.remove("s")},3000);
     SV();ARENA_REFRESH();ARENA_RENDER();
