@@ -131,15 +131,24 @@ function ARENA_FIGHT(rnk){
     var title=n.isNPC?(n.title?n.title+" ": "")+n.n:(n.n||"对手");
     var ic=n.isNPC?ME(n.s||0).i:"⚔";
     if(win){
-      d.textContent="✅ 胜利! 击败 "+title+" 排名升至#"+(target.r<=1?1:target.r-1);
-      var newR=Math.max(1,target.r-1);
-      if(!G.ar[0]||!G.ar[0].p)G.ar=[];
-      var idx=G.ar.findIndex(function(x){return x&&x.p&&x.p.indexOf("你")>=0});
-      if(idx>=0)G.ar.splice(idx,1);
-      if(G.ar.length>=100)G.ar.pop();
-      G.ar.splice(newR-1,0,{n:G.name||"我",p:"⚔️你·"+R(100,999),pw:myPW,sq:R(1,5),w:1});
-      while(G.ar.length>100)G.ar.pop();
+      // 交换排名：玩家变成目标的排名，目标后移一位
+      var myIdx2=G.ar.findIndex(function(x){return x&&x.p&&x.p.indexOf("你")>=0});
+      var newR=target.r;
+      if(myIdx2>=0){
+        // 把玩家从当前位置移除
+        var playerData=G.ar.splice(myIdx2,1)[0];
+        // 插入到目标排名位置（如果目标排名>100则降为100）
+        var insertPos=Math.min(newR-1,G.ar.length);
+        G.ar.splice(insertPos,0,{n:G.name||"我",p:"⚔️你·"+R(100,999),pw:myPW,sq:R(1,5),w:1});
+        while(G.ar.length>100)G.ar.pop();
+      }else{
+        // 玩家首次参战
+        var insertPos=Math.min(newR-1,G.ar.length);
+        G.ar.splice(insertPos,0,{n:G.name||"我",p:"⚔️你·"+R(100,999),pw:myPW,sq:R(1,5),w:1});
+        while(G.ar.length>100)G.ar.pop();
+      }
       if(!G.abest||newR<G.abest)G.abest=newR;
+      d.textContent="✅ 胜利! 击败 "+title+" 交换排名至#"+(newR);
       ST("🎉排名 #"+newR,2000);
     }else{
       d.textContent="❌ 败给 "+title+"，提升实力再来";
@@ -158,6 +167,8 @@ function ARENA_RENDER(){
   if(ab){ab.innerHTML='<div style="padding:12px"><h2 style="margin-bottom:8px">⚔️竞技场</h2><div style="font-size:12px;color:#a08060;margin-bottom:8px">排名100名内可挑战，胜利取代对方排名</div><div style="display:flex;gap:10px;margin-bottom:10px"><span>🏆排名:<b id="arank">未参加</b></span><span>⚔️剩余:<b id="afight">5/5</b></span><span>🏆最高:<b id="abest">-</b></span></div><button class="bt" onclick="ARENA_REFRESH()" style="background:linear-gradient(135deg,#6a2a6a,#9a3a9a);margin-bottom:8px">↻刷新对手</button></div><div id="arl" style="max-height:60vh;overflow-y:auto;padding:0 8px"></div></div>'}
   ARENA_REFRESH()
 }
+if(G.armx&&G.af<G.armx&&(!G.afr||G.afr<Math.floor(Date.now()/86400000))){G.af=G.armx;G.afr=Math.floor(Date.now()/86400000)}
+
 //========== End Arena ==========
 
 
