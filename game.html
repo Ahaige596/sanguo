@@ -291,7 +291,7 @@ function TB(){
     var id=G.fm[fi];var fh=FH[id];if(!fh||fh.hp<=0)continue;
     var h=GH(id);if(!h)continue;
     var ae=getFrontEnemy();if(!ae)break;
-    fh.an=Math.min(100,fh.an+10);
+    
     var us=false;
     if(fh.an>=100){
       fh.an=0;
@@ -302,16 +302,16 @@ function TB(){
       var atk=getEffectiveAtk(id);
       var dmg=Math.max(1,atk+Math.floor(Math.random()*atk*0.4)-Math.floor(atk*0.2));
       if(Math.random()<0.12){dmg=Math.floor(dmg*1.8);SF("暴击!","c")}else SF("-"+dmg,"d");
-      ae.hp=Math.max(0,ae.hp-dmg);
+      ae.hp=Math.max(0,ae.hp-dmg);fh.an=Math.min(100,(fh.an||0)+30);
     }
     if(ae.hp<=0)LG(h.n+" 击败了 "+ae.n);
   }
   for(var i=0;i<EE.length;i++){
     var e=EE[i];if(!e||e.hp<=0)continue;if(e.stun){e.stun--;continue}
-    e.an=Math.min(100,(e.an||0)+10);
+    
     var tgt=getFrontHero();if(!tgt)break;
-    if(e.an>=100){e.an=0;var sd=Math.floor(e.at*2.0);FH[tgt].hp=Math.max(0,FH[tgt].hp-sd);SF("大招!","c");LG(e.n+" 释放技能");}
-    else{var ed=Math.max(1,Math.floor(e.at*0.6+Math.floor(Math.random()*7)-3));FH[tgt].hp=Math.max(0,FH[tgt].hp-ed);SF("-"+ed,"d");}
+    if(e.an>=100){e.an=0;var sd=Math.floor(e.at*2.0);FH[tgt].hp=Math.max(0,FH[tgt].hp-sd);if(FH[tgt])FH[tgt].an=Math.min(100,(FH[tgt].an||0)+10);if(e)e.an=Math.min(100,(e.an||0)+30);SF("大招!","c");LG(e.n+" 释放技能");}
+    else{var ed=Math.max(1,Math.floor(e.at*0.6+Math.floor(Math.random()*7)-3));FH[tgt].hp=Math.max(0,FH[tgt].hp-ed);if(FH[tgt])FH[tgt].an=Math.min(100,(FH[tgt].an||0)+10);if(e)e.an=Math.min(100,(e.an||0)+30);SF("-"+ed,"d");}
     if(FH[tgt].hp<=0){var dh=GH(tgt);LG((dh?dh.n:"武将")+" 阵亡");}
   }
   var e3=document.querySelector(".es2");if(e3&&EE.some(function(x){return x.hp>0})&&G.fighting){e3.classList.remove("hs");void e3.offsetWidth;e3.classList.add("hs")}
@@ -642,7 +642,7 @@ function DG_TICK(){
   }
   if(CE&&CE.hp>0){
     var al=[];for(var i=0;i<G.fm.length;i++){var fh=FH[G.fm[i]];if(fh&&fh.hp>0)al.push(G.fm[i])}
-    if(al.length>0){var t=PK(al);var ed=Math.max(1,CE.at+R(-4,4));FH[t].hp=Math.max(0,FH[t].hp-ed);SF("-"+ed,"d")}
+    if(al.length>0){var t=PK(al);var ed=Math.max(1,CE.at+R(-4,4));FH[t].hp=Math.max(0,FH[t].hp-ed);if(FH[t])FH[t].an=Math.min(100,(FH[t].an||0)+10);SF("-"+ed,"d")}
   }
   UBU();
   var stg=G.dg?G.dg.stage||1:1;
