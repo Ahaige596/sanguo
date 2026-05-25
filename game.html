@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>三国挂机 - 放置英雄</title><style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#0f0700;color:#e0c080;min-height:100vh;overflow-x:hidden;background-image:radial-gradient(circle at 20% 30%,#2a1a0a 0%,#0f0700 70%)}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#1a0a00}::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#8b6914,#d4a017);border-radius:2px}@keyframes glow{0%,100%{text-shadow:0 0 5px rgba(240,208,96,.3)}50%{text-shadow:0 0 20px rgba(240,208,96,.7)}}@keyframes fadeIn{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}@keyframes bossPulse{0%,100%{transform:scale(1);filter:drop-shadow(0 0 10px rgba(255,0,0,.5))}50%{transform:scale(1.1);filter:drop-shadow(0 0 25px rgba(255,0,0,.9))}}#header{background:linear-gradient(135deg,#1a0a00,#3a1a00,#1a0a00);border-bottom:2px solid #8b6914;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.8)}#header h1{font-size:16px;color:#f0d060;animation:glow 3s infinite;letter-spacing:1px}.rbar{display:flex;gap:6px;font-size:13px;flex-wrap:wrap;align-items:center}.r{display:flex;align-items:center;gap:2px;background:rgba(0,0,0,.4);padding:3px 8px;border-radius:5px;border:1px solid rgba(139,105,20,.2);white-space:nowrap}.r .v{color:#f0d060;font-weight:700;min-width:16px;text-align:right;font-size:13px}#tb{display:flex;background:#1a0a00;border-bottom:1px solid #3a1a00;position:sticky;top:41px;z-index:99;overflow-x:auto}#tb button{flex:1;min-width:55px;padding:10px 6px;background:0;border:none;color:#806040;font-size:13px;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}#tb button.a{color:#f0d060;border-bottom-color:#d4a017;background:linear-gradient(0deg,rgba(212,160,23,.1),transparent)}.pn{display:none;padding:10px;max-width:820px;margin:0 auto}.pn.a{display:block}#ba{background:linear-gradient(180deg,#0d0800,#1a0a00);border:1px solid #5a3a0a;border-radius:10px;padding:12px;margin-bottom:10px;text-align:center;min-height:190px;position:relative;overflow:hidden}#ba::before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:url("data:image/svg+xml,%3Csvg width=60 height=60 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cpath d=%27M30 5 L35 20 L50 20 L38 30 L42 45 L30 35 L18 45 L22 30 L10 20 L25 20 Z%27 fill=none stroke=%275a3a0a%27 stroke-width=.5 opacity=.15/%3E%3C/svg%3E") repeat;pointer-events:none}.bf{display:flex;justify-content:space-around;align-items:center;min-height:110px;position:relative;z-index:1}.fs2{display:flex;flex-direction:column;align-items:center;gap:4px}.fhs{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}.fb{display:flex;flex-direction:column;align-items:center;background:rgba(0,40,0,.25);border:1px solid rgba(64,192,64,.2);border-radius:8px;padding:4px 6px;min-width:50px;transition:all .2s}.fb .fi{font-size:20px}.fb .fn{font-size:9px;color:#80c080;max-width:46px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fb .fbar{width:44px;height:4px;background:#2a0a0a;border-radius:2px;overflow:hidden;margin-top:2px}.fb .ff{height:100%;background:linear-gradient(90deg,#40c040,#80e080);transition:width .3s;border-radius:2px}.es2{display:flex;flex-direction:column;align-items:center;gap:4px}.eic{font-size:48px;transition:all .3s}.eic.b{animation:bossPulse 1.5s infinite}.enm{color:#ff7070;font-size:14px;font-weight:700}.enm.b{color:#ff3030;font-size:16px;text-shadow:0 0 10px rgba(255,0,0,.5)}.bhp{width:130px;height:10px;background:#2a0a0a;border-radius:5px;overflow:hidden;border:1px solid #5a2a2a;margin:4px auto}.bhp .bf{height:100%;background:linear-gradient(90deg,#cc2222,#ff4444);transition:width .3s;border-radius:5px}.vs{font-size:22px;font-weight:700;color:#8b6914;animation:glow 2s infinite}.blog{font-size:12px;color:#a08040;margin-top:6px;max-height:32px;overflow:hidden;position:relative;z-index:1}.binf{font-size:12px;color:#806040;margin-top:4px;display:flex;justify-content:center;gap:20px}.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:10px 0}.hc{background:linear-gradient(145deg,#1a0a00,#2a1a0a);border:1px solid #5a3a0a;border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;position:relative;transition:all .2s;overflow:hidden}.hc::after{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.03) 0%,transparent 60%);pointer-events:none}.hc:hover{border-color:#8b6914;transform:translateY(-3px);box-shadow:0 4px 16px rgba(139,105,20,.2)}.hc .av{font-size:32px}.hc .nm{font-size:13px;font-weight:700}.hc .st{font-size:11px;color:#f0d060}.hc .pw{font-size:11px;color:#40c040}.hc .lv{font-size:10px;color:#806040}.q0{color:#5cc05c;border-color:rgba(92,192,92,.3)}.q1{color:#6090ff;border-color:rgba(96,144,255,.3)}.q2{color:#c060ff;border-color:rgba(192,96,255,.3)}.q3{color:#ff9050;border-color:rgba(255,144,80,.3)}.q4{color:#ff5050;border-color:rgba(255,80,80,.3)}.b0{background:linear-gradient(145deg,#0a1a0a,#0f0f00)}.b1{background:linear-gradient(145deg,#0a0a2a,#0f000f)}.b2{background:linear-gradient(145deg,#1a0a2a,#0f001f)}.b3{background:linear-gradient(145deg,#2a1a0a,#1f0f00)}.b4{background:linear-gradient(145deg,#2a0a0a,#1f0000)}.db{position:absolute;top:4px;right:4px;background:#d4a017;color:#1a0a00;border-radius:50%;width:20px;height:20px;line-height:20px;font-size:11px;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.4);animation:pulse 2s infinite}.sg{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0}.f{background:linear-gradient(145deg,#1a0e00,#2a1a0a);border:2px dashed #3a2a0a;border-radius:10px;padding:10px;min-width:90px;min-height:90px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;transition:all .3s}.f.u{border-style:solid;border-color:#8b6914;background:linear-gradient(145deg,#1a1a00,#2a2a0a);box-shadow:0 2px 8px rgba(139,105,20,.15)}.f:hover{border-color:#d4a017;transform:translateY(-2px)}.bt{padding:10px 20px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}.bt:active{transform:scale(.95)}.bg{background:linear-gradient(135deg,#8b6914,#d4a017);color:#1a0a00;box-shadow:0 2px 8px rgba(139,105,20,.3)}.bg:hover{box-shadow:0 4px 16px rgba(139,105,20,.5)}.br{background:linear-gradient(135deg,#8b1414,#d41717);color:#fff}.bb{background:linear-gradient(135deg,#14348b,#1750d4);color:#fff}.bgn{background:linear-gradient(135deg,#1a7a1a,#22b822);color:#fff}.bs{padding:7px 14px;font-size:12px}.ti{font-size:15px;color:#f0d060;margin:12px 0 8px;padding-left:10px;border-left:3px solid #d4a017}.sr{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04)}.sr .l{color:#806040}.sr .v{color:#f0d060}.e{display:inline-flex;flex-direction:column;align-items:center;background:#1a0a00;border:1px solid #3a2a0a;border-radius:8px;padding:8px 12px;margin:4px;font-size:12px;min-width:85px}.ig{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin:8px 0}.ig .iv{background:#1a0a00;border:1px solid #3a2a0a;border-radius:8px;padding:8px 6px;text-align:center;font-size:12px;cursor:pointer;transition:all .2s}.ig .iv:hover{border-color:#8b6914;transform:translateY(-2px)}.sgp{background:#1a0a00;border:1px solid #3a1a00;border-radius:10px;padding:12px;margin:8px 0}.sgp h3{font-size:14px;color:#f0d060;margin-bottom:8px;border-bottom:1px solid #3a1a00;padding-bottom:6px}#tt{position:fixed;bottom:80px;left:50%;transform:translateQ(-50%);background:rgba(15,7,0,.92);color:#f0d060;padding:12px 24px;border-radius:10px;font-size:14px;border:1px solid #8b6914;pointer-events:none;opacity:0;transition:opacity .3s;z-index:999;backdrop-filter:blur(4px)}#tt.s{opacity:1}.md{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.75);z-index:200;justify-content:center;align-items:center}.md.s{display:flex}.mbx{background:linear-gradient(145deg,#1a0a00,#2a1a0a);border:2px solid #8b6914;border-radius:14px;padding:24px;max-width:380px;width:90%;max-height:80vh;overflow-y:auto;position:relative;box-shadow:0 8px 32px rgba(0,0,0,.6)}.mbx h2{color:#f0d060;text-align:center;margin-bottom:14px;font-size:20px}.mc{position:absolute;top:10px;right:14px;font-size:24px;cursor:pointer;color:#806040;background:0;border:none}.mc:hover{color:#f0d060}@keyframes hs{0%,100%{transform:translateQ(0)}20%,60%{transform:translateQ(-4px)}40%,80%{transform:translateQ(4px)}}@keyframes af{0%,100%{filter:brightness(1)}50%{filter:brightness(2)sepia(.4)}}@keyframes fu{0%{opacity:1;transform:translateY(0)scale(1)}100%{opacity:0;transform:translateY(-40px)scale(1.3)}}@keyframes ed{0%{transform:scale(1);opacity:1}30%{transform:scale(1.4);filter:brightness(2)}100%{transform:scale(0);opacity:0}}.hs{animation:hs .3s}.af{animation:af .3s}.ed2{animation:ed .6s forwards}.fdm{position:absolute;font-weight:700;font-size:20px;pointer-events:none;animation:fu .7s forwards;z-index:50;left:50%;transform:translateQ(-50%)}.fd{color:#ff6644}.fdd{color:#ffaa00;font-size:26px;text-shadow:0 0 6px rgba(255,170,0,.5)}.ap{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(15,7,0,.95);border:2px solid #d4a017;border-radius:14px;padding:24px 36px;text-align:center;z-index:300;animation:fadeIn .4s;box-shadow:0 0 50px rgba(212,160,23,.3)}.ap h3{color:#f0d060;font-size:20px}.ap p{color:#a08050;font-size:13px;margin-top:4px}.fc{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:8px 0}.tc{text-align:center}.mt{margin-top:8px}.mb{margin-bottom:8px}.em{color:#504030;text-align:center;padding:24px;font-size:13px}.rl{font-size:9px;color:#806040;margin-right:2px}@media(max-width:500px){.cg{grid-template-columns:repeat(auto-fill,minmax(105px,1fr))}.ig{grid-template-columns:repeat(auto-fill,minmax(95px,1fr))}.f{min-width:70px;min-height:70px}}/*epc*/:1px solid rgba(139,105,20,.15);border-radius:6px;margin:6px 0;padding:6px;background:rgba(0,0,0,.2)}/*epl*/:13px;color:#f0d060;font-weight:700;padding:4px 6px;margin-bottom:4px;border-bottom:1px solid rgba(139,105,20,.2)}/*epg*/:flex;flex-wrap:wrap;gap:4px}/*epc*/:1px solid rgba(139,105,20,.15);border-radius:6px;margin:4px 0;padding:6px;background:rgba(0,0,0,.2)}/*epl*/:13px;color:#f0d060;font-weight:700;padding:4px 6px;margin-bottom:4px;border-bottom:1px solid rgba(139,105,20,.2)}/*epg*/:flex;flex-wrap:wrap;gap:4px}/*et*/:rgba(0,0,0,.3);color:#806040;border-radius:5px}.et:hover{background:rgba(139,105,20,.2)}.bptabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}.bptab{padding:6px 10px;border:1px solid rgba(139,105,20,.3);border-radius:5px;background:rgba(0,0,0,.3);color:#806040;font-size:12px;cursor:pointer;white-space:nowrap}.bptab.a{background:rgba(139,105,20,.25);color:#f0d060;border-color:#8b6914}.bptab:hover{background:rgba(139,105,20,.15)}.bpgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px;padding:4px}.bpitem{display:flex;flex-direction:column;align-items:center;padding:8px 4px;border-radius:8px;border:1.5px solid;background:rgba(0,0,0,.35);cursor:pointer;transition:all .15s;gap:2px}.bpitem:active{transform:scale(.95)}.em{text-align:center;padding:20px;color:#605040;font-size:13px}.epright{flex:1.2;min-width:180px;position:sticky;top:100px;border-left:1px solid rgba(139,105,20,.15);padding-left:10px}.epempty{text-align:center;padding:30px 10px;color:#605040;font-size:12px}.epdetail-card{background:linear-gradient(145deg,#1a0a00,#2a1a0a);border:1px solid rgba(139,105,20,.25);border-radius:10px;padding:14px;text-align:center}.epdetail-card .eicon{font-size:44px;margin:6px 0}.epdetail-card .ename{font-weight:700;font-size:14px;margin:4px 0}.epdetail-card .estats{font-size:12px;color:#ccc;line-height:1.8;margin-bottom:6px}.esl{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}.esl-slot{width:80px;min-height:90px;background:linear-gradient(145deg,#1a0e00,#2a1a08);border:1px solid rgba(139,105,20,.2);border-radius:8px;padding:6px;text-align:center;position:relative;display:flex;flex-direction:column;align-items:center;gap:2px}.esl-slot.esl-empty{opacity:.5}.esl-icon{font-size:22px;line-height:1.2}.esl-name{font-size:10px;font-weight:700;line-height:1.2;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.esl-rm{position:absolute;top:2px;right:4px;font-size:10px;cursor:pointer;color:#f66;display:none}.esl-slot:hover .esl-rm{display:block}</style></head><body><div id="head"><h1>⚔️ 三国挂机</h1><span id="pnick" style="font-size:11px;color:#c0a060;cursor:pointer;margin-left:4px" onclick="SHOW_NICKNAME_DIALOG()">🪪无名</span><div class="rbar"><span class="r" title="推图/扫荡获得"><span>💰</span><span class="rl">金币</span><span class="v" id="gld">0</span></span><span class="r" title="BOSS/兑换获得"><span>💎</span><span class="rl">钻石</span><span class="v" id="jde">0</span></span><span class="r" title="招募武将消耗"><span>📜</span><span class="rl">招募令</span><span class="v" id="rct">0</span></span><span class="r" title="当前等级进度"><span>🏆</span><span class="rl">关卡</span><span class="v" id="stg">1-1</span></span><span class="r"><span>⭐</span><span class="rl">等级</span><span class="v" id="plv">1</span></span><span class="r"><span>📊</span><span class="rl">经验</span><span class="v" id="expBar">0/10</span></span></span></div></div><div id="tb"><button class="a" data-tab="r">⚔️征战</button><button data-tab="f">📋阵容</button><button data-tab="h">👥武将</button><button data-tab="e">⚔️装备</button><button data-tab="s">🏪商店</button><button data-tab="a">⚔️竞技</button></div><div id="pr" class="pn a"><div id="ba"><div class="bf"><div class="fs2"><div style="font-size:11px;color:#80c080;margin-bottom:3px">🛡️我方</div><div class="fhs" id="fhs"></div></div><div class="vs">⚡</div><div class="es2"><div class="eic" id="eic">👹</div><div class="enm" id="enm">山贼</div><div class="bhp"><div class="bf" id="ehp" style="width:100%"></div></div><div style="font-size:11px;color:#806040"><span id="eht">100/100</span></div></div></div><div style="font-size:11px;color:#504030;margin-top:2px;position:relative;z-index:1">关卡 <span id="stg2">1-1</span></div><div class="blog" id="blog">点击"出征"开始战斗</div><div class="binf"><span>战力:<span id="mypw">0</span></span><span>敌方:<span id="epw">0</span></span></div></div><div class="fc"><button class="bt bg" id="bob">⚔️出征</button><button class="bt bb bs" id="boa">▶️自动</button><button class="bt br bs" id="bol" onclick="G.lock=G.lock?0:1;this.textContent=G.lock?'🔒已锁定':'🔓锁定';ST(G.lock?'已锁定':'已解锁',2000);SV()">🔓锁定</button></div><div class="fc" style="margin-top:4px"><button class="bt bg bs" onclick="SWEEP(1)">🔄扫荡(免费)</button><button class="bt br bs" onclick="SWEEP(2)">📺广告扫荡</button><button class="bt bb bs" onclick="DG_ENTER()">🏰秘境</button><button class="bt bgn bs" onclick="EXP_BOOK()">📖经验书(200💰)</button></div>
+<div style="font-size:11px;color:#806040;text-align:center;margin:2px 0"><span id="swinfo" style="margin-right:12px">扫荡:0/5</span><span id="dginfo" style="margin-right:12px">秘境: 第1层 | 今日0/3</span><span style="cursor:pointer;color:#504030" onclick="ADVICE()">💡卡关了?</span></div><div style="font-size:11px;color:#504030;text-align:center;margin:4px 0" id="ofi"></div><div class="ti">🎲招募武将</div><div class="fc"><button class="bt br bs" id="br1">🆓x1(1📜)</button><button class="bt br" id="br10">🔥x10(10📜)</button></div><div class="ti">⭐新招募</div><div class="cg" id="newh"></div></div><div id="pf" class="pn"><div class="ti">📋上阵阵容<span style="font-size:12px;color:#605040;font-weight:normal">(最多6人)</span></div><div class="sg" id="fsl"></div><div class="fc"><button class="bt bgn bs" id="bad">🤖自动编队</button><button class="bt br bs" id="bcf">🗑️清空</button></div><div class="ti">👥武将列表</div><div class="cg" id="hlf"></div></div><div id="ph" class="pn"><div class="fc mb"><button class="bt bgn bs" id="bom">🔄一键升星</button></div><div class="ti">👥所有武将</div><div class="cg" id="hl"></div></div><div id="pe" class="pn"><div class="ti">⚔装备栏</div><div class="esl" id="esl"><!-- rendered by UEQ --></div><div class="ti">装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div><div class="ti" style="margin-top:8px">快速分解</div><div class="fc" style="flex-wrap:wrap"><button class="bt bs" style="background:linear-gradient(135deg,#2a5a0a,#3a7a0a);color:#fff" onclick="SALVAGE(0)">🟢分解普通</button><button class="bt bs" style="background:linear-gradient(135deg,#0a2a5a,#0a3a7a);color:#fff" onclick="SALVAGE(1)">🔵分解优秀</button><button class="bt bs" style="background:linear-gradient(135deg,#2a0a5a,#3a0a7a);color:#fff" onclick="SALVAGE(2)">🟣分解稀有</button><button class="bt bs" style="background:linear-gradient(135deg,#5a0a0a,#7a0a0a);color:#fff" onclick="SALVAGE(3)">🟠分解传说</button><button class="bt bs" style="background:linear-gradient(135deg,#5a0000,#8a0000);color:#fff" onclick="SALVAGE(4)">🔴分解神话</button></div><div style="font-size:10px;color:#504030;text-align:center">分解返还金币:绿5 蓝15 ��30 橙50 红80</div><div class="ti" style="margin-top:8px">装备强化</div><div class="sr"><span class="l">当前可强化至</span><span class="v" id="eqlCap">Lv.0</span></div><div class="sr"><span class="l">解锁上限</span><span class="v" id="eqlUnlock">Lv.1可升至Lv.2</span></div><div class="sr"><span style="font-size:10px;color:#605040">每级+15%属性，上限=玩家等级×2</span></div><div class="bptabs" id="bpt"></div><div class="bpgrid" id="ebg"></div></div><div id="ps"div id="ps"div id="ps" class="pn"><div class="ti">🏪商店</div><div class="fc"><button class="bt bg bs" id="sb1">📜x5(500💰)</button><button class="bt bg bs" id="sb2">📜x10(100💎)</button></div><div class="ti">💰兑换</div><div class="fc"><button class="bt bg bs" id="scg">1000💰→10💎</button></div><div class="ti">⚡强化</div><div class="sr"><span class="l">攻击加成</span><span class="v" id="sab">x1.0</span></div><div class="sr"><span class="l">生命加成</span><span class="v" id="shb">x1.0</span></div><div class="fc mt"><button class="bt bb bs" id="sua">⬆️攻击(500💰,5💎)</button><button class="bt bb bs" id="suh">⬆️生命(500💰,5💎)</button></div><div class="ti">🏅成就</div><div class="sgp" id="achv"></div><div class="ti">📊总览</div><div class="sgp" id="sov"></div><div class="ti" style="margin-top:12px;color:#504030">����广告位</div><div id="adslot" style="background:#0a0500;border:1px dashed #3a2a0a;border-radius:8px;padding:20px;text-align:center;color:#504030;font-size:12px;margin:8px 0">[ 横幅广告位 - 替换为你的广告代码 ]</div></div>
+<div id="pa" class="pn"><div id="ab"><!-- Arena rendered by ARENA_RENDER --></div></div>
+
+<div class="md" id="nmModal" onclick="if(event.target===this)this.classList.remove('s')">
+  <div class="mbx" style="max-width:320px">
+    <button class="mc" onclick="document.getElementById('nmModal').classList.remove('s')">✖</button>
+    <h2>📝修改昵称</h2>
+    <div style="text-align:center;margin:12px 0">
+      <input id="nmi" type="text" maxlength="6" placeholder="输入新昵称（最多6字）" style="width:80%;padding:8px;border:1px solid #8b6914;border-radius:6px;background:#1a0a00;color:#f0d060;font-size:16px;text-align:center">
+    </div>
+    <div id="nmcd" style="text-align:center;color:#ff6644;font-size:12px;margin-bottom:8px;display:none"></div>
+    <div style="text-align:center;margin:8px 0">
+      <button class="bt bg" onclick="SAVE_NICKNAME()">✅确认修改</button>
+    </div>
+    <div style="text-align:center;font-size:10px;color:#504030">昵称修改后3天内不可再次修改</div>
+  </div>
+</div>
+<div id="tt"></div><div class="md" id="md"><div class="mbx"><button class="mc" id="mcc">&times;</button><h2 id="mtt">详情</h2><div id="mbd"></div></div></div><script>
+var QN={0:"普通",1:"优秀",2:"稀有",3:"传说",4:"神话"};var QC={0:"#5cc05c",1:"#6090ff",2:"#c060ff",3:"#ff9050",4:"#ff5050"};var QE={0:"🟢",1:"🔵",2:"🟣",3:"🟠",4:"🔴"};var RC=[0.45,0.30,0.15,0.08,0.02];var ET=["武器","铠甲","头盔","战靴","护腕","玉佩"];var EI=["🗡️","🛡️","⛑️","👢","🪢","💎"];var HP=[{"n":"廖化","i":"⚔️","q":0,"a":10,"h":80},{"n":"周仓","i":"🗡️","q":0,"a":12,"h":70},{"n":"张角","i":"⚡","q":0,"a":11,"h":75},{"n":"华雄","i":"🪓","q":0,"a":14,"h":65},{"n":"潘凤","i":"🛡️","q":0,"a":13,"h":60},{"n":"邢道荣","i":"🔨","q":0,"a":11,"h":70},{"n":"戏志才","i":"🧮","q":0,"a":12,"h":72},{"n":"曹植","i":"📝","q":0,"a":10,"h":78},{"n":"诸葛瑾","i":"🔮","q":0,"a":11,"h":76},{"n":"关平","i":"🗡️","q":0,"a":13,"h":68},{"n":"马谡","i":"📜","q":0,"a":9,"h":80},{"n":"张翼","i":"⚔️","q":0,"a":12,"h":70},{"n":"马良","i":"✒️","q":0,"a":10,"h":75},{"n":"刘封","i":"🛡️","q":0,"a":11,"h":74},{"n":"徐晃","i":"🏹","q":1,"a":20,"h":160},{"n":"张郃","i":"⚡","q":1,"a":22,"h":140},{"n":"曹仁","i":"🛡️","q":1,"a":16,"h":220},{"n":"魏延","i":"🗡️","q":1,"a":24,"h":130},{"n":"马岱","i":"🏹","q":1,"a":21,"h":150},{"n":"黄盖","i":"🔥","q":1,"a":18,"h":200},{"n":"颜良","i":"🪓","q":1,"a":25,"h":120},{"n":"文丑","i":"⚔️","q":1,"a":23,"h":125},{"n":"荀彧","i":"🎩","q":1,"a":19,"h":210},{"n":"荀攸","i":"🧠","q":1,"a":20,"h":195},{"n":"夏侯惇","i":"👁️","q":2,"a":40,"h":300},{"n":"张辽","i":"🐎","q":2,"a":45,"h":260},{"n":"甘宁","i":"⚓","q":2,"a":48,"h":240},{"n":"太史慈","i":"🏹","q":2,"a":42,"h":280},{"n":"黄忠","i":"🎯","q":2,"a":44,"h":250},{"n":"庞德","i":"⚔️","q":2,"a":46,"h":230},{"n":"法正","i":"🧠","q":2,"a":38,"h":320},{"n":"孙坚","i":"🔥","q":2,"a":50,"h":220},{"n":"典韦","i":"🪓","q":2,"a":47,"h":350},{"n":"许褚","i":"🐻","q":2,"a":52,"h":340},{"n":"姜维","i":"🐉","q":2,"a":43,"h":290},{"n":"邓艾","i":"⛰️","q":2,"a":41,"h":310},{"n":"关羽","i":"🐉","q":3,"a":80,"h":500,"sk":{"n":"武圣斩","t":"dmg","v":3.2,"d":"320%伤害",c:"enemy"}},{"n":"张飞","i":"🐯","q":3,"a":90,"h":450,"sk":{"n":"喝断桥","t":"dmg","v":2.8,"d":"280%伤害",c:"enemy"}},{"n":"赵云","i":"🐎","q":3,"a":85,"h":480,"sk":{"n":"七进七出","t":"dmg","v":2.0,"d":"200%x3",c:"enemy"}},{"n":"马超","i":"⚡","q":3,"a":88,"h":420,"sk":{"n":"铁骑冲锋","t":"dmg","v":2.5,"d":"250%",c:"enemy"}},{"n":"黄月英","i":"🔧","q":3,"a":75,"h":550,"sk":{"n":"木牛流马","t":"heal","v":0.6,"d":"全体回60%",c:"all"}},{"n":"周瑜","i":"🔥","q":3,"a":95,"h":380,"sk":{"n":"赤壁火","t":"dmg","v":3,"d":"300%",c:"enemy"}},{"n":"吕蒙","i":"📚","q":3,"a":78,"h":520,"sk":{"n":"白衣渡江","t":"debuff","v":0.4,"d":"敌方攻-60%",c:"enemy"}},{"n":"陆逊","i":"🪶","q":3,"a":82,"h":460,"sk":{"n":"火烧连营","t":"dmg","v":2.2,"d":"220%x2",c:"enemy"}},{"n":"郭嘉","i":"💀","q":3,"a":76,"h":530,"sk":{"n":"遗计定辽","t":"dmg","v":4,"d":"400%",c:"enemy"}},{"n":"庞统","i":"🦅","q":3,"a":80,"h":510,"sk":{"n":"连环计","t":"dmg","v":3.5,"d":"350%",c:"enemy"}},{"n":"吕布","i":"👿","q":4,"a":150,"h":800,"sk":{"n":"天下无双","t":"dmg","v":5,"d":"500%",c:"enemy"}},{"n":"诸葛亮","i":"☯️","q":4,"a":120,"h":1000,"sk":{"n":"七星借命","t":"heal","v":1,"d":"回满全体",c:"all"}},{"n":"曹操","i":"👑","q":4,"a":140,"h":850,"sk":{"n":"挟天子","t":"buff","v":1.8,"d":"攻+80%",c:"self"}},{"n":"司马懿","i":"🌑","q":4,"a":130,"h":900,"sk":{"n":"狼顾之相","t":"dmg","v":4.5,"d":"450%",c:"enemy"}},{"n":"左慈","i":"🧙","q":4,"a":135,"h":880,"sk":{"n":"遁甲天书","t":"heal","v":0.8,"d":"全体回80%",c:"all"}},{"n":"孙权","i":"🦁","q":4,"a":125,"h":950,"sk":{"n":"制衡","t":"buff","v":1.5,"d":"攻+50%全队",c:"all"}},{"n":"袁绍","i":"🗡️","q":4,"a":145,"h":780,"sk":{"n":"四世三公","t":"dmg","v":2.8,"d":"280%x3",c:"enemy"}},];var SKILL_POOL={0:[{n:"猛击",t:"dmg",v:1.5,d:"150%伤害",c:"enemy"},{n:"小愈",t:"heal",v:0.2,d:"回复20%",c:"lowest"},{n:"怒吼",t:"debuff",v:0.8,d:"敌方攻-20%",c:"enemy"},{n:"振奋",t:"buff",v:1.15,d:"攻+15%",c:"self"},{n:"铁壁",t:"buff",v:2.5,d:"攻+15%自回5%",c:"self"},{n:"速攻",t:"dmg",v:1.3,d:"130%",c:"enemy"}],1:[{n:"重击",t:"dmg",v:2,d:"200%",c:"enemy"},{n:"强愈",t:"heal",v:0.35,d:"回复35%",c:"lowest"},{n:"威压",t:"debuff",v:0.7,d:"敌方攻-30%",c:"enemy"},{n:"战吼",t:"buff",v:1.25,d:"攻+25%",c:"self"},{n:"斩击",t:"dmg",v:1.3,d:"130%x2",c:"enemy"},{n:"急救",t:"heal",v:0.25,d:"全员回25%",c:"all"},{n:"狂暴",t:"buff",v:1.3,d:"攻+30%",c:"self"}],2:[{n:"破军",t:"dmg",v:2.5,d:"250%",c:"enemy"},{n:"回春",t:"heal",v:0.5,d:"回复50%",c:"all"},{n:"震慑",t:"debuff",v:0.6,d:"敌方攻-40%",c:"enemy"},{n:"激昂",t:"buff",v:1.35,d:"攻+35%",c:"self"},{n:"连斩",t:"dmg",v:1.5,d:"150%x2",c:"enemy"},{n:"护盾",t:"heal",v:0.3,d:"全体回30%",c:"all"},{n:"眩晕击",t:"stun",v:0.5,d:"50%晕",c:"enemy"},{n:"裂地",t:"dmg",v:3,d:"300%",c:"enemy"},{n:"冰封",t:"stun",v:0.4,d:"40%晕",c:"enemy"}],3:[{n:"万钧",t:"dmg",v:3.5,d:"350%",c:"enemy"},{n:"普济",t:"heal",v:0.7,d:"回复70%",c:"all"},{n:"威慑",t:"debuff",v:0.5,d:"敌方攻-50%",c:"enemy"},{n:"神勇",t:"buff",v:1.5,d:"攻+50%",c:"self"},{n:"乱舞",t:"dmg",v:2,d:"200%x2",c:"enemy"},{n:"治愈之风",t:"heal",v:0.4,d:"全体回40%",c:"all"},{n:"眩晕猛击",t:"stun",v:0.7,d:"70%晕",c:"enemy"},{n:"舍身",t:"heal",v:1,d:"自损20%满队",c:"all"},{n:"背水",t:"dmg",v:4,d:"400%自损10%",c:"enemy"},{n:"奇袭",t:"dmg",v:2.5,d:"250%x2",c:"enemy"}],4:[{n:"天崩地裂",t:"dmg",v:5,d:"500%",c:"enemy"},{n:"起死回生",t:"heal",v:1,d:"回满全体",c:"all"},{n:"威震八方",t:"debuff",v:0.3,d:"敌方攻-70%",c:"enemy"},{n:"天下无双",t:"buff",v:1.8,d:"攻+80%",c:"self"},{n:"雷霆万钧",t:"dmg",v:2.5,d:"250%x3",c:"enemy"},{n:"万象回春",t:"heal",v:0.6,d:"全体回60%",c:"all"},{n:"神威",t:"stun",v:0.9,d:"90%晕",c:"enemy"},{n:"七星续命",t:"heal",v:0.5,d:"每回50%x3",c:"lowest"},{n:"天火焚城",t:"dmg",v:3,d:"300%全队",c:"all"},{n:"混沌",t:"dmg",v:2,"d":"200%x2晕50%",c:"enemy"}],};
+
+var G={g:0,j:0,rt:10,s:1,ss:1,hs:[],fm:[],eqb:[],eq:{w:null,a:null,h:null,b:null,r:null,p:null},nid:1,neid:1,tb:0,tr:0,tg:0,tk:0,ls:0,lo:0,al:0,hl:0,auto:0,ach:{},lv:1,exp:0,nexp:10};
+var NPC_TITLES=["天帝","战神","鬼王","霸王","武圣","飞将","神机","天策","龙骧","虎威","麒麟","凤凰","苍狼","烈火","寒冰","雷霆","疾风","暴雨","破军","贪狼","七杀","天罡","地煞","白虎","朱雀","青龙","玄武","修罗","夜叉","明王","无双","绝世","凌霄","九霄","星辰","皓月","烈日","玄冥","太虚","混沌","神威","天罚","不败","纵横","无极","乾坤","天元","霸天","凌天","傲天","血战","铁骑","飞龙","猛虎","巨熊","神鹰","灵狐","玄龟","天马","金鹏"];
+
+function R(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function PK(a){return a[R(0,a.length-1)]}
+function SR(s,ss){return(s||1)+"-"+(ss||1)}
+function PW(h){return Math.floor((h.a+h.h*0.5)*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*(1+h.q*0.25)+(h.sk?80:0))}
+function TP(){var s=0;for(var i=0;i<G.hs.length;i++)s+=PW(G.hs[i]);return s}
+function FP(){var s=0;for(var i=0;i<G.fm.length;i++){var h=GH(G.fm[i]);if(h)s+=PW(h)}return s}
+function AB(){return 1+G.al*0.1}
+function HB(){return 1+G.hl*0.1}
+function GH(id){for(var i=0;i<G.hs.length;i++)if(G.hs[i].id===id)return G.hs[i];return null}
+function ID(id){for(var i=0;i<G.fm.length;i++)if(G.fm[i]===id)return true;return false}
+function HA(id){var h=GH(id);if(!h)return 0;var skb=h.sk?1.15:1;return Math.floor(h.a*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*skb*AB())}
+function HH(id){var h=GH(id);if(!h)return 0;return Math.floor(h.h*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*HB())}
+function ME(s_){s_=s_||1;var bp=30+s_*15+Math.floor(s_/5)*30,bhe=50+s_*20+Math.floor(s_/3)*15;
+var p=[{n:"山贼",i:"👹"},{n:"黄巾兵",i:"🎭"},{n:"流寇",i:"🏴"},{n:"乱军",i:"⚔️"},{n:"山贼头目",i:"👺"},{n:"黄巾将领",i:"🗡️"},{n:"董卓余党",i:"👿"},{n:"南蛮勇士",i:"🦣"},{n:"西凉铁骑",i:"🐎"},{n:"虎豹骑",i:"🐯"}];
+var isBoss=s_%10===0;var ec=isBoss?1+R(2,4):Math.min(1+Math.floor(s_/15),5);var em=[];
+for(var ei=0;ei<ec;ei++){var e=p[isBoss?R(0,9):(ei+Math.floor((s_-1)/3))%10];var att=bp*(1+R(0,2)*0.2);var hpp=bhe*(1+R(0,2)*0.3);if(isBoss&&ei===0){att=bp*4;hpp=bhe*6;em.push({n:"⚡BOSS "+e.n,i:"👾",at:Math.floor(att),mhp:Math.floor(hpp),hp:Math.floor(hpp),isBoss:true,idx:ei})}else{em.push({n:e.n,i:Math.random()<0.1?"🏴":e.i,at:Math.floor(att),mhp:Math.floor(hpp),hp:Math.floor(hpp),isBoss:false,idx:ei})}}return em;}
+
+//========== Arena ==========
+var ARENA_SEED=R(1,999999);
+function ARENA_SHA(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return Math.abs(h)}
+function ARENA_GEN_NPC(idx,seed){
+  var h=ARENA_SHA("arena"+idx+seed);
+  var h2=ARENA_SHA("a2"+idx+seed);
+  var q=Math.min(4,Math.floor(h%5));
+  var lv=Math.max(1,G.s+Math.floor(h%3)-1);
+  var a=10+lv*3+Math.floor(h%10)+q*20;
+  var h3=50+lv*10+Math.floor(h2%20)+q*30;
+  var at=Math.max(1,Math.floor(a*(1+(q||1)*0.15)));
+  var ht=Math.max(1,Math.floor(h3*(1+(q||1)*0.15)));
+  var sk=null;
+  var skp=SKILL_POOL[q];
+  if(skp&&skp.length&&h%3===0){sk=skp[R(0,skp.length-1)]}
+  return{n:idx<4?"NPC"+(100+idx):"NPC"+(200+idx-4),q:q,lv:lv,a:at,h:ht,pw:PW({a:at,h:ht,q:q,lv:lv,st:q%2,sk:sk}),sk:sk,title:NPC_TITLE()}
+}
+function ARENA_REFRESH(){
+  var ls=document.getElementById("arl");if(!ls)return;
+  var ar=G.ar||[];
+  var myIdx=ar.findIndex(function(e){return e&&e.p&&e.p.indexOf("你")>=0});
+  var ranks=[];
+  for(var i=0;i<100;i++){
+    if(ar[i]&&myIdx>=0&&i!==myIdx){
+      ranks.push({r:i+1,n:ar[i].n||ar[i].nome,p:ar[i].p||0,w:ar[i].w||0,sq:ar[i].sq||0})
+    }else if(!ar[i]||myIdx<0){
+      var n=ARENA_GEN_NPC(i,ARENA_SEED);
+      ranks.push({r:i+1,n:n.n,q:n.q,lv:n.lv,a:n.a,h:n.h,pw:n.pw,sk:n.sk,isNPC:true,title:n.title})
+    }
+  }
+  var myR=myIdx>=0?myIdx+1:0;
+  var arank=document.getElementById("arank");
+  if(arank)arank.textContent=myR>0?"#"+myR:"未参加";
+  var afight=document.getElementById("afight");
+  if(afight)afight.textContent=G.af+"/"+G.armx;
+  var abest=document.getElementById("abest");
+  if(abest&&G.abest>0)abest.textContent="#"+G.abest;
+  var html='';
+  var targetIdx=null;
+  for(var i=0;i<ranks.length;i++){
+    var r=ranks[i];
+    if(r.isNPC&&!targetIdx&&myR>0&&myR<100&&r.r>myR){targetIdx=r.r}
+    if(html.length>30000){html+='<div style="color:#504030;text-align:center;padding:8px;font-size:11px">⋯ 已显示部分排名</div>';break}
+    html+='<div class="sr" style="cursor:pointer" onclick="ARENA_FIGHT('+r.r+')">';
+    html+='<span class="l">#'+r.r+'</span>';
+    if(r.isNPC)html+='<span style="font-size:12px">'+(r.title?r.title+" ": "")+r.n+'</span>';
+    else html+='<span style="font-size:12px;color:#f0d060">'+(r.n||r.nome||"未知")+(r.p?' <span style="font-size:10px;color:#a08060">'+r.p+'</span>':'')+'</span>';
+    if(r.isNPC){html+='<span style="font-size:10px;color:'+QC[r.q]+'">'+QE[r.q]+'Lv.'+(r.lv||1)+'</span>'}
+    else{html+='<span style="font-size:10px;color:#a08060">'+'战力'+r.pw+'</span>'}
+    html+='<span style="font-size:11px;color:#a08060">⚔'+r.pw+'</span>';
+    html+='</div>'
+  }
+  ls.innerHTML=html||'<div class="em">暂无排名数据</div>';
+  if(targetIdx){
+    var el=ls.children[targetIdx-1];
+    if(el){el.style.border='1px solid #d4a017';el.style.borderRadius='6px'}
+  }
+}
+function ARENA_FIGHT(rnk){
+  if(G.af<=0){ST("挑战次数已用完！每日刷新");return}
+  var ranks=[];
+  var myIdx=-1;
+  for(var i=0;i<100;i++){
+    var ri=G.ar&&G.ar[i]?G.ar[i]:null;
+    if(ri&&ri.p&&ri.p.indexOf("你")>=0)myIdx=i;
+    var ranks={r:i+1};
+    if(ri&&!(ri.isNPC))ranks.isPlayer=true;
+    if(!ri||myIdx<0){
+      var n=ARENA_GEN_NPC(i,ARENA_SEED);
+      ranks.n=n.n;ranks.q=n.q;ranks.lv=n.lv;ranks.a=n.a;ranks.h=n.h;
+      ranks.pw=n.pw;ranks.sk=n.sk;ranks.isNPC=true;ranks.title=n.title
+    }else{
+      ranks.n=ri.n||ri.nome||"未知";ranks.pw=ri.pw||0
+    }
+    ranks.push(ranks)
+  }
+  var target=ranks[rnk-1];
+  if(!target){ST("目标无效");return}
+  G.af--;
+  var n=target;
+  var myPW=0;
+  for(var fi=0;fi<G.fm.length;fi++){var id=G.fm[fi];var h=FH[id];if(h){myPW+=PW(h)}}
+  if(myPW<=0){myPW=G.hs.reduce(function(s,h){return s+PW(h)},0)};
+  myPW=Math.max(myPW,1);
+  var win=myPW>target.pw*R(5,15)/10;
+  var d=document.getElementById("tt");
+  if(d){
+    var title=n.isNPC?(n.title?n.title+" ": "")+n.n:(n.n||"对手");
+    var ic=n.isNPC?ME(n.s||0).i:"⚔";
+    if(win){
+      d.textContent="✅ 胜利! 击败 "+title+" 排名升至#"+(target.r<=1?1:target.r-1);
+      var newR=Math.max(1,target.r-1);
+      if(!G.ar[0]||!G.ar[0].p)G.ar=[];
+      var idx=G.ar.findIndex(function(x){return x&&x.p&&x.p.indexOf("你")>=0});
+      if(idx>=0)G.ar.splice(idx,1);
+      if(G.ar.length>=100)G.ar.pop();
+      G.ar.splice(newR-1,0,{n:G.name||"我",p:"⚔️你·"+R(100,999),pw:myPW,sq:R(1,5),w:1});
+      while(G.ar.length>100)G.ar.pop();
+      if(!G.abest||newR<G.abest)G.abest=newR;
+      ST("🎉排名 #"+newR,2000);
+    }else{
+      d.textContent="❌ 败给 "+title+"，提升实力再来";
+      ST("💪继续加油",2000);
+    }
+    d.classList.add("s");
+    setTimeout(function(){if(d)d.classList.remove("s")},3000);
+    SV();ARENA_REFRESH();ARENA_RENDER();
+  }
+}
+function ARENA_RENDER(){
+  var t=G.ar||[];
+  var ls=document.getElementById("arl");
+  var ab=document.getElementById("ab");
+  if(!ls&&!ab)return;
+  if(ab){ab.innerHTML='<div style="padding:12px"><h2 style="margin-bottom:8px">⚔️竞技场</h2><div style="font-size:12px;color:#a08060;margin-bottom:8px">排名100名内可挑战，胜利取代对方排名</div><div style="display:flex;gap:10px;margin-bottom:10px"><span>🏆排名:<b id="arank">未参加</b></span><span>⚔️剩余:<b id="afight">5/5</b></span><span>🏆最高:<b id="abest">-</b></span></div><button class="bt" onclick="ARENA_REFRESH()" style="background:linear-gradient(135deg,#6a2a6a,#9a3a9a);margin-bottom:8px">↻刷新对手</button></div><div id="arl" style="max-height:60vh;overflow-y:auto;padding:0 8px"></div></div>'}
+  ARENA_REFRESH()
+}
+//========== End Arena ==========
+
+
+function SHOW_NICKNAME_DIALOG(){
+  var d=document.getElementById("nmModal");
+  if(!d)return;
+  var i=document.getElementById("nmi");
+  if(!i)return;
+  i.value=G.name||"";
+  var ts=G.nrn||0;
+  var cd=document.getElementById("nmcd");
+  if(cd){
+    if(ts>0){
+      var left=259200000-(Date.now()-ts);
+      if(left>0){
+        var h=Math.floor(left/3600000);
+        var m=Math.floor((left%3600000)/60000);
+        cd.textContent="⏳冷却中 "+h+"小时"+m+"分";
+        cd.style.display="block";
+      }else{cd.style.display="none"}
+    }else{cd.style.display="none"}
+  }
+  d.classList.add("s");
+}
+function SAVE_NICKNAME(){
+  var i=document.getElementById("nmi");
+  if(!i)return;
+  var v=i.value.trim().substring(0,6);
+  if(!v){ST("昵称不能为空");return}
+  var badwords=["毛泽东","习近平","共产党","共党","法轮功","六四","天安门","郓小平","江泽民","胡锦涛","温家宝","周永康","薄熙来","令计划","赵紫阳","李克强","王岐山","惟尼","包子","独裁","专制","共匪","暴政","fuck","草你妈","操你妈","傻逼","傻B","妈的","他妈的","去死","垃圾","废物","死全家","尼玛","滚蛋","nmsl","cnm","wcnm","沙逼","烢笔","狗日","日你","狗屁","蠢货","脑残","疯子","变态","恶心","贱人","妓女","畜生","杂种","婁子","狗娘"];
+  for(var bi=0;bi<badwords.length;bi++){if(v.indexOf(badwords[bi])>=0){ST("昵称包含不当内容");return}}
+  var ts=G.nrn||0;
+  if(ts>0&&Date.now()-ts<259200000){
+    var left=259200000-(Date.now()-ts);
+    var h=Math.floor(left/3600000);
+    var m=Math.floor((left%3600000)/60000);
+    ST("冷却中，剩余"+h+"小时"+m+"分");
+    return;
+  }
+  G.name=v;
+  G.nrn=Date.now();
+  SV();
+  document.getElementById("nmModal").classList.remove("s");
+  UPDATE_NAME_DISPLAY();
+  ST("✅ 昵称已修改（3天冷却）");
+}
+function UPDATE_NAME_DISPLAY(){
+  var el=document.getElementById("pnick");
+  if(el)el.textContent=G.name||"无名";
+}
+function NPC_TITLE(){
+  return NPC_TITLES[R(0,NPC_TITLES.length-1)]+"·"+NPC_TITLES[R(0,NPC_TITLES.length-1)];
+}
+
+
+function SV(){G.ls=Date.now();G.lo=G.lo||Date.now();try{localStorage.setItem("sg7",JSON.stringify(G))}catch(e){}}
+function LD(){try{var r=localStorage.getItem("sg7");if(r){var s=JSON.parse(r);for(var k in s)G[k]=s[k];G.fm=G.fm||[];G.eq=G.eq||{w:null,a:null,h:null,b:null,r:null,p:null};G.lo=G.lo||Date.now();G.al=G.al||0;G.hl=G.hl||0;G.auto=G.auto||0;G.ach=G.ach||{};G.fighting=0;return true}}catch(e){}return false}
+function RST(){if(!confirm("重置所有数据？"))return;localStorage.removeItem("sg7");location.reload()}
+function OC(){var n=Date.now(),e=n-(G.lo||n);if(e<60000)return null;var h=e/3600000,pw=FP();if(pw<=0)return null;var g=Math.floor((30+G.s*10+Math.floor(pw/5))*h*0.6),t=Math.floor(h*0.3),j=Math.floor(h*0.1);if(g<=0&&t<=0&&j<=0)return null;return{g,t,j,hrs:Math.round(h*10)/10};}
+function OA(){var r=OC();if(!r)return;G.g+=r.g;G.rt+=r.t;G.j+=r.j;G.lo=Date.now();var m="离线 "+r.hrs+"h: ";if(r.g>0)m+=r.g+"💰 ";if(r.t>0)m+=r.t+"📜 ";if(r.j>0)m+=r.j+"💎";if(r.g||r.t||r.j)ST(m,4000);SV()}
+
+var CE=null,EE=[],BT=null,FH={};
+function SB(){
+  if(G.fighting)return;if(!G.fm.length){ST("请先在[阵容]上阵武将");return}
+  EE=ME(G.s);CE=EE[0];G.fighting=1;FH={};for(var i=0;i<G.fm.length;i++){var id=G.fm[i];FH[id]={hp:HH(id),mhp:HH(id)}}
+  UBU();LG("全军出击！");if(BT)clearInterval(BT);BT=setInterval(TB,700);
+  for(var fi=1;fi<EE.length;fi++){setTimeout(function(){LG("第"+(EE.length)+"个敌人出现！")},300)}
+}function SP(){G.fighting=0;if(BT){clearInterval(BT);BT=null}LG("战斗停止")}
+function TB(){
+  if(!G.fighting){SP();return}
+  // My heroes attack
+  for(var i=0;i<G.fm.length;i++){
+    var id=G.fm[i];var fh=FH[id];if(!fh||fh.hp<=0)continue;
+    // Find alive enemy
+    var aliveE=-1;for(var ei=0;ei<EE.length;ei++){if(EE[ei].hp>0){aliveE=ei;break}}
+    if(aliveE<0)break;
+    var e=EE[aliveE];
+    var atk=HA(id);var dmg=Math.max(1,atk+R(-Math.floor(atk*0.2),Math.floor(atk*0.2)));
+    if(Math.random()<0.12){dmg=Math.floor(dmg*1.8);SF("-"+dmg+"!","c")}else{SF("-"+dmg,"d")}
+    e.hp=Math.max(0,e.hp-dmg);
+    var _h2=GH(id);if(Math.random()<0.3&&_h2&&_h2.sk&&(_h2.sk.t||true)&&e.hp>0){var _sk=typeof _h2.sk==='object'?_h2.sk:null;if(!_sk)_sk={t:'dmg',v:1.5};var se=e;if(_sk.t==='dmg'&&_sk.c==='enemy'){var sc=(_sk.n&&_sk.n.indexOf('x3')>0)?3:(_sk.n&&_sk.n.indexOf('x2')>0)?2:1;for(var si=0;si<sc;si++){if(se.hp<=0)break;se.hp=Math.max(0,se.hp-Math.floor(Math.max(1,dmg*_sk.v/sc)));SF('-','c');}}else if(_sk.t==='dmg'&&_sk.c==='all'){var ac=0;for(var si=0;si<EE.length;si++)if(EE[si].hp>0)ac++;for(var si=0;si<EE.length;si++){if(EE[si].hp>0)EE[si].hp=Math.max(0,EE[si].hp-Math.floor(Math.max(1,dmg*_sk.v/ac)));}SF('!!','c');}else if(_sk.t==='heal'&&_sk.c==='lowest'){var li=-1,lp=2;for(var si=0;si<G.fm.length;si++){var sf=FH[G.fm[si]];if(sf&&sf.hp>0){var pc=sf.hp/sf.mhp;if(pc<lp){lp=pc;li=G.fm[si];}}}if(li>=0){FH[li].hp=Math.min(FH[li].mhp,FH[li].hp+Math.floor(FH[li].mhp*_sk.v));SF('++','c');}}else if(_sk.t==='heal'&&_sk.c==='all'){for(var si=0;si<G.fm.length;si++){var sf=FH[G.fm[si]];if(sf&&sf.hp>0)sf.hp=Math.min(sf.mhp,sf.hp+Math.floor(sf.mhp*_sk.v));}SF('++','c');}else if(_sk.t==='debuff'&&_sk.c==='enemy'&&se.hp>0){se.at=Math.max(1,Math.floor(se.at*_sk.v));SF('-ATK','c');}else if(_sk.t==='stun'&&_sk.c==='enemy'&&se.hp>0){if(Math.random()<_sk.v){se.stun=2;SF('ZZZ','c');}}else if(_sk.t==='buff'&&_sk.c==='self'){se.at=Math.floor(se.at*_sk.v);SF('ATK+','c');}}var e2=document.querySelectorAll(".fhs .fb");if(e2[i]){e2[i].classList.remove("af");void e2[i].offsetWidth;e2[i].classList.add("af")}
+  }
+  // Enemies attack
+  for(var ei=0;ei<EE.length;ei++){
+    var e=EE[ei];if(e.stun){e.stun--;continue}if(!e||e.hp<=0)continue;
+    var al=[];for(var fi=0;fi<G.fm.length;fi++){var fh=FH[G.fm[fi]];if(fh&&fh.hp>0)al.push(G.fm[fi])}
+    if(al.length>0){var t=PK(al);var ed=Math.max(1,Math.floor(e.at*0.6+R(-3,3)));FH[t].hp=Math.max(0,FH[t].hp-ed);SF("-"+ed,"d")}
+  }
+  var e3=document.querySelector(".es2");if(e3&&EE.some(function(x){return x.hp>0})&&G.fighting){e3.classList.remove("hs");void e3.offsetWidth;e3.classList.add("hs")}
+  UBU();
+  // Check all enemies dead
+  var allDead=EE.every(function(x){return x.hp<=0});
+  if(allDead){
+    SP();var e4=document.getElementById("eic");if(e4)e4.classList.add("ed2");
+    var hasBoss=EE.some(function(x){return x.isBoss});
+    var gr=10+G.s*3+R(1,10)*EE.length+(hasBoss?50:0);G.g+=gr;G.tg+=gr;G.tk++;G.tb++;
+    var msg=hasBoss?"🎉BOSS战胜利! +"+gr+"💰":"胜利! +"+gr+"💰";
+    if(Math.random()<0.2+hasBoss*0.3){var eq=GE(G.s);G.eqb.push(eq);msg+=" 获得"+eq.n}
+    if(hasBoss){var eq2=GE(G.s+5);G.eqb.push(eq2);msg+=" BOSS掉落"+eq2.n;G.j+=10}
+    // Player exp per battle
+    var xp=EE.length*2+(hasBoss?5:0);S_EXP(xp);
+    G.ss++;if(G.ss>3){G.ss=1;if(!G.lock){G.s++;msg+=" 进入第"+G.s+"章"}else{G.ss=1;msg+=" 锁定中，停留在第"+G.s+"章"}}
+    LG(msg);ST(msg,3000);
+    for(var fi=0;fi<G.fm.length;fi++){var h=GH(G.fm[fi]);if(h){h.exp=(h.exp||0)+R(1,3);if(h.exp>=10+(h.lv||1)*3){h.exp=0;h.lv=(h.lv||1)+1}}}
+    SV();CE=null;EE=[];UA();
+    if(G.auto)setTimeout(function(){if(G.auto)SB()},600);return;
+  }
+  // Check all heroes dead
+  var allDeadH=G.fm.every(function(id){var fh=FH[id];return!fh||fh.hp<=0});
+  if(allDeadH){SP();if(G.lock){G.ss=1;ST("锁定 第"+G.s+"章 重新出征",1500)}else{G.s=Math.max(1,G.s-1);G.ss=1;ST("退至第"+G.s+"章 重新出征",1500)}setTimeout(function(){SB()},1200)}SV();UA()
+}
+function SF(t,c){var el=document.createElement("div");el.className="fdm "+(c==="c"?"fdd":"fd");el.textContent=t;var a=document.getElementById("ba");el.style.left=(30+Math.random()*40)+"%";el.style.top="25%";a.appendChild(el);setTimeout(function(){el.remove()},700)}
+function UBU(){
+  var c=document.getElementById("fhs");c.innerHTML="";
+  for(var i=0;i<G.fm.length;i++){var id=G.fm[i];var h=GH(id);var fh=FH[id];if(!h)continue;var p=fh?Math.max(0,Math.floor((fh.hp/fh.mhp)*100)):100;c.innerHTML+='<div class="fb"><div class=fi>'+h.i+'</div><div class=fn>'+h.n+'</div><div class=fbar><div class=ff style=width:'+p+'%></div></div></div>';}
+  if(CE){var eic=document.getElementById("eic");eic.textContent=CE.i;eic.className="eic"+(CE.isBoss?" b":"");var en=document.getElementById("enm");en.textContent=CE.n+" ("+SR(G.s,G.ss)+")";en.className="enm"+(CE.isBoss?" b":"");var pct=Math.max(0,(CE.hp/CE.mhp)*100);document.getElementById("ehp").style.width=pct+"%";document.getElementById("eht").textContent=Math.max(0,Math.floor(CE.hp))+"/"+CE.mhp;document.getElementById("epw").textContent=CE.at}
+  document.getElementById("mypw").textContent=FP();document.getElementById("stg2").textContent=SR(G.s,G.ss);
+}
+function LG(m){document.getElementById("blog").textContent=m}
+
+function RO(){var r=Math.random(),c=0,q=0;for(var i=0;i<5;i++){c+=RC[i];if(r<=c){q=i;break}}var po=[];for(var i=0;i<HP.length;i++)if(HP[i].q===q)po.push(HP[i]);if(!po.length)return null;var b=PK(po);var _h={id:G.nid++,n:b.n,i:b.i,q:b.q,a:b.a+R(-2,2),h:b.h+R(-5,5),sk:b.sk||null,st:0,lv:1,exp:0};var _p=SKILL_POOL[_h.q];if(_p&&!_h.sk)_h.sk=_p[Math.floor(Math.random()*_p.length)];return _h;}
+function DR(n){
+  if(G.rt<n){ST("招募令不足");return}G.rt-=n;var rs=[];for(var i=0;i<n;i++){var h=RO();if(!h)continue;var ex=null;for(var j=0;j<G.hs.length;j++){if(G.hs[j].n===h.n){ex=G.hs[j];break}}if(ex){ex.st=(ex.st||0)+1;ex.a=Math.floor(ex.a*1.15);ex.h=Math.floor(ex.h*1.15);rs.push({t:1,nm:h.n,q:h.q,st:ex.st})}else{G.hs.push(h);rs.push({t:0,n:h.n,i:h.i,q:h.q})}}G.tr+=n;
+  var ct=document.getElementById("newh");ct.innerHTML="";for(var i=0;i<rs.length;i++){var r=rs[i];var d=document.createElement("div");d.className="hc b"+r.q+" q"+r.q;if(r.t===0){d.innerHTML='<div class=av>'+r.i+'</div><div class="nm q'+r.q+'">'+r.n+'</div><div class=st>'+QE[r.q]+QN[r.q]+'</div>'}else{d.innerHTML='<div class=av>⬆️</div><div class="nm q'+r.q+'">'+r.nm+'</div><div class=st>⭐'+(r.st)+'升星</div>'}ct.appendChild(d)}ST("招募"+rs.length+"名",2500);SV();UA()}
+
+function DM(){var gr={};G.hs.forEach(function(h){var k=h.n;if(!gr[k])gr[k]=[];gr[k].push(h)});var m=0;for(var k in gr){var a=gr[k];if(a.length<=1)continue;for(var i=1;i<a.length;i++){a[0].st=(a[0].st||0)+1;a[0].a=Math.floor(a[0].a*1.15);a[0].h=Math.floor(a[0].h*1.15);var idx=G.hs.indexOf(a[i]);if(idx>=0)G.hs.splice(idx,1);m++}}if(m>0){ST("合并"+m+"名",2500);SV();UA()}else{ST("无可合并",2000)}}
+
+function GE(stg){var qr=Math.random(),q=0;if(qr<0.5)q=0;else if(qr<0.75)q=1;else if(qr<0.9)q=2;else if(qr<0.98)q=3;else q=4;var ti=R(0,5);var p2=["破旧","普通","精良","锋利","坚固","闪亮","古老","传奇"];var nm=PK(p2)+ET[ti];var stgMul=1+Math.floor(stg/5)*0.2;var atk=Math.floor((10+R(1,5)*stgMul+stg*1.5)*(1+q*0.6));var hp=Math.floor((20+R(2,8)*stgMul+stg*2)*(1+q*0.6));var sp=null;if(q===4){var sr=Math.random();var si=R(0,9);if(sr<0.15){sp={n:["暴击","爆伤","吸血","连击","反击","穿透","格挡","闪避","减伤","回复"][si],v:R(5,15)+"%",t:3}}else if(sr<0.50){sp={n:["暴击","爆伤","吸血","连击","反击","穿透","格挡","闪避","减伤","回复"][si],v:R(3,8)+"%",t:2}}else{if(sr>=0.50){sp={n:["暴击","爆伤","吸血","连击","反击","穿透","格挡","闪避","减伤","回复"][si],v:R(1,3)+"%",t:1}}}}return{id:G.neid++,n:nm,i:EI[ti],ti:ti,atk:atk,hp:hp,q:q,sp:sp,eqLevel:1}}
+var SK={0:"w",1:"a",2:"h",3:"b",4:"r",5:"p"};var SN=["武器","铠甲","头盔","战靴","护腕","玉佩"];
+function EI2(id){for(var z=0;z<G.eqb.length;z++){if(G.eqb[z].id===id){EQ_DIALOG(G.eqb[z],"backpack");return}}ST("装备不存在",2000)};
+
+function EQ_SLOT_CLICK(sk){var eq=G.eq[sk];if(!eq){ST("空槽",1500);return}EQ_DIALOG(eq,"slot")}
+function UE(sk){if(!G.eq[sk])return;G.eqb.push(G.eq[sk]);G.eq[sk]=null;SV();UA()}
+
+function DEP(id){if(ID(id)){UND(id);return}if(G.fm.length>=6){ST("已满");return}G.fm.push(id);SV();UF();UA()}
+function UND(id){var idx=G.fm.indexOf(id);if(idx<0)return;G.fm.splice(idx,1);SV();UF();UA()}
+function AD(){var s=G.hs.slice().sort(function(a,b){return PW(b)-PW(a)});G.fm=[];for(var i=0;i<Math.min(6,s.length);i++)G.fm.push(s[i].id);SV();UF();UA();ST("自动编队完成")}
+function CF(){G.fm=[];SV();UF();UA();ST("已清���")}
+function UF(){var sc=document.getElementById("fsl");sc.innerHTML="";for(var i=0;i<6;i++){var id=G.fm[i];var h=id?GH(id):null;var c2="f"+(h?" u":"");if(h){sc.innerHTML+='<div class="'+c2+'"><div style=font-size:11px;color:#605040>#'+(i+1)+'</div><div style=font-size:24px>'+h.i+'</div><div class="nm q'+h.q+'" style=font-size:12px>'+h.n+'</div><div style=font-size:10px;color:#f0d060>'+QE[h.q]+'⭐'+(h.st||0)+'</div><div style=font-size:10px;color:#f44;cursor:pointer onclick=UND('+id+')>✕卸下</div></div>'}else{sc.innerHTML+='<div class="'+c2+'" onclick=document.querySelectorAll("#tb button")[1].click()><div style=font-size:11px;color:#605040>#'+(i+1)+'</div><div style=font-size:28px;color:#605040>＋</div><div style=font-size:10px;color:#605040>空位</div></div>'}}UFL()}
+function UFL(){var ct=document.getElementById("hlf");ct.innerHTML="";if(!G.hs.length){ct.innerHTML='<div class=em>暂无武将，先去招募!</div>';return}var s=G.hs.slice().sort(function(a,b){return PW(b)-PW(a)});for(var i=0;i<s.length;i++){var h=s[i];var dep=ID(h.id);var d=document.createElement("div");d.className="hc b"+h.q+" q"+h.q;d.dataset.id=h.id;d.innerHTML='<div class=av>'+h.i+'</div><div class="nm q'+h.q+'">'+h.n+'</div><div class=st>'+QE[h.q]+'⭐'+(h.st||0)+'</div><div class=pw>'+PW(h)+'</div>'+(dep?'<div class=db>✓</div>':'')+(h.sk?(typeof h.sk==='object'?'<div style=font-size:9px;color:#f0d060;margin-top:2px>⚡'+h.sk.n+'</div>':'<div style=font-size:9px;color:#f0d060;margin-top:2px>⚡'+h.sk+'</div>'):'');d.onclick=function(){var id=parseInt(this.dataset.id);var h2=GH(id);if(h2)SM(h2)};;ct.appendChild(d)}}
+
+function UA(){document.getElementById("gld").textContent=G.g.toLocaleString();document.getElementById("jde").textContent=G.j;document.getElementById("rct").textContent=G.rt;document.getElementById("stg").textContent=SR(G.s,G.ss);document.getElementById("plv").textContent=G.lv||1;var e2=document.getElementById("expBar");if(e2)e2.textContent=(G.exp||0)+"/"+(G.nexp||10);UHL();UEQ();US();UAch();UOF()}
+
+function UHL(){var ct=document.getElementById("hl");ct.innerHTML="";if(!G.hs.length){ct.innerHTML='<div class=em>暂无武将</div>';return}var s=G.hs.slice().sort(function(a,b){if(b.q!==a.q)return b.q-a.q;return PW(b)-PW(a)});for(var i=0;i<s.length;i++){var h=s[i];var d=document.createElement("div");d.className="hc b"+h.q+" q"+h.q;d.dataset.id=h.id;d.innerHTML='<div class=av>'+h.i+'</div><div class="nm q'+h.q+'">'+h.n+'</div><div class=st>'+"⭐".repeat((h.st||0)+1)+'</div><div class=lv>Lv.'+(h.lv||1)+'</div><div class=pw>'+PW(h)+'</div>'+(h.sk?(typeof h.sk==='object'?'<div style=font-size:9px;color:#f0d060;margin-top:2px>⚡'+h.sk.n+'</div>':'<div style=font-size:9px;color:#f0d060;margin-top:2px>⚡'+h.sk+'</div>'):'');d.onclick=function(){var id=parseInt(this.dataset.id);var h2=GH(id);if(h2)SM(h2)};ct.appendChild(d)}}
+
+function UEQ(){var el=document.getElementById("esl");if(el){var si=["\ud83d\udde1\ufe0f","\ud83d\udee1\ufe0f","\u26d1\ufe0f","\ud83d\udc62","\ud83e\udea2","\ud83d\udc8e"],ks=["w","a","h","b","r","p"];el.innerHTML="";for(var i=0;i<6;i++){var e=G.eq[ks[i]];var ec='';if(e){var eqid=e.id;ec='<div class=esl-slot style=border-color:'+QC[e.q]+';cursor:pointer onclick="ESL_CLICK('+eqid+')"><div class=esl-icon>'+e.i+'</div><div class=esl-name style=color:'+QC[e.q]+'>'+e.n+'</div><div style=font-size:9px;color:#605040>Lv'+(e.eqLevel||1)+'</div><div class=esl-rm onclick="EQ_SLOT_CLICK(\''+ks[i]+'\')" style=display:block onmouseover="this.style.display=\'block\'">\u2715</div></div>'}else ec='<div class=esl-slot esl-empty><div class=esl-icon>'+si[i]+'</div><div style=font-size:10px;color:#605040>'+SN[i]+'</div></div>';el.innerHTML+=ec}};var tc=document.getElementById("bpt");if(!tc)return;tc.innerHTML="";var si2=["\ud83d\udde1\ufe0f","\ud83d\udee1\ufe0f","\u26d1\ufe0f","\ud83d\udc62","\ud83e\udea2","\ud83d\udc8e"],pn=["\u6b66\u5668","\u76d4\u7532","\u5934\u76d4","\u9774\u5b50","\u6212\u6307","\u9970\u54c1"];var at=document.createElement("button");at.className="bptab a";at.textContent="\u5168\u90e8 ("+G.eqb.length+")";at.dataset.filter="-1";tc.appendChild(at);for(var p=0;p<6;p++){var cnt=G.eqb.filter(function(eq){return eq.ti===p}).length;if(!cnt)continue;var tb=document.createElement("button");tb.className="bptab";tb.textContent=si2[p]+pn[p]+" ("+cnt+")";tb.dataset.filter=p;tc.appendChild(tb)};renderEqGrid(-1);var bs=tc.querySelectorAll(".bptab");for(var i=0;i<bs.length;i++){bs[i].onclick=function(){var al=tc.querySelectorAll(".bptab");for(var j=0;j<al.length;j++)al[j].className="bptab";this.className="bptab a";renderEqGrid(parseInt(this.dataset.filter))}};var ec=document.getElementById("eqlCap");if(ec)ec.textContent="Lv."+G.lv*2;var ul=document.getElementById("eqlUnlock");if(ul)ul.textContent="Lv."+G.lv+"\u53ef\u5347\u81f3Lv."+G.lv*2}
+function renderEqGrid(filter){var gc=document.getElementById("ebg");if(!gc)return;gc.innerHTML="";var eqs=(filter<0)?G.eqb:G.eqb.filter(function(eq){return eq.ti===filter});for(var i=0;i<eqs.length;i++){var eq=eqs[i];var cd=document.createElement("div");cd.className="bpitem";cd.style.borderColor=QC[eq.q];cd.innerHTML='<div style="position:relative;display:inline-block;font-size:18px">'+eq.i+(eq.lk?"<span style='position:absolute;top:-6px;right:-6px;font-size:11px'>\ud83d\udd12</span>":"")+'</div><div style="font-weight:700;color:'+QC[eq.q]+';font-size:11px">'+eq.n+'</div><div style="font-size:9px;color:#605040">Lv'+(eq.eqLevel||1)+'</div>';cd.onclick=function(){showEqDetail(parseInt(this.dataset.id))};cd.dataset.id=eq.id;gc.appendChild(cd)}if(!eqs.length)gc.innerHTML='<div class=em style=grid-column:1/-1>该分类无装备</div>'}function showEqPart(p,si,QC,partNames){var gc=document.getElementById("egc");gc.innerHTML='<div class=epc><div class=epl>'+si[p]+' '+partNames[p]+'</div><div class=epg></div></div>';var pg=gc.querySelector(".epg");var partEqs=G.eqb.filter(function(eq){return eq.ti===p});for(var j=0;j<partEqs.length;j++){var eq=partEqs[j];var cd=document.createElement("div");cd.className="iv";cd.style.borderColor=QC[eq.q];cd.style.cssText+="display:inline-flex;flex-direction:column;align-items:center;padding:6px 8px;margin:4px;border-radius:6px;border:1px solid;background:rgba(0,0,0,.3);cursor:pointer;min-width:70px";cd.innerHTML='<div style=font-size:20px>'+eq.i+'</div><div style=font-weight:700;color:'+QC[eq.q]+';font-size:11px>'+eq.n+'</div><div style=font-size:9px;color:#aaa>⚔+'+eq.atk+' ❤+'+eq.hp+'</div>';cd.onclick=function(){EI2(parseInt(this.dataset.id))};cd.dataset.id=eq.id;pg.appendChild(cd)}}
+
+function US(){document.getElementById("sab").textContent='x'+AB().toFixed(1)+' (Lv.'+G.al+')';document.getElementById("shb").textContent='x'+HB().toFixed(1)+' (Lv.'+G.hl+')';var ov=document.getElementById("sov");var qc2=[0,0,0,0,0];G.hs.forEach(function(h){qc2[h.q]++});ov.innerHTML='<h3>📊数据</h3>'+qSR("关卡",SR(G.s,G.ss))+qSR("武将总数",G.hs.length)+qSR("上阵",G.fm.length+"/6")+qSR("战力",FP())+qSR("总战力",TP())+qSR("战斗次数",G.tb)+qSR("击杀",G.tk)+qSR("招募",G.tr)+qSR("🟢"+qc2[0]+" 🔵"+qc2[1]+" 🟣"+qc2[2]+" 🟠"+qc2[3]+" 🔴"+qc2[4],"")+'<div class="fc mt"><button class="bt br bs" onclick=RST()>🗑️重置</button></div>'}
+function qSR(l,v){return '<div class=sr><span class=l>'+l+'</span><span class=v>'+v+'</span></div>'}
+
+function UAch(){var ov=document.getElementById("achv");var a=G.ach;var list=[];list.push({n:"初出茅庐",d:"击杀100敌",chk:function(){return G.tk>=100},key:"k100"});list.push({n:"小有名气",d:"击杀500敌",chk:function(){return G.tk>=500},key:"k500"});list.push({n:"百战将军",d:"击杀1000敌",chk:function(){return G.tk>=1000},key:"k1k"});list.push({n:"十步一杀",d:"通关10章",chk:function(){return G.s>=10},key:"wk10"});list.push({n:"天下无双",d:"通关20章",chk:function(){return G.s>=20},key:"wk20"});var changed=0;for(var i=0;i<list.length;i++){if(!a[list[i].key]&&list[i].chk()){a[list[i].key]=1;changed=1;showAch(list[i].n,list[i].d)}}if(changed)SV();ov.innerHTML='<h3>🏅成就</h3>';for(var i=0;i<list.length;i++)ov.innerHTML+='<div class=sr><span class=l>'+list[i].n+'</span><span class=v>'+(a[list[i].key]?'✅ '+list[i].d:'🔒 未完成')+'</span></div>'}
+
+function showAch(t,d){var el=document.createElement("div");el.className="ap";el.innerHTML='<h3>🏅成就解锁!</h3><p>'+t+'</p><p style=font-size:11px;color:#605040>'+d+'</p>';document.body.appendChild(el);setTimeout(function(){el.remove()},3500)}
+
+function UOF(){var el=Date.now()-(G.lo||Date.now());if(el>120000){var r=OC();if(r){document.getElementById("ofi").textContent='离线 '+r.hrs+'h: '+r.g+'💰 '+r.t+'📜';return}}document.getElementById("ofi").textContent='挂机收集中...'}
+
+function SM(h){document.getElementById("mtt").textContent=h.n;var htm='<div class="tc mb"><div style=font-size:48px>'+h.i+'</div><div style=font-size:18px;font-weight:700;color:'+QC[h.q]+'>'+h.n+'</div><div style=display:inline-block;padding:2px 8px;background:'+QC[h.q]+';color:#fff;border-radius:4px;font-size:11px;margin-top:4px>'+QN[h.q]+'</div></div>';if(h.sk&&typeof h.sk==='object')htm+=qSR('技能','⚡'+h.sk.n+' ('+h.sk.d+')');else if(h.sk)htm+=qSR('技能','⚡'+h.sk);htm+=qSR("品质",QE[h.q]+QN[h.q])+qSR("星级","⭐"+((h.st||0)+1))+qSR("等级","Lv."+(h.lv||1))+qSR("攻击",h.a)+qSR("生命",h.h)+qSR("战力",PW(h))+qSR("经验",(h.exp||0)+"/"+(10+(h.lv||1)*3));document.getElementById("mbd").innerHTML=htm;document.getElementById("md").classList.add("s")}
+function EQ_DIALOG(eq,src){
+  var qns=["普通","优秀","稀有","传说","神话"];
+  var htm='<div class="tc mb"><div style=font-size:48px>'+eq.i+'</div><div style=font-size:18px;font-weight:700;color:'+QC[eq.q]+'>'+eq.n+'</div><div style=display:inline-block;padding:2px 8px;background:'+QC[eq.q]+';color:#fff;border-radius:4px;font-size:11px;margin-top:4px>'+qns[eq.q]+'</div></div>';
+  htm+='<div class="es">⚔攻击+'+eq.atk+' ❤生命+'+eq.hp+'</div>';
+  if(eq.lvl)htm+='<div class="es">Lv.'+eq.lvl+'</div>';
+  if(eq.sp)htm+='<div class="es" style=color:#ff0>🔥'+eq.sp.n+'+'+eq.sp.v+'</div>';
+  htm+='<div class="es">💰分解可得:'+((eq.q+1)*5)+'金币</div>';
+  htm+='<div style=display:flex;gap:10px;justify-content:center;margin-top:15px>';
+  if(src==='backpack'){
+    htm+='<button class="bt" style="background:linear-gradient(135deg,#2a6a2a,#3a8a3a)" onclick="EQ_ACTION('+eq.id+',1)">✅装备</button>';
+    htm+='<button class="bt" style="font-size:11px;padding:7px 10px;background:linear-gradient(135deg,#5a5a2a,#7a7a3a)" onclick="EQ_LOCK('+eq.id+')">🔒上锁</button>';
+    htm+='<button class="bt" style="background:linear-gradient(135deg,#8a2a2a,#aa3a3a)" onclick="EQ_ACTION('+eq.id+',2)">🗑️分解</button>';
+  } else {
+    htm+='<button class="bt" style="background:linear-gradient(135deg,#6a5a2a,#8a7a3a)" onclick="EQ_ACTION('+eq.id+',3)">⬇️卸下</button>';
+    htm+='<button class="bt" style="background:linear-gradient(135deg,#8a2a2a,#aa3a3a)" onclick="EQ_ACTION('+eq.id+',2)">🗑️分解</button>';
+  }
+  htm+='<button class="bt" style="background:linear-gradient(135deg,#3a3a3a,#5a5a5a)" onclick="document.getElementById("md").classList.remove("s")">↩️取消</button>';
+  htm+='</div>';
+  document.getElementById("mtt").textContent='装备详情';
+  document.getElementById("mbd").innerHTML=htm;
+  document.getElementById("md").classList.add("s");
+}
+function EQ_ACTION(id,act){
+  document.getElementById("md").classList.remove("s");
+  if(act===2){
+    // Decompose - find equip
+    for(var z=0;z<G.eqb.length;z++){
+      if(G.eqb[z].id===id){
+        if(G.eqb[z].lk){ST("🔒已上锁，请先解锁",2e3);return}
+        G.g+=((G.eqb[z].q+1)*5);
+        ST("分解"+G.eqb[z].n+" 获得"+((G.eqb[z].q+1)*5)+"💰",2500);
+        G.eqb.splice(z,1);
+        SV();UEQ();
+        return;
+      }
+    }
+    // Check equipped slots
+    var ks=["w","a","h","b","r","p"];
+    for(var z=0;z<ks.length;z++){
+      if(G.eq[ks[z]]&&G.eq[ks[z]].id===id){
+        G.g+=((G.eq[ks[z]].q+1)*5);
+        ST("分解"+G.eq[ks[z]].n+" 获得"+((G.eq[ks[z]].q+1)*5)+"💰",2500);
+        G.eq[ks[z]]=null;
+        SV();UEQ();UA();
+        return;
+      }
+    }
+    ST("装备不存在",2000);
+    return;
+  }
+  if(act===1){
+    // Equip from backpack
+    var idx=-1;
+    for(var z=0;z<G.eqb.length;z++){if(G.eqb[z].id===id){idx=z;break}}
+    if(idx<0){ST("装备不存在",2000);return}
+    var eq=G.eqb[idx];
+    var sk=SK[eq.ti];
+    if(G.eq[sk])G.eqb.push(G.eq[sk]);
+    G.eq[sk]=eq;
+    G.eqb.splice(idx,1);
+    SV();UA();ST("装备"+eq.n,2000);
+    return;
+  }
+  if(act===3){
+    // Unequip from slot
+    var ks=["w","a","h","b","r","p"];
+    for(var z=0;z<ks.length;z++){
+      if(G.eq[ks[z]]&&G.eq[ks[z]].id===id){
+        G.eqb.push(G.eq[ks[z]]);
+        G.eq[ks[z]]=null;
+        SV();UA();ST("已卸下",2000);
+        return;
+      }
+    }
+    ST("装备不存在",2000);
+  }
+}
+
+
+
+var TT=null;function ST(m,d){var el=document.getElementById("tt");el.textContent=m;el.classList.add("s");if(TT)clearTimeout(TT);TT=setTimeout(function(){el.classList.remove("s")},d||2000)}
+
+function B1(){if(G.g<500){ST("金币不足");return}G.g-=500;G.rt+=5;SV();UA();ST("📜x5",2000)}
+function B2(){if(G.j<100){ST("💎不足");return}G.j-=100;G.rt+=10;SV();UA();ST("📜x10",2000)}
+function CG(){if(G.g<1000){ST("金币不足");return}G.g-=1000;G.j+=10;SV();UA();ST("+10💎",2000)}
+function UA2(){if(G.g<500||G.j<5){ST("资源不足");return}G.g-=500;G.j-=5;G.al++;SV();UA();ST("攻击Lv"+G.al,2000)}
+function UH2(){if(G.g<500||G.j<5){ST("资源不足");return}G.g-=500;G.j-=5;G.hl++;SV();UA();ST("生命Lv"+G.hl,2000)}
+
+function AS(){SV();setTimeout(AS,30000)}
+function IL(){var pw=FP();if(pw>0&&!G.fighting){G.g+=Math.max(1,Math.floor(1+G.s*0.5+pw/100));G.tg+=Math.floor(1+G.s*0.5+pw/100);if(Math.random()<0.01)G.rt++}UA();setTimeout(IL,5000)}
+
+
+
+function SALVAGE(q){
+  var keep=[];var cnt=0;var locked=0;var gold=0;
+  for(var i=0;i<G.eqb.length;i++){
+    var e=G.eqb[i];
+    if(e.q===q){if(e.lk){locked++;keep.push(e)}else{cnt++;gold+=5+q*10}}
+    else{keep.push(e)}
+  }
+  if(cnt===0&&locked===0){ST("没有"+QN[q]+"装备可分解");return}
+  if(cnt===0){ST(QN[q]+"装备全部已上锁 (🔒"+locked+"件)",2e3);return}
+  G.eqb=keep;G.g+=gold;
+  ST("分解"+cnt+"件"+QN[q]+"装备 +"+gold+"💰"+(locked?"(🔒跳过"+locked+"件)":""),3000);
+  SV();UA()
+}
+
+function SALVAGE_ALL(q){
+  if(!confirm("确定分解所有"+QN[q]+"品质(含已装备)装备?"))return;
+  var keep=[];var cnt=0;var gold=0;
+  for(var i=0;i<G.eqb.length;i++){
+    var e=G.eqb[i];
+    if(e.q===q){cnt++;gold+=5+q*10}
+    else{keep.push(e)}
+  }
+  G.eqb=keep;G.g+=gold;
+  ST("分解"+cnt+"件+"+gold+"💰",3000);
+  SV();UA()
+}
+// ===== V4 NEW FEATURES =====
+
+// 1.扫荡系统 - 快速获取资源
+
+
+
+function SWEEP(mode){
+  if(!G.fm.length){ST("先上阵武将");return}
+  if(G.s<=1&&G.ss<=1){ST("至少通关1-1");return}
+  if(G.fighting){ST("战斗中");return}
+  if(!G.sw)G.sw=0;if(!G.swa)G.swa=0;
+  var td=new Date().toDateString();
+  if(G.swd!==td){G.sw=0;G.swa=0;G.swd=td}
+  if(mode===2){
+    if(G.swa>=5){ST("广告已达上限",2500);return}
+    G.swa++;runSwp();return
+  }
+  if(G.sw>=5){ST("免费已用完",3000);return}
+  G.sw++;runSwp();
+  function runSwp(){var expS=0;
+    var gold=0,eqC=0,expT=0,expP=0,stgL=Math.max(1,G.s);
+    for(var i=0;i<5;i++){
+      gold+=10+stgL*5+R(1,stgL*2);
+      for(var j=0;j<G.fm.length;j++){var h=GH(G.fm[j]);if(h)expT+=R(1,2);expS+=R(1,2)}
+      if(Math.random()<0.3){eqC++;G.eqb.push(GE(stgL))}
+    }
+    G.g+=gold;G.tb+=5;S_EXP(expP);ADD_EXP(expS);
+    for(var j=0;j<G.fm.length;j++){var h=GH(G.fm[j]);if(h){h.exp=(h.exp||0)+expT;while(h.exp>=10+(h.lv||1)*3){h.exp-=10+(h.lv||1)*3;h.lv=(h.lv||1)+1}}}
+    var msg="扫荡5次! +"+gold+"💰";if(eqC>0)msg+=" 🎁"+eqC+"件装备";if(expT>0)msg+=" +"+expT+"经验";ST(msg,3500);SV();UA()
+  }
+}
+
+
+// 2.秘境副本 - 专门刷经验和装备
+var DG={}; // {started:0, stage:1, maxStage:1, energy:5, maxEnergy:5}
+function DG_INIT(){try{G.dg=G.dg||{stage:1,started:0,energy:5};}catch(e){G.dg={stage:1,started:0,energy:5}}}
+
+
+
+function DG_ENTER(){
+  // Init dungeon state
+  if(!G.dg){G.dg={stage:1,dd:""}}
+  var td=new Date().toDateString();
+  if(G.dg.dd!==td){G.dg.dd=td;G.dg.today=0}
+  G.dg.today=G.dg.today||0;
+  if(G.dg.today>=3){ST("秘境每天限3次!",3000);return}
+  // Show modal
+  var stg=G.dg.stage||1;
+  var rec=200+stg*50;
+  document.getElementById("dgIcon").textContent=G.dg.today===2?"👾":"🏰";
+  document.getElementById("dgTitle").textContent=G.dg.today===2?"⚡精英秘境":"🏰秘境探险";
+  document.getElementById("dgStage").textContent=stg;
+  document.getElementById("dgToday").textContent=G.dg.today+"/3";
+  document.getElementById("dgRec").textContent=rec;
+  document.getElementById("dgBody").style.borderColor=G.dg.today===2?"#a060ff":"#6040a0";
+  document.getElementById("dgModal").classList.add("s");
+}
+
+
+
+function DG_START(){document.getElementById("dgModal").classList.remove("s");
+  if(!G.fm.length){ST("请先上阵武将");return}
+  document.getElementById("dgModal").classList.remove("s");
+  var stg=G.dg.stage||1;
+  var isElite=(G.dg.today===2); // 3rd run = elite (0-indexed: 2)
+  var mhp=300+stg*120+(isElite?300:0);
+  var atk=60+stg*25+(isElite?40:0);
+  var boss={n:(isElite?"⚡精英":"秘境")+"守卫 Lv."+stg,i:isElite?"👾":"👹",at:atk,mhp:mhp,hp:mhp,isElite:isElite,isDg:true};
+  CE=boss;G.fighting=1;FH={};
+  for(var i=0;i<G.fm.length;i++){var id=G.fm[i];FH[id]={hp:HH(id),mhp:HH(id)}}
+  UBU();LG("🏰秘境 Lv."+stg+" 探险!");
+  if(BT)clearInterval(BT);BT=setInterval(DG_TICK,700);
+}
+
+function DG_TICK(){
+  if(!G.fighting||!CE){if(BT){clearInterval(BT);BT=null}return}
+  for(var i=0;i<G.fm.length;i++){
+    var id=G.fm[i];var fh=FH[id];if(!fh||fh.hp<=0||CE.hp<=0)continue;
+    var atk=HA(id);var dmg=Math.max(1,atk+R(-Math.floor(atk*0.2),Math.floor(atk*0.2)));
+    if(Math.random()<0.12){dmg=Math.floor(dmg*1.8);SF("-"+dmg+"!","c")}else{SF("-"+dmg,"d")}
+    CE.hp=Math.max(0,CE.hp-dmg);
+    var e2=document.querySelectorAll(".fhs .fb");if(e2[i]){e2[i].classList.remove("af");void e2[i].offsetWidth;e2[i].classList.add("af")}
+    if(CE.hp<=0)break;
+  }
+  if(CE&&CE.hp>0){
+    var al=[];for(var i=0;i<G.fm.length;i++){var fh=FH[G.fm[i]];if(fh&&fh.hp>0)al.push(G.fm[i])}
+    if(al.length>0){var t=PK(al);var ed=Math.max(1,CE.at+R(-4,4));FH[t].hp=Math.max(0,FH[t].hp-ed);SF("-"+ed,"d")}
+  }
+  UBU();
+  var stg=G.dg?G.dg.stage||1:1;
+  if(CE&&CE.hp<=0){
+    G.fighting=0;if(BT){clearInterval(BT);BT=null}
+    document.getElementById("eic").classList.add("ed2");
+    G.dg.stage=stg+1;
+    G.dg.today++;S_EXP(stg*5+R(1,10));
+    var goldR=80+stg*20+R(1,50)+(CE.isElite?80:0);
+    G.g+=goldR;S_EXP(stg*3+R(2,6));
+    for(var j=0;j<G.fm.length;j++){var h=GH(G.fm[j]);if(h){h.exp=(h.exp||0)+R(5,12);while(h.exp>=10+(h.lv||1)*3){h.exp-=10+(h.lv||1)*3;h.lv=(h.lv||1)+1}}}
+    var eq=GE(G.s+stg);G.eqb.push(eq);
+    G.j+=R(3,8);G.rt+=R(0,2);
+    var msg="🏰秘境通关! +"+goldR+"💰|"+eq.n;if(CE.isElite)msg+="|🎁精英!"
+    LG(msg);ST(msg,4000);
+    SV();UA();CE=null;
+    return;
+  }
+  var ad=1;for(var i=0;i<G.fm.length;i++){var fh=FH[G.fm[i]];if(fh&&fh.hp>0){ad=0;break}}
+  if(ad){G.fighting=0;if(BT){clearInterval(BT);BT=null}LG("秘境失败");ST("重整旗鼓",2000);SV();UA()}
+}
+
+
+
+
+// 3.吃经验书快速升级
+function EXP_BOOK(){if(G.g<200){ST("金币不足",2500);return}G.g-=200;S_EXP(G.lv*2+R(1,5));
+  if(G.g<200){ST("金币不足(200💰)");return}
+  if(!G.fm.length){ST("上阵武将才给吃书");return}
+  G.g-=200;
+  for(var j=0;j<G.fm.length;j++){
+    var h=GH(G.fm[j]);
+    if(h){
+      h.exp=(h.exp||0)+10;
+      while(h.exp>=10+(h.lv||1)*3){
+        h.exp-=10+(h.lv||1)*3;
+        h.lv=(h.lv||1)+1;
+      }
+    }
+  }
+  ST("全军+10经验",2000);
+  SV();UA();
+}
+
+// 4.卡关提示
+function ADVICE(){
+  var pw=FP();
+  var msgs=[];
+  if(G.fm.length<6)msgs.push("👥 上满6名武将提升战力");
+  if(!G.eq.w&&!G.eq.a&&!G.eq.h)msgs.push("🗡️ 装备能大幅提升属性");
+  var canMerge=0;var nameCount={};G.hs.forEach(function(h){nameCount[h.n]=(nameCount[h.n]||0)+1});for(var k in nameCount)if(nameCount[k]>1)canMerge=1;
+  if(canMerge)msgs.push("⭐ 有重复武将，去升星!");
+  var minLv=99;G.fm.forEach(function(id){var h=GH(id);if(h&&h.lv<minLv)minLv=h.lv});
+  if(minLv<3)msgs.push("📖 用经验书给主力升级");
+  if(G.g<500)msgs.push("💰 离线挂机攒金币强化");
+  msgs.push("⚡ 商店里可以强化攻击/生命");
+  if(!msgs.length||msgs.length>5)msgs.push("⚔️ 继续刷装备和升星");
+  ST("💡 建议: "+msgs.slice(0,3).join(" | "),6000);
+}
+
+// Modified UA to include dungeon info
+var ua_orig=UA;
+UA=function(){
+  ua_orig();
+  // Update dungeon display
+  var di=document.getElementById("dginfo");
+  if(di){DG_INIT();di.textContent="秘境: 第"+(G.dg?G.dg.stage||1:1)+"层 | 今日"+(G.dg?G.dg.today||0:0)+"/3"}
+}
+
+
+
+
+
+function S_EXP(amt){G.exp=(G.exp||0)+amt;while((G.nexp||10)>0&&G.exp>=(G.nexp||10)){G.exp-=(G.nexp||10);G.lv=(G.lv||1)+1;if(G.lv<=100)G.nexp=Math.floor(10+Math.pow(G.lv,1.5)*0.8);else if(G.lv<=200)G.nexp=Math.floor(100+Math.pow(G.lv,1.6)*1.2);else if(G.lv<=500)G.nexp=Math.floor(500+Math.pow(G.lv,1.7)*3);else if(G.lv<=800)G.nexp=Math.floor(5000+Math.pow(G.lv,1.8)*8);else G.nexp=Math.floor(30000+Math.pow(G.lv,2)*5);if(G.lv>=1000){G.lv=1000;G.nexp=0;break}}SV();UA();ST("升级! 当前Lv."+G.lv,2000)}
+function init(){
+  LD();OA();CE=ME(G.s);UA();
+  document.querySelectorAll("#tb button").forEach(function(b){b.onclick=function(){document.querySelectorAll("#tb button").forEach(function(x){x.classList.remove("a")});document.querySelectorAll(".pn").forEach(function(p){p.classList.remove("a")});this.classList.add("a");document.getElementById("p"+this.dataset.tab).classList.add("a");if(this.dataset.tab==="f")UF();if(this.dataset.tab==="a"){ARENA_REFRESH();ARENA_RENDER()}}});
+  document.getElementById("bob").onclick=SB;
+  document.getElementById("boa").onclick=function(){G.auto=!G.auto;this.textContent=G.auto?"⏹️自动":"⏹️停止"/*will be overridden*/;if(G.auto)SB()};
+  document.getElementById("br1").onclick=function(){DR(1)};document.getElementById("br10").onclick=function(){DR(10)};
+  document.getElementById("bom").onclick=DM;document.getElementById("bad").onclick=AD;document.getElementById("bcf").onclick=CF;
+  document.getElementById("sb1").onclick=B1;document.getElementById("sb2").onclick=B2;document.getElementById("scg").onclick=CG;
+  document.getElementById("sua").onclick=UA2;document.getElementById("suh").onclick=UH2;
+  document.getElementById("mcc").onclick=function(){document.getElementById("md").classList.remove("s")};document.getElementById("dgClose").onclick=function(){document.getElementById("dgModal").classList.remove("s")};document.getElementById("dgFight").onclick=DG_START;document.getElementById("dgModal").onclick=function(e){if(e.target===document.getElementById("dgModal"))document.getElementById("dgModal").classList.remove("s")};
+  document.getElementById("dgClose").onclick=function(){document.getElementById("dgModal").classList.remove("s")};
+  document.getElementById("dgFight").onclick=DG_START;
+  document.getElementById("dgModal").onclick=function(e){if(e.target===document.getElementById("dgModal")){document.getElementById("dgModal").classList.remove("s")}};
+  document.getElementById("md").onclick=function(e){if(e.target===document.getElementById("md"))document.getElementById("md").classList.remove("s")};
+  G.hs.forEach(function(h){if(h&&!h.sk){var _p=SKILL_POOL[h.q];if(_p)h.sk=_p[Math.floor(Math.random()*_p.length)];}});G.eqb.forEach(function(e){if(e.lk===void 0)e.lk=0;});AS();IL();setInterval(UA,3000);
+
+
+  }
+
+function EQ_STRENGTHEN(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(ei<0)return;var eq=G.eqb[ei];if(!eq.eqLevel)eq.eqLevel=1;var maxLv=G.lv*2;if(eq.eqLevel>=maxLv){ST("已达等级上限Lv."+maxLv,1500);return}var cost=eq.eqLevel*50+(eq.q+1)*20;if(G.g<cost){ST("金币不足，需"+cost+"💰",1500);return}G.g-=cost;eq.eqLevel++;eq.atk=Math.floor(eq.atk*1.15);eq.hp=Math.floor(eq.hp*1.15);ST("⬆"+eq.n+"强化至Lv."+eq.eqLevel,1500);SV();UA();UEQ();showEqDetail(eq.id)}
+function DECOMPOSE(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(ei<0)return;var eq=G.eqb[ei];var g=[5,15,30,50,80][eq.q];G.g+=g;G.eqb.splice(ei,1);ST(QN[eq.q]+"装备已分解，获得"+g+"金币",1500);SV();UEQ();;var d=document.getElementById("epdetail");if(d)d.innerHTML=""}
+
+
+function ESL_CLICK(id){var eq;var ks=["w","a","h","b","r","p"];for(var i=0;i<6;i++){if(G.eq[ks[i]]&&G.eq[ks[i]].id===id){eq=G.eq[ks[i]];break}}if(!eq)return;var d=document.getElementById("epdetail");if(!d)return;var sp='';if(eq.sp)sp='<div style=color:#ff6644>'+eq.sp.n+':'+eq.sp.v+'</div>';var lv=eq.eqLevel||1;var maxLv=G.lv*2;var cost=lv*50+(eq.q+1)*20;var htm='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>&#9876;&#25915;&#20987;:'+eq.atk+'<br>&#10084;&#29983;&#21629;:'+eq.hp+(sp?'<br>'+sp:'')+'</div>';htm+='<div class=fc style="flex-wrap:wrap"><button class="bt bs br" onclick="Q('+id+',0)">&#11015;&#33073;&#19979;</button><button class="bt bs" onclick="Q('+id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">&#11014;&#24378;&#21270; ['+cost+'&#128176;]</button><button class="bt bs br" onclick="Q('+id+',3)">&#128465;&#20998;&#35299;</button></div></div>';htm+='<div style=margin-top:12px;padding-top:8px;border-top:1px solid rgba(139,105,20,.15)><div style=font-size:13px;color:#f0d060;margin-bottom:6px>&#128073; \u540c\u7c7b\u578b\u80cc\u5305\u88c5\u5907\u5bf9\u6bd4:</div>';var bp=G.eqb.filter(function(e){return e.ti===eq.ti});if(!bp.length){htm+='<div style=font-size:12px;color:#605040>\u5305\u4e2d\u65e0\u540c\u7c7b\u578b\u88c5\u5907</div>'}else{for(var j=0;j<bp.length;j++){var be=bp[j];htm+='<div style="display:inline-flex;flex-direction:column;align-items:center;padding:8px 10px;margin:4px;border-radius:8px;border:1.5px solid '+QC[be.q]+';background:rgba(0,0,0,.3);cursor:pointer" onclick="showEqDetail('+be.id+')"><div style=font-size:20px>'+be.i+'</div><div style=font-size:11px;font-weight:700;color:'+QC[be.q]+'>'+be.n+'</div><div style=font-size:9px;color:#aaa>&#9876;'+be.atk+' &#10084;'+be.hp+'</div></div>'}}htm+='</div>';d.innerHTML=htm;d.dataset.eqid=eq.id;}
+function showEqDetail(id){
+  var eq=G.eqb.find(function(e){return e.id===id});
+  if(!eq)return;
+  var d=document.getElementById('epdetail');
+  if(!d)return;
+  var sp='';
+  if(eq.sp)sp='<div style=color:#ff6644>'+eq.sp.n+':'+eq.sp.v+'</div>';
+  var lv=eq.eqLevel||1;
+  var maxLv=G.lv*2;
+  var cost=lv*50+(eq.q+1)*20;
+  var sk=['w','a','h','b','r','p'][eq.ti];
+  var isEq=G.eq[sk]&&G.eq[sk].id===eq.id;
+  var btn=isEq?
+    '<button class="bt bs br" onclick="Q('+id+',0)">&#11015;&#33073;&#19979;</button>':
+    '<button class="bt bs bg" onclick="Q('+id+',1)">&#9876;&#35013;&#22791;</button>';
+  var lkBtn=eq.lk?
+    '<button class="bt bs" style="background:linear-gradient(135deg,#6a6a2a,#8a8a3a);font-size:10px" onclick="Q('+id+',4)">🔓解锁</button>':
+    '<button class="bt bs" style="background:linear-gradient(135deg,#3a3a2a,#5a5a3a);font-size:10px" onclick="Q('+id+',4)">🔒上锁</button>';
+  d.innerHTML='<div class=epdetail-card>'+
+    '<div class=eicon>'+eq.i+'</div>'+
+    '<div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div>'+
+    '<div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div>'+
+    '<div class=estats>&#9876;&#25915;&#20987;:'+eq.atk+'<br>&#10084;&#29983;&#21629;:'+eq.hp+(sp?'<br>'+sp:'')+'</div>'+
+    '<div class=fc style="flex-wrap:wrap">'+lkBtn+btn+
+      '<button class="bt bs" onclick="Q('+id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">&#11014;&#24378;&#21270; ['+cost+'&#128176;]</button>'+
+      '<button class="bt bs br" onclick="Q('+id+',3)">&#128465;&#20998;&#35299;</button>'+
+    '</div></div>';
+  d.dataset.eqid=eq.id;
+}function Q(id,t){
+  if(t===1){
+    var ei=G.eqb.findIndex(function(e){return e.id===id});
+    if(ei<0){ST('no',2000);return}
+    var eq=G.eqb[ei];
+    var sk=["w","a","h","b","r","p"][eq.ti];
+    if(G.eq[sk]){G.eqb.push(G.eq[sk])}
+    G.eq[sk]=eq;
+    G.eqb.splice(ei,1);
+    ST('ok'+eq.n,1500);SV();UEQ();UA();
+  }else if(t===0){
+    var ks=["w","a","h","b","r","p"];
+    for(var zi=0;zi<ks.length;zi++){
+      if(G.eq[ks[zi]]&&G.eq[ks[zi]].id===id){
+        G.eqb.push(G.eq[ks[zi]]);G.eq[ks[zi]]=null;
+        ST('uneq',1500);SV();UEQ();UA();return;
+      }
+    }
+    ST('no',2000);
+  }else if(t===2){
+    var ei=G.eqb.findIndex(function(e){return e.id===id});
+    if(ei<0)return;
+    var eq=G.eqb[ei];
+    if(!eq.eqLevel)eq.eqLevel=1;
+    var maxLv=G.lv*2;
+    if(eq.eqLevel>=maxLv){ST('max'+maxLv,1500);return}
+    var cost=eq.eqLevel*50+(eq.q+1)*20;
+    if(G.g<cost){ST('need'+cost,1500);return}
+    G.g-=cost;eq.eqLevel++;
+    eq.atk=Math.floor(eq.atk*1.15);eq.hp=Math.floor(eq.hp*1.15);
+    ST('up'+eq.n+'Lv'+eq.eqLevel,1500);
+    SV();UA();UEQ();showEqDetail(eq.id);
+  }else if(t===3){
+    var ei=G.eqb.findIndex(function(e){return e.id===id});
+    if(ei<0)return;
+    var eq=G.eqb[ei];
+    if(eq.lk){ST('已锁定，请先解锁',2e3);return}
+    var g=[5,15,30,50,80][eq.q];
+    G.g+=g;G.eqb.splice(ei,1);
+    ST('decom'+g,1500);SV();UEQ();
+    var d=document.getElementById('epdetail');if(d)d.innerHTML='';
+  }
+
+  if(t===4){
+    var ei=G.eqb.findIndex(function(e){return e.id===id});
+    if(ei<0)return;
+    G.eqb[ei].lk=!G.eqb[ei].lk;
+    SV();showEqDetail(id);
+    ST(G.eqb[ei].lk?'锁定了':'已解锁',1500);
+  }
+}
+function init(){
+  LD();OA();CE=ME(G.s);UA();
+  document.querySelectorAll("#tb button").forEach(function(b){b.onclick=function(){document.querySelectorAll("#tb button").forEach(function(x){x.classList.remove("a")});document.querySelectorAll(".pn").forEach(function(p){p.classList.remove("a")});this.classList.add("a");document.getElementById("p"+this.dataset.tab).classList.add("a");if(this.dataset.tab==="f")UF()}});
+  document.getElementById("bob").onclick=SB;
+  document.getElementById("boa").onclick=function(){G.auto=!G.auto;this.textContent=G.auto?"⏹️自动":"⏹️停止";if(G.auto)SB()};
+  document.getElementById("br1").onclick=function(){DR(1)};document.getElementById("br10").onclick=function(){DR(10)};
+  document.getElementById("bom").onclick=DM;document.getElementById("bad").onclick=AD;document.getElementById("bcf").onclick=CF;
+  document.getElementById("sb1").onclick=B1;document.getElementById("sb2").onclick=B2;document.getElementById("scg").onclick=CG;
+  document.getElementById("sua").onclick=UA2;document.getElementById("suh").onclick=UH2;
+  document.getElementById("mcc").onclick=function(){document.getElementById("md").classList.remove("s")};
+  document.getElementById("dgClose").onclick=function(){document.getElementById("dgModal").classList.remove("s")};
+  document.getElementById("dgFight").onclick=DG_START;
+  document.getElementById("dgModal").onclick=function(e){if(e.target===document.getElementById("dgModal"))document.getElementById("dgModal").classList.remove("s")};
+  document.getElementById("md").onclick=function(e){if(e.target===document.getElementById("md"))document.getElementById("md").classList.remove("s")};
+  G.hs.forEach(function(h){if(h&&!h.sk){var _p=SKILL_POOL[h.q];if(_p)h.sk=_p[Math.floor(Math.random()*_p.length)];}});G.eqb.forEach(function(e){if(e.lk===void 0)e.lk=0;});AS();IL();setInterval(UA,3000);
+}
+init();
+
+
+
+
+function EQ_LOCK(id){
+  for(var z=0;z<G.eqb.length;z++){
+    if(G.eqb[z].id===id){
+      G.eqb[z].lk=!G.eqb[z].lk;
+      SV();EQ_DIALOG(G.eqb[z],"backpack");
+      return;
+    }
+  }
+  ST("装备不存在",2e3)
+}
+</script><div class="md" id="dgModal" onclick="if(event.target===this)this.classList.remove('s')">
+  <div class="mbx" style="max-width:420px;background:linear-gradient(145deg,#0a0a1a,#1a0a2a);border-color:#6040a0">
+    <button class="mc" id="dgClose" onclick="document.getElementById('dgModal').classList.remove('s')">&times;</button>
+    <div id="dgBody" class="tc">
+      <div style="font-size:48px;margin:10px 0" id="dgIcon">🏰</div>
+      <h2 style="color:#a080ff" id="dgTitle">秘境探险</h2>
+      <div style="font-size:13px;color:#8060c0;margin:8px 0" id="dgDesc">深入秘境，获取稀有装备</div>
+      <div style="background:#0a0015;border:1px solid #402080;border-radius:10px;padding:12px;margin:12px 0">
+        <div class="srow"><span class="l">当前层数</span><span class="v" id="dgStage">1</span></div>
+        <div class="srow"><span class="l">今日挑战</span><span class="v" id="dgToday">0/3</span></div>
+        <div class="srow"><span class="l">推荐战力</span><span class="v" id="dgRec">0</span></div>
+        <div class="srow"><span class="l">奖励预览</span><span class="v">装备+经验+💎</span></div>
+      </div>
+      <div class="fc">
+        <button class="bt" id="dgFight" onclick="DG_START()" style="background:linear-gradient(135deg,#4020a0,#6040d0);color:#fff;font-size:16px;padding:12px 36px">⚔️ 进入秘境</button>
+      </div>
+      <div style="font-size:11px;color:#504080;margin-top:4px">每第3次为精英挑战，奖励翻倍</div>
+    </div>
+  </div>
+</div>
+</body></html>
