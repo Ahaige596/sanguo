@@ -1608,13 +1608,7 @@ function ADVICE(){
 }
 
 // Modified UA to include dungeon info
-var ua_orig=UA;
-UA=function(){
-  ua_orig();
-  // Update dungeon display
-  var di=document.getElementById("dginfo");
-  if(di){DG_INIT();di.textContent="秘境: 第"+(G.dg?G.dg.stage||1:1)+"层 | 今日"+(G.dg?G.dg.today||0:0)+"/3"}
-}
+
 
 
 
