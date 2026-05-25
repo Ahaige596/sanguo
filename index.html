@@ -851,7 +851,7 @@ var salcol=['#2a5a0a,#3a7a0a','#0a2a5a,#0a3a7a','#2a0a5a,#3a0a7a','#5a0a0a,#7a0a
 var salemo=['','','','',''];
 for(var sq=0;sq<5;sq++){html+='<button class="bt bs" style="background:linear-gradient(135deg,'+salcol[sq]+');color:#fff" onclick="SALVAGE('+sq+')">'+QE[sq]+'分解'+QN[sq]+'</button>';}
 html+='</div><div style="font-size:10px;color:#504030;text-align:center">分解返还金币:普通5 优秀15 稀有30 传说50 神话80</div>';
-ml+='<div class="bpgrid">';
+html+='<div class="bpgrid">';
   var filtered=G.eqb;
   if(window._eqFilter>=0)filtered=G.eqb.filter(function(e){return e.ti===window._eqFilter});
   filtered.forEach(function(eq){
