@@ -26,38 +26,7 @@ var CLASS_SPECS={0:{hpMod:1.4,atkMod:0.9},1:{hpMod:0.9,atkMod:1.3},2:{hpMod:0.8,
 var G={g:0,j:0,rt:10,s:1,ss:1,hs:[],fm:[],eqb:[],eq:{w:null,a:null,h:null,b:null,r:null,p:null},nid:1,neid:1,tb:0,tr:0,tg:0,tk:0,ls:0,lo:0,al:0,hl:0,auto:0,ach:{},lv:1,exp:0,nexp:10};
 var NPC_TITLES=["天帝","战神","鬼王","霸王","武圣","飞将","神机","天策","龙骧","虎威","麒麟","凤凰","苍狼","烈火","寒冰","雷霆","疾风","暴雨","破军","贪狼","七杀","天罡","地煞","白虎","朱雀","青龙","玄武","修罗","夜叉","明王","无双","绝世","凌霄","九霄","星辰","皓月","烈日","玄冥","太虚","混沌","神威","天罚","不败","纵横","无极","乾坤","天元","霸天","凌天","傲天","血战","铁骑","飞龙","猛虎","巨熊","神鹰","灵狐","玄龟","天马","金鹏"];
 
-function BACKPACK_RENDER(heroId){
-  var h=heroId?GH(heroId):null;
-  var html="";
-  if(!G.eqb.length)return '<div class="em">背包为空</div>';
-  if(window._eqFilter===void 0||window._eqFilter<0)window._eqFilter=-1;
-  html+='<div class="bptabs" id="bptabs"><span class="bptab" onclick="window._eqFilter=-1;UEQ()">📦 全部</span>';
-  var types=["武器","铠甲","头盔","战靴","护腕","玉佩"];
-  var icons=["🗡️","🛡️","⛑️","👢","🪢","💎"];
-  for(var ti=0;ti<6;ti++){html+='<span class="bptab" onclick="window._eqFilter='+ti+';UEQ()">'+icons[ti]+' '+types[ti]+'</span>'}
-  html+='</div>';
-  
-html+='<div class="eqbtns">';
-for(var qi=0;qi<5;qi++){html+='<button class="bt" onclick="SALVAGE_ALL('+qi+')">🗑️分解'+QN[qi]+'</button>'}
-html+='</div>';
-html+='<div class="bpgrid">';
-  var filtered=G.eqb;
-  if(window._eqFilter>=0)filtered=G.eqb.filter(function(e){return e.ti===window._eqFilter});
-  filtered.forEach(function(eq){
-    var sp="";if(eq.sp)sp='<span style="font-size:9px;color:#ff6644;display:block">'+eq.sp.n.slice(0,4)+'</span>';
-    if(h&&h.eq){var skip=0;for(var k in h.eq){if(h.eq[k]&&h.eq[k].id===eq.id)skip=1}if(skip)return}
-    var cls=heroId!==null&&heroId!==void 0?"Q("+heroId+","+eq.id+",1)":"showEqDetail(0,"+eq.id+")";
-    html+='<div class="bpitem" style="border-color:'+QC[eq.q]+'" data-heroid="'+heroId+'" data-eqid="'+eq.id+'" onclick="Q(parseInt(this.dataset.heroid),parseInt(this.dataset.eqid),1)">';
-    html+='<div style="font-size:22px">'+eq.i+'</div>';
-    html+='<div style="font-size:10px;font-weight:700;color:'+QC[eq.q]+'">'+eq.n.slice(0,6)+'</div>';
-    html+='<div style="font-size:8px;color:#aaa">⚔'+eq.atk+' ❤'+eq.hp+'</div>';
-    html+=sp;
-    if(eq.lk)html+='<div style="font-size:10px;color:#d4a017">🔒</div>';
-    html+='</div>'
-  });
-  html+='</div>';
-  return html;
-}
+
 
 function UEQ(){
   var con=document.getElementById("pe");if(!con)return;
@@ -108,37 +77,7 @@ function UEQ(){
   con.innerHTML=html;
 }
 
-function BACKPACK_RENDER(heroId){
-  var h=heroId?GH(heroId):null;
-  var html="";
-  if(!G.eqb.length)return '<div class="em">背包为空</div>';
-  if(window._eqFilter===void 0||window._eqFilter<0)window._eqFilter=-1;
-  html+='<div class="bptabs" id="bptabs"><span class="bptab" onclick="window._eqFilter=-1;UEQ()">📦 全部</span>';
-  var types=["武器","铠甲","头盔","战靴","护腕","玉佩"];
-  var icons=["🗡️","🛡️","⛑️","👢","🪢","💎"];
-  for(var ti=0;ti<6;ti++){html+='<span class="bptab" onclick="window._eqFilter='+ti+';UEQ()">'+icons[ti]+' '+types[ti]+'</span>'}
-  html+='</div>';
-  html+='<div class="bpgrid">';
-  var filtered=G.eqb;
-  if(window._eqFilter>=0)filtered=G.eqb.filter(function(e){return e.ti===window._eqFilter});
-  filtered.forEach(function(eq){
-    var sp="";if(eq.sp)sp='<span style="font-size:9px;color:#ff6644;display:block">'+eq.sp.n.slice(0,4)+'</span>';
-    var haseq=0;
-    if(h&&h.eq){for(var k in h.eq){if(h.eq[k]&&h.eq[k].id===eq.id)haseq=1}}
-    if(haseq)return;
-    var lv=eq.eqLevel||1;
-    var cls=heroId!==null&&heroId!==void 0?"Q("+heroId+","+eq.id+",1)":"showEqDetail(0,"+eq.id+")";
-    html+='<div class="bpitem" style="border-color:'+QC[eq.q]+'" onclick="'+cls+'">';
-    html+='<div style="font-size:22px">'+eq.i+'</div>';
-    html+='<div style="font-size:10px;font-weight:700;color:'+QC[eq.q]+'">'+eq.n.slice(0,6)+'</div>';
-    html+='<div style="font-size:8px;color:#aaa">⚔'+eq.atk+' ❤'+eq.hp+'</div>';
-    html+=sp;
-    if(eq.lk)html+='<div style="font-size:10px;color:#d4a017">🔒</div>';
-    html+='</div>'
-  });
-  html+='</div>';
-  return html;
-}
+
 
 
 
@@ -831,34 +770,7 @@ var CLASS_SPECS={0:{hpMod:1.4,atkMod:0.9},1:{hpMod:0.9,atkMod:1.3},2:{hpMod:0.8,
 var G={g:0,j:0,rt:10,s:1,ss:1,hs:[],fm:[],eqb:[],eq:{w:null,a:null,h:null,b:null,r:null,p:null},nid:1,neid:1,tb:0,tr:0,tg:0,tk:0,ls:0,lo:0,al:0,hl:0,auto:0,ach:{},lv:1,exp:0,nexp:10};
 var NPC_TITLES=["天帝","战神","鬼王","霸王","武圣","飞将","神机","天策","龙骧","虎威","麒麟","凤凰","苍狼","烈火","寒冰","雷霆","疾风","暴雨","破军","贪狼","七杀","天罡","地煞","白虎","朱雀","青龙","玄武","修罗","夜叉","明王","无双","绝世","凌霄","九霄","星辰","皓月","烈日","玄冥","太虚","混沌","神威","天罚","不败","纵横","无极","乾坤","天元","霸天","凌天","傲天","血战","铁骑","飞龙","猛虎","巨熊","神鹰","灵狐","玄龟","天马","金鹏"];
 
-function BACKPACK_RENDER(heroId){
-  var h=heroId?GH(heroId):null;
-  var html="";
-  if(!G.eqb.length)return '<div class="em">背包为空</div>';
-  if(window._eqFilter===void 0||window._eqFilter<0)window._eqFilter=-1;
-  html+='<div class="bptabs" id="bptabs"><span class="bptab" onclick="window._eqFilter=-1;UEQ()">📦 全部</span>';
-  var types=["武器","铠甲","头盔","战靴","护腕","玉佩"];
-  var icons=["🗡️","🛡️","⛑️","👢","🪢","💎"];
-  for(var ti=0;ti<6;ti++){html+='<span class="bptab" onclick="window._eqFilter='+ti+';UEQ()">'+icons[ti]+' '+types[ti]+'</span>'}
-  html+='</div>';
-  html+='<div class="bpgrid">';
-  var filtered=G.eqb;
-  if(window._eqFilter>=0)filtered=G.eqb.filter(function(e){return e.ti===window._eqFilter});
-  filtered.forEach(function(eq){
-    var sp="";if(eq.sp)sp='<span style="font-size:9px;color:#ff6644;display:block">'+eq.sp.n.slice(0,4)+'</span>';
-    if(h&&h.eq){var skip=0;for(var k in h.eq){if(h.eq[k]&&h.eq[k].id===eq.id)skip=1}if(skip)return}
-    var cls=heroId!==null&&heroId!==void 0?"Q("+heroId+","+eq.id+",1)":"showEqDetail(0,"+eq.id+")";
-    html+='<div class="bpitem" style="border-color:'+QC[eq.q]+'" data-heroid="'+heroId+'" data-eqid="'+eq.id+'" onclick="Q(parseInt(this.dataset.heroid),parseInt(this.dataset.eqid),1)">';
-    html+='<div style="font-size:22px">'+eq.i+'</div>';
-    html+='<div style="font-size:10px;font-weight:700;color:'+QC[eq.q]+'">'+eq.n.slice(0,6)+'</div>';
-    html+='<div style="font-size:8px;color:#aaa">⚔'+eq.atk+' ❤'+eq.hp+'</div>';
-    html+=sp;
-    if(eq.lk)html+='<div style="font-size:10px;color:#d4a017">🔒</div>';
-    html+='</div>'
-  });
-  html+='</div>';
-  return html;
-}
+
 
 function UEQ(){
   var con=document.getElementById("pe");if(!con)return;
@@ -919,7 +831,11 @@ function BACKPACK_RENDER(heroId){
   var icons=["🗡️","🛡️","⛑️","👢","🪢","💎"];
   for(var ti=0;ti<6;ti++){html+='<span class="bptab" onclick="window._eqFilter='+ti+';UEQ()">'+icons[ti]+' '+types[ti]+'</span>'}
   html+='</div>';
-  html+='<div class="bpgrid">';
+ 
+html+='<div class="eqbtns">';
+for(var qi=0;qi<5;qi++){html+='<button class="bt" onclick="SALVAGE_ALL('+qi+')">🗑️分解'+QN[qi]+'</button>'}
+html+='</div>';
+ html+='<div class="bpgrid">';
   var filtered=G.eqb;
   if(window._eqFilter>=0)filtered=G.eqb.filter(function(e){return e.ti===window._eqFilter});
   filtered.forEach(function(eq){
