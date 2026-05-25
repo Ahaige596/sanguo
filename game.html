@@ -44,7 +44,7 @@ function BACKPACK_RENDER(heroId){
     var sp="";if(eq.sp)sp='<span style="font-size:9px;color:#ff6644;display:block">'+eq.sp.n.slice(0,4)+'</span>';
     if(h&&h.eq){var skip=0;for(var k in h.eq){if(h.eq[k]&&h.eq[k].id===eq.id)skip=1}if(skip)return}
     var cls=heroId!==null&&heroId!==void 0?"Q("+heroId+","+eq.id+",1)":"showEqDetail(0,"+eq.id+")";
-    html+='<div class="bpitem" style="border-color:'+QC[eq.q]+'" onclick="'+cls+'">';
+    html+='<div class="bpitem" style="border-color:'+QC[eq.q]+'" data-heroid="'+heroId+'" data-eqid="'+eq.id+'" onclick="Q(parseInt(this.dataset.heroid),parseInt(this.dataset.eqid),1)">';
     html+='<div style="font-size:22px">'+eq.i+'</div>';
     html+='<div style="font-size:10px;font-weight:700;color:'+QC[eq.q]+'">'+eq.n.slice(0,6)+'</div>';
     html+='<div style="font-size:8px;color:#aaa">⚔'+eq.atk+' ❤'+eq.hp+'</div>';
@@ -60,7 +60,7 @@ function UEQ(){
   var con=document.getElementById("pe");if(!con)return;
   var selectedHero=window._equipHero;
   var html="";
-  html+='<div class="ti">👤 选择武将</div>';
+  html+='<div class="ti" style="margin-bottom:4px">👤 选择武将（先点武将再穿装备）</div>';
   html+='<div class="fc" style="margin-bottom:8px">';
   G.fm.forEach(function(id){
     var h=GH(id);if(!h)return;
@@ -82,10 +82,10 @@ function UEQ(){
       for(var si=0;si<6;si++){
         var sk=slots[si];var eq=h.eq[sk];
         if(eq){
-          html+='<div class="esl-slot" id="ess'+si+'" style="border-color:'+QC[eq.q]+'">';
+          html+='<div class="esl-slot" style="border-color:'+QC[eq.q]+'">';
           html+='<div class="esl-icon" onclick="showEqDetail('+selectedHero+','+eq.id+')">'+eq.i+'</div>';
-          html+='<div class="esl-name" style="color:'+QC[eq.q]+'">'+eq.n+'</div>';
-          html+='<div class="esl-rm" onclick="Q('+selectedHero+','+eq.id+',0)">✕</div>';
+          html+='<div class="esl-name" style="font-size:10px;color:'+QC[eq.q]+'">'+eq.n+'</div>';
+          html+='<div class="esl-rm" onclick="Q('+selectedHero+','+eq.id+',0)" style="cursor:pointer">✕</div>';
           html+='</div>';
         }else{
           html+='<div class="esl-slot esl-empty"><div style="font-size:16px;opacity:.3">'+slotIcons[si]+'</div><div style="font-size:9px;color:#504030">'+slotNames[si]+'</div></div>';
@@ -97,9 +97,11 @@ function UEQ(){
       if(eqAtk||eqHp)html+='<div style="font-size:11px;color:#80a080;text-align:center;margin-bottom:8px">📊 装备加成: ⚔+'+eqAtk+' ❤+'+eqHp+'</div>';
     }
   }
-  html+='<div class="ti">🎒 装备背包</div>';
+  html+='<div class="ti" style="margin-top:8px">🎒 装备背包</div>';
   html+=BACKPACK_RENDER(selectedHero);
-  html+='<div style="font-size:10px;color:#504030;text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid rgba(139,105,20,.1)">💡 先点选武将，再点背包装备穿上</div>';
+  html+='<div style="font-size:10px;color:#504030;text-align:center;margin-top:8px">💡 点武将→点背包装备</div>';
+  // 保留epdetail容器
+  html+='<div class="ti" style="margin-top:8px">📋 装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div>';
   con.innerHTML=html;
 }
 
@@ -871,6 +873,8 @@ function showEqDetail(heroId,eqId){var eq;if(eqId){eq=G.eqb.find(function(e){ret
     '</div></div>';
   d.dataset.eqid=eq.id;
 function Q(heroId,eqId,action){
+  if(heroId===null||heroId===void 0){heroId=window._equipHero||0}
+
   var h=GH(heroId);if(!h){ST("武将不存在",1500);return}
   if(!h.eq){h.eq={w:null,a:null,h:null,b:null,r:null,p:null}}
   var sk=["w","a","h","b","r","p"];
