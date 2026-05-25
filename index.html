@@ -61,7 +61,7 @@ function ARENA_GEN_NPC(idx,seed){
   var sk=null;
   var skp=SKILL_POOL[q];
   if(skp&&skp.length&&h%3===0){sk=skp[R(0,skp.length-1)]}
-  return{n:idx<4?"NPC"+(100+idx):"NPC"+(200+idx-4),q:q,lv:lv,a:at,h:ht,pw:PW({a:at,h:ht,q:q,lv:lv,st:q%2,sk:sk}),sk:sk,title:n.title||""}
+  return{n:idx<4?"NPC"+(100+idx):"NPC"+(200+idx-4),q:q,lv:lv,a:at,h:ht,pw:PW({a:at,h:ht,q:q,lv:lv,st:q%2,sk:sk}),sk:sk,title:NPC_TITLE()}
 }
 function ARENA_REFRESH(){
   var ls=document.getElementById("arl");if(!ls)return;
