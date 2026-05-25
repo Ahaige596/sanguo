@@ -932,37 +932,6 @@ function Q(heroId,eqId,action){
     ST(G.eqb[ei].lk?'锁定了':'已解锁',1500);
   }
 }
-function init(){
-  LD();OA();CE=ME(G.s);UA();
-  document.querySelectorAll("#tb button").forEach(function(b){b.onclick=function(){document.querySelectorAll("#tb button").forEach(function(x){x.classList.remove("a")});document.querySelectorAll(".pn").forEach(function(p){p.classList.remove("a")});this.classList.add("a");document.getElementById("p"+this.dataset.tab).classList.add("a");if(this.dataset.tab==="f")UF();if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()}}});
-  document.getElementById("bob").onclick=SB;
-  document.getElementById("boa").onclick=function(){G.auto=!G.auto;this.textContent=G.auto?"⏹️自动":"⏹️停止";if(G.auto)SB()};
-  document.getElementById("br1").onclick=function(){DR(1)};document.getElementById("br10").onclick=function(){DR(10)};
-  document.getElementById("bom").onclick=DM;document.getElementById("bad").onclick=AD;document.getElementById("bcf").onclick=CF;
-  document.getElementById("sb1").onclick=B1;document.getElementById("sb2").onclick=B2;document.getElementById("scg").onclick=CG;
-  document.getElementById("sua").onclick=UA2;document.getElementById("suh").onclick=UH2;
-  document.getElementById("mcc").onclick=function(){document.getElementById("md").classList.remove("s")};
-  document.getElementById("dgClose").onclick=function(){document.getElementById("dgModal").classList.remove("s")};
-  document.getElementById("dgFight").onclick=DG_START;
-  document.getElementById("dgModal").onclick=function(e){if(e.target===document.getElementById("dgModal"))document.getElementById("dgModal").classList.remove("s")};
-  document.getElementById("md").onclick=function(e){if(e.target===document.getElementById("md"))document.getElementById("md").classList.remove("s")};
-  G.hs.forEach(function(h){if(h&&!h.sk){var _p=SKILL_POOL[h.q];if(_p)h.sk=_p[Math.floor(Math.random()*_p.length)];}});G.eqb.forEach(function(e){if(e.lk===void 0)e.lk=0;});AS();IL();setInterval(UA,3000);
-}
-init();
-
-
-
-
-function EQ_LOCK(id){
-  for(var z=0;z<G.eqb.length;z++){
-    if(G.eqb[z].id===id){
-      G.eqb[z].lk=!G.eqb[z].lk;
-      SV();EQ_DIALOG(G.eqb[z],"backpack");
-      return;
-    }
-  }
-  ST("装备不存在",2e3)
-}
 </script><div class="md" id="dgModal" onclick="if(event.target===this)this.classList.remove('s')">
   <div class="mbx" style="max-width:420px;background:linear-gradient(145deg,#0a0a1a,#1a0a2a);border-color:#6040a0">
     <button class="mc" id="dgClose" onclick="document.getElementById('dgModal').classList.remove('s')">&times;</button>
