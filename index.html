@@ -836,6 +836,15 @@ function BACKPACK_RENDER(heroId){
   var icons=["🗡️","🛡️","⛑️","👢","🪢","💎"];
   for(var ti=0;ti<6;ti++){html+='<span class="bptab" onclick="window._eqFilter='+ti+';UEQ()">'+icons[ti]+' '+types[ti]+'</span>'}
   html+='</div>';
+html+='<div class="ti" style="margin-top:8px">快速分解</div>';
+html+='<div class="fc" style="flex-wrap:wrap;gap:4px;justify-content:center">';
+html+='<button class="bt bs" style="background:linear-gradient(135deg,#2a5a0a,#3a7a0a);color:#fff" onclick="SALVAGE(0)">🟢普通</button>';
+html+='<button class="bt bs" style="background:linear-gradient(135deg,#0a2a5a,#0a3a7a);color:#fff" onclick="SALVAGE(1)">🔵优秀</button>';
+html+='<button class="bt bs" style="background:linear-gradient(135deg,#2a0a5a,#3a0a7a);color:#fff" onclick="SALVAGE(2)">🟣稀有</button>';
+html+='<button class="bt bs" style="background:linear-gradient(135deg,#5a0a0a,#7a0a0a);color:#fff" onclick="SALVAGE(3)">🟠传说</button>';
+html+='<button class="bt bs" style="background:linear-gradient(135deg,#5a0000,#8a0000);color:#fff" onclick="SALVAGE(4)">🔴神话</button>';
+html+='</div>';
+html+='<div style="font-size:10px;color:#706040;text-align:center;margin:4px 0">💰普通5 优秀15 稀有30 传说50 神话80</div>';
 html+='<div class="ti" style="margin-top:8px">快速分解</div><div class="fc" style="flex-wrap:wrap">';
 var saltxt=['绿5','蓝15','紫30','橙50','红80'];
 var salcol=['#2a5a0a,#3a7a0a','#0a2a5a,#0a3a7a','#2a0a5a,#3a0a7a','#5a0a0a,#7a0a0a','#5a0000,#8a0000'];
