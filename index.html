@@ -835,6 +835,10 @@ function BACKPACK_RENDER(heroId){
 html+='<div class="eqbtns">';
 for(var qi=0;qi<5;qi++){html+='<button class="bt" onclick="SALVAGE_ALL('+qi+')">🗑️分解'+QN[qi]+'</button>'}
 html+='</div>';
+
+html+='<div class="eqbtns">';
+for(var qi=0;qi<5;qi++){html+='<button class="bt" onclick="SALVAGE_ALL('+qi+')">🗑️分解'+QN[qi]+'</button>'}
+html+='</div>';
  html+='<div class="bpgrid">';
   var filtered=G.eqb;
   if(window._eqFilter>=0)filtered=G.eqb.filter(function(e){return e.ti===window._eqFilter});
