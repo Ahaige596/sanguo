@@ -1634,132 +1634,8 @@ function showEqDetail(heroId,eqId){var eq;if(eqId){eq=G.eqb.find(function(e){ret
   }
 }
 
-// Force name check
-function CHECK_NAME(){
-  if(!G.name||G.name==='无名'||G.name.trim()===''){
-    var nm=document.getElementById('nmModal');
-    if(nm){
-      nm.onclick=function(){};
-      var mbx=nm.querySelector('.mbx');
-      if(mbx){
-        var mc=mbx.querySelector('.mc');if(mc)mc.style.display='none';
-        var h2=mbx.querySelector('h2');if(h2)h2.textContent='👤 请先取名';
-      }
-      var inp=document.getElementById('nmi');
-      if(inp){inp.placeholder='输入你的名字（最多6字）';inp.value='';inp.onkeydown=function(ev){if(ev.key==='Enter')DO_CHECK_NAME()}}
-      var cd=document.getElementById('nmcd');if(cd)cd.style.display='none';
-      // Replace confirm button handler
-      var btns=nm.querySelectorAll('button');
-      for(var bi=0;bi<btns.length;bi++){
-        if(btns[bi].textContent.includes('确认')||btns[bi].textContent.includes('确定')||btns[bi].className.includes('bg')){
-          btns[bi].textContent='✅ 确定';
-          btns[bi].onclick=DO_CHECK_NAME;
-        }
-      }
-      nm.classList.add('s');
-    }
-    // Hide game content
-    var ps=['pr','pf','ph','pe','ps','pa'];
-    for(var pi=0;pi<ps.length;pi++){var el=document.getElementById(ps[pi]);if(el)el.innerHTML=''}
-    document.getElementById('tb').style.display='none';
-    return false;
-  }
-  return true;
-}
-function DO_CHECK_NAME(){
-  var inp=document.getElementById('nmi');
-  if(!inp)return;
-  var v=inp.value.trim();
-  if(!v){var cd=document.getElementById('nmcd');if(cd){cd.style.display='block';cd.textContent='❌ 名字不能为空！'};return}
-  if(v.length>6){var cd=document.getElementById('nmcd');if(cd){cd.style.display='block';cd.textContent='❌ 名字最多6个字！'};return}
-  // Bad words
-  var bw=["毒品","吸毒","贩毒","冰毒","麻古","k粉","摇头丸","海洛因","大麻","可卡因","鸦片","毒药","赌博","赌场","赌钱","色情","黄色","情色","淫秽","嫖娼","卖淫","枪支","弹药","炸药","暴力","血腥","恐怖","邪教","法轮功","台独","藏独","疆独","港独","六四","天安门","操你妈","傻逼","尼玛","SB"];
-  for(var bi=0;bi<bw.length;bi++){if(v.indexOf(bw[bi])>=0){var cd=document.getElementById('nmcd');if(cd){cd.style.display='block';cd.textContent='❌ 名字包含不当内容！'};return}}
-  if(v==='无名'){var cd=document.getElementById('nmcd');if(cd){cd.style.display='block';cd.textContent='❌ 换个名字！'};return}
-  G.name=v;
-  G.nrn=Date.now();
-  SV();
-  document.getElementById('nmModal').classList.remove('s');
-  document.getElementById('tb').style.display='';
-  document.getElementById('pnick').textContent=G.name;
-  location.reload();
-}
-// Guarded init
-if(CHECK_NAME()){
-// Force name check
-function CHECK_NAME(){
-  if(!G.name||G.name==='无名'||G.name.trim()===''){
-    var nm=document.getElementById('nmModal');
-    if(nm){
-      nm.onclick=function(){};
-      var mbx=nm.querySelector('.mbx');
-      if(mbx){
-        var mc=mbx.querySelector('.mc');if(mc)mc.style.display='none';
-        var h2=mbx.querySelector('h2');if(h2)h2.textContent='👤 请先取名';
-      }
-      var inp=document.getElementById('nmi');
-      if(inp){inp.placeholder='输入你的名字（最多6字）';inp.value='';inp.onkeydown=function(ev){if(ev.key==='Enter')DO_CHECK_NAME()}}
-      var cd=document.getElementById('nmcd');if(cd)cd.style.display='none';
-      // Replace confirm button handler
-      var btns=nm.querySelectorAll('button');
-      for(var bi=0;bi<btns.length;bi++){
-        if(btns[bi].textContent.includes('确认')||btns[bi].textContent.includes('确定')||btns[bi].className.includes('bg')){
-          btns[bi].textContent='✅ 确定';
-          btns[bi].onclick=DO_CHECK_NAME;
-        }
-      }
-      nm.classList.add('s');
-    }
-    // Hide game content
-    var ps=['pr','pf','ph','pe','ps','pa'];
-    for(var pi=0;pi<ps.length;pi++){var el=document.getElementById(ps[pi]);if(el)el.innerHTML=''}
-    document.getElementById('tb').style.display='none';
-    return false;
-  }
-  return true;
-}
-function DO_CHECK_NAME(){
-  var inp=document.getElementById('nmi');
-  if(!inp)return;
-  var v=inp.value.trim();
-  if(!v){var cd=document.getElementById('nmcd');if(cd){cd.style.display='block';cd.textContent='❌ 名字不能为空！'};return}
-  if(v.length>6){var cd=document.getElementById('nmcd');if(cd){cd.style.display='block';cd.textContent='❌ 名字最多6个字！'};return}
-  // Bad words
-  var bw=["毒品","吸毒","贩毒","冰毒","麻古","k粉","摇头丸","海洛因","大麻","可卡因","鸦片","毒药","赌博","赌场","赌钱","色情","黄色","情色","淫秽","嫖娼","卖淫","枪支","弹药","炸药","暴力","血腥","恐怖","邪教","法轮功","台独","藏独","疆独","港独","六四","天安门","操你妈","傻逼","尼玛","SB"];
-  for(var bi=0;bi<bw.length;bi++){if(v.indexOf(bw[bi])>=0){var cd=document.getElementById('nmcd');if(cd){cd.style.display='block';cd.textContent='❌ 名字包含不当内容！'};return}}
-  if(v==='无名'){var cd=document.getElementById('nmcd');if(cd){cd.style.display='block';cd.textContent='❌ 换个名字！'};return}
-  G.name=v;
-  G.nrn=Date.now();
-  SV();
-  document.getElementById('nmModal').classList.remove('s');
-  document.getElementById('tb').style.display='';
-  document.getElementById('pnick').textContent=G.name;
-  // Reload with cache-busting parameter
-  location.href=location.pathname+'?v='+Date.now();
-}
-// Guarded init
-if(CHECK_NAME()){init();}</script><div class="md" id="dgModal" onclick="if(event.target===this)this.classList.remove('s')">
-  <div class="mbx" style="max-width:420px;background:linear-gradient(145deg,#0a0a1a,#1a0a2a);border-color:#6040a0">
-    <button class="mc" id="dgClose" onclick="document.getElementById('dgModal').classList.remove('s')">&times;</button>
-    <div id="dgBody" class="tc">
-      <div style="font-size:48px;margin:10px 0" id="dgIcon">🏰</div>
-      <h2 style="color:#a080ff" id="dgTitle">秘境探险</h2>
-      <div style="font-size:13px;color:#8060c0;margin:8px 0" id="dgDesc">深入秘境，获取稀有装备</div>
-      <div style="background:#0a0015;border:1px solid #402080;border-radius:10px;padding:12px;margin:12px 0">
-        <div class="srow"><span class="l">当前层数</span><span class="v" id="dgStage">1</span></div>
-        <div class="srow"><span class="l">今日挑战</span><span class="v" id="dgToday">0/3</span></div>
-        <div class="srow"><span class="l">推荐战力</span><span class="v" id="dgRec">0</span></div>
-        <div class="srow"><span class="l">奖励预览</span><span class="v">装备+经验+💎</span></div>
-      </div>
-      <div class="fc">
-        <button class="bt" id="dgFight" onclick="DG_START()" style="background:linear-gradient(135deg,#4020a0,#6040d0);color:#fff;font-size:16px;padding:12px 36px">⚔️ 进入秘境</button>
-      </div>
-      <div style="font-size:11px;color:#504080;margin-top:4px">每第3次为精英挑战，奖励翻倍</div>
-    </div>
-  </div>
-</div>
 
-<script>
+
 // ===== 强制首次取名(含敏感词过滤) + 装备详情保护 + 竞技场修复 =====
 (function(){
 // ===== 敏感词表 =====
@@ -1948,6 +1824,88 @@ ARENA_REFRESH=function(){
     else h+='<span style="font-size:12px;color:#f0d060">'+(r.n||'未知')+(r.p?' <span style="font-size:10px;color:#a08060">'+r.p+'</span>':'')+'</span>';
     if(r.npc)h+='<span style="font-size:10px;color:'+QC[r.q]+'">'+QE[r.q]+'Lv.'+(r.lv||1)+'</span>';
     else h+='<span style="font-size:10px;color:#a08060">'+(r.w||0)+'胜</span>';h+='</div>'}
+  ls.innerHTML=h
+};
+})();
+</script><script>
+(function(){
+var _BAD_WORDS=["毒品","吸毒","贩毒","冰毒","麻古","k粉","摇头丸","海洛因","大麻","可卡因","鸦片","毒药","赌博","赌场","赌钱","色情","黄色","情色","淫秽","嫖娼","卖淫","枪支","弹药","炸药","暴力","血腥","恐怖","邪教","法轮功","台独","藏独","疆独","港独","六四","天安门","操你妈","傻逼","尼玛","SB"];
+(function(){
+  if(!G.name||G.name==='无名'||G.name.trim()===''){
+    try{["pr","pf","ph","pe","ps","pa"].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=''});var tb=document.getElementById('tb');if(tb)tb.style.display='none';var hd=document.getElementById('head');hd.style.display='none'}catch(e){}
+    document.body.style.background='#0f0700';
+    setTimeout(function(){
+      var nm=document.getElementById('nmModal');if(!nm)return;
+      var mc=nm.querySelector('.mc');if(mc)mc.style.display='none';
+      nm.onclick=function(){};
+      var mbx=nm.querySelector('.mbx');if(mbx){var h2=mbx.querySelector('h2');if(h2)h2.textContent='👤 请先取名';}
+      var inp=document.getElementById('nmi');if(inp){inp.placeholder='输入你的名字（最多6字）';inp.value='';inp.focus();inp.onkeydown=function(ev){if(ev.key==='Enter')DO_FORCE_NAME()}}
+      var cd=document.getElementById('nmcd');if(!cd&&mbx){cd=document.createElement('div');cd.id='nmcd';cd.style.cssText='text-align:center;color:#ff6644;font-size:12px;margin-bottom:8px;display:none';mbx.appendChild(cd)}
+      var btn=document.getElementById('_fnbtn');if(!btn){btn=document.createElement('button');btn.id='_fnbtn';btn.className='bt bg';btn.textContent='✅ 确定';btn.style.cssText='margin:0 auto;display:block';btn.onclick=DO_FORCE_NAME;if(mbx)mbx.appendChild(btn)}
+      nm.classList.add('s');
+    }, 50);
+  }
+})();
+function DO_FORCE_NAME(){
+  var inp=document.getElementById('nmi');if(!inp)return;
+  var v=inp.value.trim();var cd=document.getElementById('nmcd');
+  if(!v){if(cd){cd.style.display='block';cd.textContent='❌ 名字不能为空！'};return}
+  if(v.length>6){if(cd){cd.style.display='block';cd.textContent='❌ 名字最多6个字！'};return}
+  for(var bi=0;bi<_BAD_WORDS.length;bi++){if(v.indexOf(_BAD_WORDS[bi])>=0){if(cd){cd.style.display='block';cd.textContent='❌ 名字包含不当内容！'};return}}
+  if(v==='无名'){if(cd){cd.style.display='block';cd.textContent='❌ 换个名字！'};return}
+  G.name=v;G.nrn=Date.now();SV();
+  document.getElementById('nmModal').classList.remove('s');
+  document.getElementById('head').style.display='';document.getElementById('tb').style.display='';
+  try{init()}catch(e){location.href=location.pathname+'?r='+Date.now()}
+  var p=document.getElementById('pnick');if(p)p.textContent=G.name;
+  ST('🎉 欢迎你，'+v+'！');
+}
+var _origUEQ=UEQ;
+UEQ=function(){
+  var _oldEp=document.getElementById('epdetail');var _savedContent=_oldEp&&_oldEp.innerHTML.includes('epdetail-card')?_oldEp.innerHTML:'';var _savedStyle=_oldEp?_oldEp.style.cssText:'';
+  _origUEQ();var _pe=document.getElementById('pe');var _ep=document.getElementById('epdetail');
+  if(_ep&&_pe){if(_pe.firstChild!==_ep){_pe.insertBefore(_ep,_pe.firstChild)}if(_savedContent&&(_ep.innerHTML.includes('epempty')||!_ep.innerHTML.trim())){_ep.innerHTML=_savedContent}_ep.style.cssText=_savedStyle||'position:sticky;top:10px;z-index:100;background:#1a1a1a;border:1px solid #3a2a0a;border-radius:8px;padding:6px;margin-bottom:6px'}
+};
+window.showEqDetail=function(heroId,eqId){
+  var eq;if(heroId){var h=GH(heroId);if(h){if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};var s2=['w','a','h','b','r','p'];for(var zi=0;zi<6;zi++){if(h.eq[s2[zi]]&&h.eq[s2[zi]].id===eqId){eq=h.eq[s2[zi]];break}}}}
+  if(!eq&&eqId){if(G.eqb)for(var fi=0;fi<G.eqb.length;fi++){if(G.eqb[fi].id===eqId){eq=G.eqb[fi];break}}if(!eq&&G.eq)for(var k in G.eq){if(G.eq[k]&&G.eq[k].id===eqId){eq=G.eq[k];break}}}
+  if(!eq&&!eqId){eq=null;heroId=0}if(!eq&&heroId&&typeof heroId==='number'){eq=G.eqb.find(function(e){return e.id===heroId});eqId=heroId;heroId=0}
+  var d=document.getElementById('epdetail');if(!d){var pe=document.getElementById('pe');if(!pe)return;d=document.createElement('div');d.id='epdetail';pe.insertBefore(d,pe.firstChild)}
+  var sp='';if(eq&&eq.sp)sp='<div style=color:#ff6644>'+eq.sp.n+':'+eq.sp.v+'</div>';var lv=eq?eq.eqLevel||1:1;var ml=G.lv*2;var cost=lv*50+((eq?eq.q:0)+1)*20;
+  var h=heroId?GH(heroId):null;var et=null;if(eq&&h&&h.eq){for(var zi=0;zi<6;zi++){var _s=['w','a','h','b','r','p'][zi];if(h.eq[_s]&&h.eq[_s].id===eq.id){et=_s;break}}}
+  var ht='<div class=epdetail-card style="margin:0;padding-bottom:6px">';
+  if(eq){ht+='<div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+ml+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div>';
+    ht+='<div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div>'+sp;
+    if(eq.atk)ht+='<div><span style=color:#ff6644>⚔'+eq.atk+'</span></div>';if(eq.hp)ht+='<div><span style=color:#44bb44>❤'+eq.hp+'</span></div>';
+    ht+='<div style=font-size:10px;color:#a08060>品质:Lv.'+eq.q+'</div>';if(eq.lk)ht+='<div style=color:#f0f060>🔒已上锁</div>';
+    var onHero=!!et;if(!onHero&&heroId>0&&h)ht+='<button class="bt bb bs" style="margin:4px 2px" onclick="Q('+heroId+','+eq.id+',1)">👕穿上</button>';
+    if(onHero&&h){ht+='<button class="bt" style="margin:4px 2px;background:linear-gradient(135deg,#5a3a1a,#7a4a2a)" onclick="Q('+heroId+','+eq.id+',2)">⚡强化('+cost+'💰)</button>';ht+='<button class="bt" style="margin:4px 2px;background:linear-gradient(135deg,#5a3a1a,#7a4a2a)" onclick="Q('+heroId+','+eq.id+',3)">⬆进阶</button>';ht+='<button class="bt bg bs" style="margin:4px 2px" onclick="Q('+heroId+','+eq.id+',1)">⬇卸下</button>'}
+    else if(eq&&!eq.lk){ht+='<button class="bt bg bs" style="margin:4px 2px" onclick="Q(0,'+eq.id+',4)">🔒上锁</button>'}else if(eq&&eq.lk){ht+='<button class="bt bg bs" style="margin:4px 2px" onclick="Q(0,'+eq.id+',4)">🔓解锁</button>'}
+    if(!onHero){ht+='<button class="bt" style="margin:4px 2px;background:linear-gradient(135deg,#6a2a2a,#8a3a3a)" onclick="SALVAGE_SINGLE('+eq.id+')">🗑分解</button>'}}else{ht+='<div class="epempty">点击装备查看详情</div>'}
+  ht+='</div>';d.style.cssText='position:sticky;top:10px;z-index:100;background:#1a1a1a;border:1px solid #3a2a0a;border-radius:8px;padding:6px;margin-bottom:6px';d.innerHTML=ht
+};
+ARENA_FIGHT=function(rnk){
+  if(G.af<=0){ST('挑战次数已用完！每日刷新');return}G.ar=G.ar||[];while(G.ar.length<100)G.ar.push(null);
+  var ti=rnk-1;var mi=G.ar.findIndex(function(r){return r&&r.p&&r.p.indexOf('你')>=0});
+  if(mi>=0&&ti>=mi){ST('只能挑战排名高于自己的对手！');return}G.af--;
+  var mp=0;for(var fi=0;fi<G.fm.length;fi++){var id=G.fm[fi];var h=FH[id];if(h)mp+=PW(h)}if(mp<=0)mp=G.hs.reduce(function(s,h){return s+PW(h)},0);mp=Math.max(mp,1);
+  var td=G.ar[ti]||null;var tp;if(td&&td.pw)tp=td.pw;else{var n2=ARENA_GEN_NPC(ti,ARENA_SEED);tp=n2.pw}
+  var win=mp>tp*R(5,15)/10;
+  if(win){if(mi>=0){var ot=G.ar[ti];G.ar[ti]={n:G.name||'我',p:'⚔️你·'+R(100,999),pw:mp,sq:R(1,5),w:1};G.ar[mi]=ot}else{G.ar[ti]={n:G.name||'我',p:'⚔️你·'+R(100,999),pw:mp,sq:R(1,5),w:1}}
+    if(!G.abest||(ti+1)<G.abest)G.abest=ti+1;ST('✅ 胜利! 排名上升到#'+(ti+1),2500)}else{ST('❌ 失败! 战力不足',2500)}
+  SV();ARENA_REFRESH();ARENA_RENDER()};
+ARENA_REFRESH=function(){
+  var ls=document.getElementById('arl');if(!ls)return;var ar=G.ar||[];var mi=ar.findIndex(function(e){return e&&e.p&&e.p.indexOf('你')>=0});var rs=[];
+  for(var i=0;i<100;i++){var ri=ar[i]||null;var me=ri&&ri.p&&ri.p.indexOf('你')>=0;
+    if(ri&&!me)rs.push({r:i+1,n:ri.n||ri.nome||'未知',p:ri.p||'',w:ri.w||0,sq:ri.sq||0,me:false})else if(me)rs.push({r:i+1,n:G.name||'我',p:ri.p||'⚔️你·'+R(100,999),w:ri.w||1,sq:ri.sq||0,me:true})
+    else{var n3=ARENA_GEN_NPC(i,ARENA_SEED);rs.push({r:i+1,n:n3.n,q:n3.q,lv:n3.lv,a:n3.a,h:n3.h,pw:n3.pw,sk:n3.sk,npc:true,title:n3.title,me:false})}}
+  var mr=mi>=0?mi+1:0;var ae=document.getElementById('arank');if(ae)ae.textContent=mr>0?'#'+mr:'未参加';
+  var af=document.getElementById('afight');if(af)af.textContent=(G.af||0)+'/'+(G.armx||5);var ab=document.getElementById('abest');if(ab&&G.abest>0)ab.textContent='#'+G.abest;
+  var h='';for(var i=0;i<rs.length;i++){var r=rs[i];if(h.length>30000){h+='<div style="color:#504030;text-align:center;padding:8px;font-size:11px">⋯ 已显示部分排名</div>';break}
+    h+='<div class="sr" style="cursor:pointer" onclick="ARENA_FIGHT('+r.r+')"><span class="l">#'+r.r+'</span>';
+    if(r.npc)h+='<span style="font-size:12px">'+(r.title?r.title+' ':'')+r.n+'</span>';else if(r.me)h+='<span style="font-size:12px;color:#f0d060;font-weight:700">⭐ '+(r.n||'我')+(r.p?' <span style="font-size:10px;color:#a08060">'+r.p+'</span>':'')+'</span>';
+    else h+='<span style="font-size:12px;color:#f0d060">'+(r.n||'未知')+(r.p?' <span style="font-size:10px;color:#a08060">'+r.p+'</span>':'')+'</span>';
+    if(r.npc)h+='<span style="font-size:10px;color:'+QC[r.q]+'">'+QE[r.q]+'Lv.'+(r.lv||1)+'</span>';else h+='<span style="font-size:10px;color:#a08060">'+(r.w||0)+'胜</span>';h+='</div>'}
   ls.innerHTML=h
 };
 })();
