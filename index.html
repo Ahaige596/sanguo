@@ -1842,17 +1842,21 @@ var _BAD_WORDS=["毒品","吸毒","贩毒","冰毒","麻古","k粉","摇头丸",
       var inp=document.getElementById('nmi');if(inp){inp.placeholder='输入你的名字（最多6字）';inp.value='';inp.focus();inp.onkeydown=function(ev){if(ev.key==='Enter')DO_FORCE_NAME()}}
       var cd=document.getElementById('nmcd');if(!cd&&mbx){cd=document.createElement('div');cd.id='nmcd';cd.style.cssText='text-align:center;color:#ff6644;font-size:12px;margin-bottom:8px;display:none';mbx.appendChild(cd)}
       nm.classList.add('s');
-      // Replace confirm button onclick
-      var confirmBtns=nm.querySelectorAll('button');
-      for(var ci=0;ci<confirmBtns.length;ci++){
-        var cb=confirmBtns[ci];
-        if(cb.textContent.includes('确认')||(cb.onclick+'').includes('SAVE_NICKNAME')){
-          cb.onclick=function(){DO_FORCE_NAME()};
-          cb.textContent='✅ 确定';
-          break;
+    }, 50);
+  
+    // Delayed replacement to ensure buttons exist
+    setTimeout(function(){
+      var nm2=document.getElementById('nmModal');
+      if(!nm2)return;
+      var btns2=nm2.querySelectorAll('button');
+      for(var ci2=0;ci2<btns2.length;ci2++){
+        var cb2=btns2[ci2];
+        if(cb2&&((cb2.textContent||'').indexOf('确认')>=0||cb2.innerHTML.indexOf('确定')>=0)){
+          cb2.onclick=DO_FORCE_NAME;
+          cb2.innerHTML='✅ 确定';
         }
       }
-    }, 50);
+    }, 200);
   }
 })();
 
