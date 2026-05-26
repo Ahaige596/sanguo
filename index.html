@@ -1670,10 +1670,36 @@ init();</script><div class="md" id="dgModal" onclick="if(event.target===this)thi
 ;var _ueqOld=UEQ;UEQ=function(){_ueqOld();var _ep=document.getElementById('epdetail');if(_ep&&window._epCache&&!_ep.innerHTML.includes('epdetail-card')){_ep.innerHTML=window._epCache;_ep.style.cssText='position:sticky;top:42px;z-index:10;background:linear-gradient(145deg,#1a0a00,#2a1a0a);border:1px solid #8b6914;border-radius:8px;padding:10px;margin-bottom:6px';var _pp=document.getElementById('pe');if(_pp&&_pp.firstChild!==_ep){_pp.insertBefore(_ep,_pp.firstChild)}}}
 </script>
 
+
 <script>
-// ===== 装备详情置顶 + 背包点击详情 =====
+// ===== 装备详情修复: 保留详情不被UEQ重渲染覆盖 =====
 (function(){
-var _epCache=window._epCache||null;
+var _epCache=window._epCache||{heroId:null,eqId:null};
+// Fix UEQ to preserve epdetail content instead of hardcoding epempty
+var _origUEQ=UEQ;
+UEQ=function(){
+  // Save current epdetail content BEFORE UEQ runs
+  var _oldEp=document.getElementById("epdetail");
+  var _savedContent=_oldEp?_oldEp.innerHTML:"";
+  var _savedHero=window._equipHero;
+  
+  // Call original UEQ
+  _origUEQ();
+  
+  // After UEQ renders, check if epdetail was overwritten with empty
+  var _newEp=document.getElementById("epdetail");
+  if(_newEp&&_savedContent&&_savedContent.includes("epdetail-card")){
+    // If content was lost (empty), restore it
+    var isEmpty=_newEp.innerHTML.includes("epempty")||!_newEp.innerHTML.trim();
+    if(isEmpty){
+      _newEp.innerHTML=_savedContent;
+    }
+    // Ensure sticky styling
+    _newEp.style.cssText='position:sticky;top:10px;z-index:100;background:#1a1a1a;border:1px solid #3a2a0a;border-radius:8px;padding:6px;margin-bottom:6px';
+  }
+};
+
+// Fix showEqDetail with _epCache for persistence
 window.showEqDetail=function(heroId,eqId){
   var eq;
   if(heroId){
@@ -1688,23 +1714,18 @@ window.showEqDetail=function(heroId,eqId){
     }
   }
   if(!eq&&eqId){
-    var findEq=function(id){
-      if(G.eqb)for(var fi=0;fi<G.eqb.length;fi++){if(G.eqb[fi].id===id)return G.eqb[fi]}
-      if(G.eq)for(var k in G.eq){if(G.eq[k]&&G.eq[k].id===id)return G.eq[k]}
-      return null;
-    };
-    eq=findEq(eqId);
+    if(G.eqb)for(var fi=0;fi<G.eqb.length;fi++){if(G.eqb[fi].id===eqId){eq=G.eqb[fi];break}}
+    if(!eq&&G.eq)for(var k in G.eq){if(G.eq[k]&&G.eq[k].id===eqId){eq=G.eq[k];break}}
   }
   if(!eq&&!eqId){eq=null;heroId=0}
   if(!eq&&heroId&&typeof heroId==='number'){eq=G.eqb.find(function(e){return e.id===heroId});eqId=heroId;heroId=0}
+  
   var d=document.getElementById('epdetail');
   if(!d){
     var pe=document.getElementById('pe');
     if(!pe)return;
     d=document.createElement('div');d.id='epdetail';
-    var top=pe.querySelector('#epdetail-top');
-    if(top)pe.insertBefore(d,top.nextSibling);
-    else{pe.insertBefore(d,pe.firstChild)}
+    pe.insertBefore(d,pe.firstChild);
   }
   var sp='';if(eq&&eq.sp)sp='<div style=color:#ff6644>'+eq.sp.n+':'+eq.sp.v+'</div>';
   var lv=eq?eq.eqLevel||1:1;var maxLv=G.lv*2;var cost=lv*50+((eq?eq.q:0)+1)*20;
@@ -1717,35 +1738,34 @@ window.showEqDetail=function(heroId,eqId){
   if(eq){
     htm+='<div class=eicon>'+eq.i+'</div>';
     htm+='<div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div>';
-    htm+='<div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div>';
-    htm+=sp;
+    htm+='<div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div>';htm+=sp;
     if(eq.atk)htm+='<div><span style=color:#ff6644>⚔'+eq.atk+'</span></div>';
-    if(eq.hp)htm+='<div><span style=color:#44bb44>❤'+eq.eHp||eq.hp+'</span></div>';
+    if(eq.hp)htm+='<div><span style=color:#44bb44>❤'+eq.hp+'</span></div>';
     htm+='<div style=font-size:10px;color:#a08060>品质:Lv.'+eq.q+'</div>';
     if(eq.lk)htm+='<div style=color:#f0f060>🔒已上锁</div>';
     var isOnHero=!!eqType&&eqType.length===1;
-    if(!isOnHero&&heroId>0){
-      if(h){htm+='<button class="bt bb bs" style="margin:4px 2px" onclick="Q('+heroId+','+eq.id+',1);_epCache='+JSON.stringify({heroId:heroId,eqId:eq.id})+'">👕穿上</button>'}
+    if(!isOnHero&&heroId>0&&h){
+      htm+='<button class="bt bb bs" style="margin:4px 2px" onclick="Q('+heroId+','+eq.id+',1)">👕穿上</button>'
     }
     if(isOnHero&&h){
       htm+='<button class="bt" style="margin:4px 2px;background:linear-gradient(135deg,#5a3a1a,#7a4a2a)" onclick="Q('+heroId+','+eq.id+',2)">⚡强化('+cost+'💰)</button>';
-      htm+='<button class="bt" style="margin:4px 2px;background:linear-gradient(135deg,#5a3a1a,#7a4a2a)" onclick="Q('+heroId+','+eq.id+',3);_epCache=null">⬆进阶</button>';
+      htm+='<button class="bt" style="margin:4px 2px;background:linear-gradient(135deg,#5a3a1a,#7a4a2a)" onclick="Q('+heroId+','+eq.id+',3)">⬆进阶</button>';
       htm+='<button class="bt bg bs" style="margin:4px 2px" onclick="Q('+heroId+','+eq.id+',1)">⬇卸下</button>';
     }else if(eq&&!eq.lk){
       htm+='<button class="bt bg bs" style="margin:4px 2px" onclick="Q(0,'+eq.id+',4)">🔒上锁</button>';
     }else if(eq&&eq.lk){
       htm+='<button class="bt bg bs" style="margin:4px 2px" onclick="Q(0,'+eq.id+',4)">🔓解锁</button>';
     }
-    if(!eqType||eqType.length!==1){
+    if(!isOnHero||!eqType){
       htm+='<button class="bt" style="margin:4px 2px;background:linear-gradient(135deg,#6a2a2a,#8a3a3a)" onclick="SALVAGE_SINGLE('+eq.id+')">🗑分解</button>';
     }
   }else{
     htm+='<div class="epempty">点击装备查看详情</div>';
   }
   htm+='</div>';
-  d.innerHTML=htm;
   d.style.cssText='position:sticky;top:10px;z-index:100;background:#1a1a1a;border:1px solid #3a2a0a;border-radius:8px;padding:6px;margin-bottom:6px';
-  _epCache={heroId:heroId,eqId:eq.id||eqId};
+  d.innerHTML=htm;
+  _epCache={heroId:heroId,eqId:eq?eq.id:eqId};
 };
 })();
 // ===== 竞技场修复: 正确排名替换 =====
