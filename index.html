@@ -34,8 +34,8 @@ function UEQ(){
   var con=document.getElementById("pe");if(!con)return;
   var selectedHero=window._equipHero;
   var html="";
-  html+='<div class="ti" style="margin-bottom:4px">👤 选择武将（先点武将再穿装备）</div>';
-  var _oldEp=document.getElementById("epdetail");var _epc=_oldEp?_oldEp.innerHTML:"";html+='<div id="epdetail-top" style="position:sticky;top:10px;z-index:10"></div>';html+='<div class="ti" style="margin:4px 0">📋 装备详情</div><div id="epdetail">'+_epc+'</div>';html+='<div class="fc" style="margin-bottom:8px">';
+  var _oldEp=document.getElementById("epdetail");var _epc=_oldEp?_oldEp.innerHTML:"";html+='<div id="epdetail-top" style="position:sticky;top:10px;z-index:10"></div>';html+='<div class="ti" style="margin:4px 0">📋 装备详情</div><div id="epdetail">'+_epc+'</div>';
+  html+='<div class="ti" style="margin-bottom:4px">👤 选择武将（先点武将再穿装备）</div>';html+='<div class="fc" style="margin-bottom:8px">';
   G.fm.forEach(function(id){
     var h=GH(id);if(!h)return;
     if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};
