@@ -1858,7 +1858,7 @@ var _BAD_WORDS=["毒品","吸毒","贩毒","冰毒","麻古","k粉","摇头丸",
 
 
 
-function DO_FORCE_NAME(){
+window.DO_FORCE_NAME=function(){
   var inp=document.getElementById('nmi');if(!inp)return;
   var v=inp.value.trim();var cd=document.getElementById('nmcd');
   if(!v){if(cd){cd.style.display='block';cd.textContent='❌ 名字不能为空！'};return}
