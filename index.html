@@ -1748,11 +1748,22 @@ window.DO_FORCE_NAME=function(){
 // ===== Hook init to force name if G.name is empty =====
 var _origInit=window.init;
 window.init=function(){
-  _origInit();
-  // After load, check if name exists
-  if(!G.name||G.name==='无名'||G.name.trim()===''){
-    // Force name dialog after a short delay
-    setTimeout(SHOW_FORCE_NICKNAME, 300);
+  // Only run full init if player has a name
+  if(G.name&&G.name!=='无名'&&G.name.trim()!==''){
+    _origInit();
+  }else{
+    // Minimal init: just load data, don't start game
+    try{LD()}catch(e){}
+    // Clear all game content - show nothing but forced name dialog
+    var panels=['pr','pf','ph','pe','ps','pa'];
+    for(var i=0;i<panels.length;i++){var el=document.getElementById(panels[i]);if(el)el.innerHTML=''}
+    // Hide the tab bar too
+    var tb=document.getElementById('tb');if(tb)tb.style.display='none';
+    // Show a dark branded background
+    var hd=document.getElementById('head');if(hd)hd.style.display='none';
+    document.body.style.background='#0f0700';
+    // Force name dialog immediately
+    setTimeout(SHOW_FORCE_NICKNAME, 100);
   }
 };
 
