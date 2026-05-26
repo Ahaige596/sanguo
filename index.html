@@ -1923,4 +1923,41 @@ ARENA_REFRESH=function(){
   ls.innerHTML=h
 };
 })();
+</script><script>
+var _BW=["毒品","吸毒","贩毒","冰毒","麻古","k粉","摇头丸","海洛因","大麻","可卡因","鸦片","毒药","赌博","赌场","赌钱","色情","黄色","情色","淫秽","嫖娼","卖淫","枪支","弹药","炸药","暴力","血腥","恐怖","邪教","法轮功","台独","藏独","疆独","港独","六四","天安门","操你妈","傻逼","尼玛","SB"];
+(function(){
+  if(!G.name||G.name==='无名'||G.name.trim()===''){
+    try{["pr","pf","ph","pe","ps","pa"].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=''});var tb=document.getElementById('tb');if(tb)tb.style.display='none';var hd=document.getElementById('head');if(hd)hd.style.display='none'}catch(e){}
+    document.body.style.background='#0f0700';
+  }
+})();
+
+window._DO_FORCE_NAME=function(){
+  var inp=document.getElementById('nmi');if(!inp)return;
+  var v=inp.value.trim();var cd=document.getElementById('nmcd');
+  if(!v){if(cd){cd.style.display='block';cd.textContent='名字不能为空！'};return}
+  if(v.length>6){if(cd){cd.style.display='block';cd.textContent='名字最多6个字！'};return}
+  for(var bi=0;bi<_BW.length;bi++){if(v.indexOf(_BW[bi])>=0){if(cd){cd.style.display='block';cd.textContent='名字包含不当内容！'};return}}
+  if(v==='无名'){if(cd){cd.style.display='block';cd.textContent='换个名字！'};return}
+  G.name=v;G.nrn=Date.now();SV();
+  document.getElementById('nmModal').classList.remove('s');
+  document.getElementById('head').style.display='';
+  document.getElementById('tb').style.display='';
+  location.reload(true);
+};
+
+setTimeout(function(){
+  var nm=document.getElementById('nmModal');
+  if(!nm){setTimeout(arguments.callee,200);return}
+  if(!nm.classList.contains('s')){setTimeout(arguments.callee,200);return}
+  var btns=nm.querySelectorAll('button');
+  for(var i=0;i<btns.length;i++){
+    var b=btns[i];
+    var t=b.textContent||b.innerHTML||'';
+    if(t.indexOf('确认')>=0||t.indexOf('确定')>=0||b.className.indexOf('bg')>=0){
+      b.onclick=window._DO_FORCE_NAME;
+      b.textContent='确定';
+    }
+  }
+}, 500);
 </script></body></html>
