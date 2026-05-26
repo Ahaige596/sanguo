@@ -1579,7 +1579,7 @@ function showEqDetail(heroId,eqId){var eq;if(eqId){eq=G.eqb.find(function(e){ret
   var btn=isEq?'<button class="bt bs br" onclick="Q('+heroId+','+eq.id+',0)">⬇脱下</button>':'<button class="bt bs bg" onclick="Q('+heroId+','+eq.id+',1)">⚔装备</button>';
   var lkBtn=eq.lk?'<button class="bt bs" style="background:linear-gradient(135deg,#6a6a2a,#8a8a3a);font-size:10px" onclick="Q('+heroId+','+eq.id+',4)">🔓解锁</button>':'<button class="bt bs" style="background:linear-gradient(135deg,#3a3a2a,#5a5a3a);font-size:10px" onclick="Q('+heroId+','+eq.id+',4)">🔒上锁</button>';
   d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>⚔攻击:'+eq.atk+'<br>❤生命:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+lkBtn+btn+'<button class="bt bs" onclick="Q('+heroId+','+eq.id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">⬆强化 ['+cost+'💰]</button><button class="bt bs br" onclick="Q('+heroId+','+eq.id+',3)">🗑分解</button></div></div>';
-  d.dataset.eqid=eq.id;
+  d.dataset.eqid=eq.id;var _ep=d;setTimeout(function(){if(_ep)_ep.scrollIntoView({behavior:'smooth',block:'start'})},100);;
 }function Q(heroId,eqId,action){
   if(heroId===null||heroId===void 0)heroId=0;
   var h=null;if(heroId>0)h=GH(heroId);
