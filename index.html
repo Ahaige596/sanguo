@@ -298,11 +298,11 @@ function FORCE_NAME(){
 
 function disableAllBtns(){
   document.querySelectorAll("#tb button").forEach(function(b){b.disabled=true;b.style.opacity="0.5";b.style.cursor="not-allowed"});
-  document.querySelectorAll("button.bt").forEach(function(b){b.disabled=true;b.style.opacity="0.5";b.style.cursor="not-allowed"});
+  // only disable non-modal btns
+  document.querySelectorAll(".mbx button.bt").forEach(function(b){b.disabled=false});
 }
 function enableAllBtns(){
   document.querySelectorAll("#tb button").forEach(function(b){b.disabled=false;b.style.opacity="";b.style.cursor=""});
-  document.querySelectorAll("button.bt").forEach(function(b){b.disabled=false;b.style.opacity="";b.style.cursor=""});
 }
 function SAVE_NICKNAME(){
   var i=document.getElementById("nmi");
