@@ -1678,9 +1678,10 @@ init();</script><div class="md" id="dgModal" onclick="if(event.target===this)thi
 // ===== 敏感词表 =====
 var _BAD_WORDS=["黄","赌","毒","色","情","淫","吸","毒","贩","毒","枪","支","炸","弹","暴","力","血","腥","恐","怖","邪","教","迷","幻","药","嫖","娼","赌","博","赌","场","毒","品","海","洛","因","冰","毒","麻","古","摇","头","丸","k粉","操","你","妈","傻","逼","尼","玛","法","轮","功","民","运","台","独","藏","独","疆","独","港","独","六","四","天","安","门"];
 var _hasBadWord=function(name){
-  for(var bi=0;bi<_BAD_WORDS.length;bi++){if(name.indexOf(_BAD_WORDS[bi])>=0)return true}
-  // Check substrings of all 2-char combinations for bad words
-  var n1='';for(var ci=0;ci<name.length;ci++){var cc=name.charCodeAt(ci);if((cc>=0x4e00&&cc<=0x9fff)||(cc>=97&&cc<=122)||(cc>=65&&cc<=90)||(cc>=48&&cc<=57))n1+=name[ci]}
+  for(var bi=0;bi<_BAD_WORDS.length;bi++){
+    var w=_BAD_WORDS[bi];
+    if(w.length>=2&&name.indexOf(w)>=0)return true;
+  }
   return false;
 };
 
