@@ -128,11 +128,18 @@ function ARENA_REFRESH(){
   var myIdx=ar.findIndex(function(e){return e&&e.p&&e.p.indexOf("你")>=0});
   var ranks=[];
   for(var i=0;i<100;i++){
-    if(ar[i]&&myIdx>=0&&i!==myIdx){
-      ranks.push({r:i+1,n:ar[i].n||ar[i].nome,p:ar[i].p||0,w:ar[i].w||0,sq:ar[i].sq||0})
-    }else if(!ar[i]||myIdx<0){
+    var ri=ar[i]||null;
+    var isMe=ri&&ri.p&&ri.p.indexOf("你")>=0;
+    if(ri&&!isMe){
+      // Real player data (other players or NPC that was beaten)
+      ranks.push({r:i+1,n:ri.n||ri.nome||"未知",p:ri.p||0,w:ri.w||0,sq:ri.sq||0,isMe:false})
+    }else if(isMe){
+      // Player's own rank
+      ranks.push({r:i+1,n:G.name||"我",p:ri.p||"⚔️你·"+R(100,999),w:ri.w||1,sq:ri.sq||0,isMe:true})
+    }else{
+      // NPC
       var n=ARENA_GEN_NPC(i,ARENA_SEED);
-      ranks.push({r:i+1,n:n.n,q:n.q,lv:n.lv,a:n.a,h:n.h,pw:n.pw,sk:n.sk,isNPC:true,title:n.title})
+      ranks.push({r:i+1,n:n.n,q:n.q,lv:n.lv,a:n.a,h:n.h,pw:n.pw,sk:n.sk,isNPC:true,title:n.title,isMe:false})
     }
   }
   var myR=myIdx>=0?myIdx+1:0;
@@ -143,70 +150,59 @@ function ARENA_REFRESH(){
   var abest=document.getElementById("abest");
   if(abest&&G.abest>0)abest.textContent="#"+G.abest;
   var html='';
-  var targetIdx=null;
   for(var i=0;i<ranks.length;i++){
     var r=ranks[i];
-    if(r.isNPC&&!targetIdx&&myR>0&&myR<100&&r.r>myR){targetIdx=r.r}
     if(html.length>30000){html+='<div style="color:#504030;text-align:center;padding:8px;font-size:11px">⋯ 已显示部分排名</div>';break}
     html+='<div class="sr" style="cursor:pointer" onclick="ARENA_FIGHT('+r.r+')">';
     html+='<span class="l">#'+r.r+'</span>';
     if(r.isNPC)html+='<span style="font-size:12px">'+(r.title?r.title+" ": "")+r.n+'</span>';
-    else html+='<span style="font-size:12px;color:#f0d060">'+(r.n||r.nome||"未知")+(r.p?' <span style="font-size:10px;color:#a08060">'+r.p+'</span>':'')+'</span>';
+    else if(r.isMe)html+='<span style="font-size:12px;color:#f0d060;font-weight:700">⭐ '+(r.n||"我")+(r.p?' <span style="font-size:10px;color:#a08060">'+r.p+'</span>':'')+'</span>';
+    else html+='<span style="font-size:12px;color:#f0d060">'+(r.n||"未知")+(r.p?' <span style="font-size:10px;color:#a08060">'+r.p+'</span>':'')+'</span>';
     if(r.isNPC){html+='<span style="font-size:10px;color:'+QC[r.q]+'">'+QE[r.q]+'Lv.'+(r.lv||1)+'</span>'}
-    else{html+='<span style="font-size:10px;color:#a08060">'+'战力'+r.pw+'</span>'}
-    html+='<span style="font-size:11px;color:#a08060">⚔'+r.pw+'</span>';
+    else{html+='<span style="font-size:10px;color:#a08060">'+(r.w||0)+'胜</span>'}
     html+='</div>'
   }
-  ls.innerHTML=html||'<div class="em">暂无排名数据</div>';
-  if(targetIdx){
-    var el=ls.children[targetIdx-1];
-    if(el){el.style.border='1px solid #60c0ff';el.style.borderRadius='6px'}
-  }
-}
-function ARENA_FIGHT(rnk){
+  ls.innerHTML=html;
+}function ARENA_FIGHT(rnk){
   if(G.af<=0){ST("挑战次数已用完！每日刷新");return}
-  var rankList=[];
-  var myIdx=-1;
-  for(var fi=0;fi<100;fi++){
-    var ri=G.ar&&G.ar[fi]?G.ar[fi]:null;
-    if(ri&&ri.p&&ri.p.indexOf("你")>=0)myIdx=fi;
-    var rItem={r:fi+1};
-    if(!ri||myIdx<0){
-      var n=ARENA_GEN_NPC(fi,ARENA_SEED);
-      rItem.n=n.n;rItem.q=n.q;rItem.lv=n.lv;rItem.a=n.a;rItem.h=n.h;
-      rItem.pw=n.pw;rItem.sk=n.sk;rItem.isNPC=true;rItem.title=n.title
-    }else{
-      rItem.n=ri.n||ri.nome||"未知";rItem.pw=ri.pw||0
-    }
-    rankList.push(rItem)
-  }
-  var target=rankList[rnk-1];
-  if(!target){ST("目标无效");return}
+  G.ar=G.ar||[];while(G.ar.length<100)G.ar.push(null);
+  var targetIdx=rnk-1;
+  var myIdx=G.ar.findIndex(function(ri){return ri&&ri.p&&ri.p.indexOf("你")>=0});
+  // Check we're fighting someone ahead of us (or any if we're unranked)
+  if(myIdx>=0&&targetIdx>=myIdx){ST("只能挑战排名高于自己的对手！");return}
   G.af--;
+  // Calculate player power
   var myPW=0;
   for(var fi=0;fi<G.fm.length;fi++){var id=G.fm[fi];var h=FH[id];if(h){myPW+=PW(h)}}
   if(myPW<=0){myPW=G.hs.reduce(function(s,h){return s+PW(h)},0)};
   myPW=Math.max(myPW,1);
-  var win=myPW>target.pw*R(5,15)/10;
-  var d=document.getElementById("tt");
-  if(d){
-    var title=target.isNPC?(target.title?target.title+" ": "")+target.n:(target.n||"对手");
-      if(win){
-        var newR=target.r;
-        var myIdx=-1;
-        for(var fi=0;fi<100;fi++){var ri=G.ar&&G.ar[fi]?G.ar[fi]:null;if(ri&&ri.p&&ri.p.indexOf("你")>=0){myIdx=fi;break}}
-        G.ar=G.ar||[];
-        while(G.ar.length<100)G.ar.push(null);
-        if(myIdx>=0)G.ar[myIdx]=null;
-        G.ar[newR-1]={n:G.name||"我",p:"⚔️你·"+R(100,999),pw:myPW,sq:R(1,5),w:1};
-        if(!G.abest||newR<G.abest)G.abest=newR;
-        d.textContent="✅ 胜利! 排名#"+(myIdx+1)+"→#"+newR;
-        ST("✅ 胜利! 排名上升到"+newR,2500);
-      }
-    d.classList.add("s");
-    setTimeout(function(){if(d)d.classList.remove("s")},3000);
-    SV();ARENA_REFRESH();ARENA_RENDER();
+  // Get target data
+  var targetData=G.ar[targetIdx]||null;
+  var targetPW;
+  if(targetData&&!targetData.p)targetPW=targetData.pw||0;
+  else{
+    var n=ARENA_GEN_NPC(targetIdx,ARENA_SEED);
+    targetPW=n.pw;
   }
+  // Determine win
+  var win=myPW>targetPW*R(5,15)/10;
+  var targetName=G.ar[targetIdx]?G.ar[targetIdx].n||ARENA_GEN_NPC(targetIdx,ARENA_SEED).n:"对手";
+  if(win){
+    // Save target data at my old position (swap)
+    if(myIdx>=0){
+      var oldData=G.ar[targetIdx];
+      G.ar[targetIdx]={n:G.name||"我",p:"⚔️你·"+R(100,999),pw:myPW,sq:R(1,5),w:(G.ar[targetIdx]?G.ar[targetIdx].w||0:0)+1};
+      G.ar[myIdx]=oldData;  // Move target to player's old position
+    }else{
+      // First time: just put player at target's position
+      G.ar[targetIdx]={n:G.name||"我",p:"⚔️你·"+R(100,999),pw:myPW,sq:R(1,5),w:1};
+    }
+    if(!G.abest||(targetIdx+1)<G.abest)G.abest=targetIdx+1;
+    ST("✅ 胜利! 排名上升到#"+(targetIdx+1),2500);
+  }else{
+    ST("❌ 失败! 战力不足",2500);
+  }
+  SV();ARENA_REFRESH();ARENA_RENDER();
 }function ARENA_RENDER(){
   var t=G.ar||[];
   var ls=document.getElementById("arl");
