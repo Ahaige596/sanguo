@@ -855,7 +855,7 @@ html+='<div class="bpgrid">';
     if(h&&h.eq){for(var k in h.eq){if(h.eq[k]&&h.eq[k].id===eq.id)haseq=1}}
     if(haseq)return;
     var lv=eq.eqLevel||1;
-    var cls="showEqDetail("+heroId+","+eq.id+",1)":"showEqDetail(0,"+eq.id+")";
+    var cls=heroId!==null&&heroId!==void 0?"showEqDetail("+heroId+","+eq.id+")":"showEqDetail(0,"+eq.id+")";
     html+='<div class="bpitem" style="border-color:'+QC[eq.q]+'" onclick="'+cls+'">';
     html+='<div style="font-size:22px">'+eq.i+'</div>';
     html+='<div style="font-size:10px;font-weight:700;color:'+QC[eq.q]+'">'+eq.n.slice(0,6)+'</div>';
