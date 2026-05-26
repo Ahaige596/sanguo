@@ -445,8 +445,8 @@ function UBU(){
       c.innerHTML+='<div class="fb" style=min-width:56px><div class=fi>'+h.i+'</div><div class=fn>'+cs+h.n+'</div><div class=fbar style=margin-bottom:1px><div class=ff style=width:'+p+'%></div></div><div class=fbar style=height:3px><div class=ff style=width:'+an+'%;background:linear-gradient(90deg,#d4a017,#ffcc44);border-radius:2px></div></div></div>';
     });
   }
-  c.innerHTML+='<div style=display:flex;flex-direction:column;align-items:center;gap:4px><div style=font-size:10px;color:#d4a017>前排</div><div style=display:flex;flex-direction:column;gap:4px>';_renderIds(backIds);c.innerHTML+='</div></div>';
-  c.innerHTML+='<div style=display:flex;flex-direction:column;align-items:center;gap:4px><div style=font-size:10px;color:#d4a017>后排</div><div style=display:flex;flex-direction:column;gap:4px>';_renderIds(frontIds);c.innerHTML+='</div></div>';
+  c.innerHTML+='<div style=display:flex;flex-direction:column;align-items:center;gap:4px><div style=font-size:10px;color:#d4a017;display:none>后排</div><div style=display:flex;flex-direction:column;gap:4px>';_renderIds(backIds);c.innerHTML+='</div></div>';
+  c.innerHTML+='<div style=display:flex;flex-direction:column;align-items:center;gap:4px><div style=font-size:10px;color:#d4a017;display:none>前排</div><div style=display:flex;flex-direction:column;gap:4px>';_renderIds(frontIds);c.innerHTML+='</div></div>';
   if(CE){
     var eic=document.getElementById("eic");eic.textContent=CE.i;eic.className="eic"+(CE.isBoss?" b":"");
     var en=document.getElementById("enm");en.textContent=CE.n+" ("+SR(G.s,G.ss)+")";en.className="enm"+(CE.isBoss?" b":"");
@@ -1294,8 +1294,8 @@ function UBU(){
       c.innerHTML+='<div class="fb" style=min-width:56px><div class=fi>'+h.i+'</div><div class=fn>'+cs+h.n+'</div><div class=fbar style=margin-bottom:1px><div class=ff style=width:'+p+'%></div></div><div class=fbar style=height:3px><div class=ff style=width:'+an+'%;background:linear-gradient(90deg,#d4a017,#ffcc44);border-radius:2px></div></div></div>';
     });
   }
-  c.innerHTML+='<div style=display:flex;flex-direction:column;align-items:center;gap:4px><div style=font-size:10px;color:#d4a017>前排</div><div style=display:flex;flex-direction:column;gap:4px>';_renderIds(backIds);c.innerHTML+='</div></div>';
-  c.innerHTML+='<div style=display:flex;flex-direction:column;align-items:center;gap:4px><div style=font-size:10px;color:#d4a017>后排</div><div style=display:flex;flex-direction:column;gap:4px>';_renderIds(frontIds);c.innerHTML+='</div></div>';
+  c.innerHTML+='<div style=display:flex;flex-direction:column;align-items:center;gap:4px><div style=font-size:10px;color:#d4a017;display:none>后排</div><div style=display:flex;flex-direction:column;gap:4px>';_renderIds(backIds);c.innerHTML+='</div></div>';
+  c.innerHTML+='<div style=display:flex;flex-direction:column;align-items:center;gap:4px><div style=font-size:10px;color:#d4a017;display:none>前排</div><div style=display:flex;flex-direction:column;gap:4px>';_renderIds(frontIds);c.innerHTML+='</div></div>';
   if(CE){
     var eic=document.getElementById("eic");eic.textContent=CE.i;eic.className="eic"+(CE.isBoss?" b":"");
     var en=document.getElementById("enm");en.textContent=CE.n+" ("+SR(G.s,G.ss)+")";en.className="enm"+(CE.isBoss?" b":"");
