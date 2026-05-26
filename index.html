@@ -1745,27 +1745,20 @@ window.DO_FORCE_NAME=function(){
   ST('🎉 欢迎你，'+v+'！');
 };
 
-// ===== Hook init to force name if G.name is empty =====
-var _origInit=window.init;
-window.init=function(){
-  // Only run full init if player has a name
-  if(G.name&&G.name!=='无名'&&G.name.trim()!==''){
-    _origInit();
-  }else{
-    // Minimal init: just load data, don't start game
-    try{LD()}catch(e){}
-    // Clear all game content - show nothing but forced name dialog
-    var panels=['pr','pf','ph','pe','ps','pa'];
-    for(var i=0;i<panels.length;i++){var el=document.getElementById(panels[i]);if(el)el.innerHTML=''}
-    // Hide the tab bar too
-    var tb=document.getElementById('tb');if(tb)tb.style.display='none';
-    // Show a dark branded background
-    var hd=document.getElementById('head');if(hd)hd.style.display='none';
+// ===== 强制取名：主脚本的init()已执行完毕，这里直接检查 =====
+(function(){
+  if(!G.name||G.name==='无名'||G.name.trim()===''){
+    // Clear game content
+    try{
+      var panels=['pr','pf','ph','pe','ps','pa'];
+      for(var i=0;i<panels.length;i++){var el=document.getElementById(panels[i]);if(el)el.innerHTML=''}
+      var tb=document.getElementById('tb');if(tb)tb.style.display='none';
+      var hd=document.getElementById('head');hd.style.display='none';
+    }catch(e){}
     document.body.style.background='#0f0700';
-    // Force name dialog immediately
-    setTimeout(SHOW_FORCE_NICKNAME, 100);
+    setTimeout(SHOW_FORCE_NICKNAME, 50);
   }
-};
+})();
 
 // ===== 装备详情保护（保留内容不被UEQ覆盖）=====
 var _origUEQ=UEQ;
