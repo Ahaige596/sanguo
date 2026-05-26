@@ -1740,11 +1740,14 @@ window.DO_FORCE_NAME=function(){
   G.nrn=Date.now();
   SV();
   document.getElementById('nmModal').classList.remove('s');
-  // Restore game content: show head + tb + restore panels
-  var hd=document.getElementById('head');if(hd)hd.style.display='';
-  var tb=document.getElementById('tb');if(tb)tb.style.display='';
-  // Re-init the game now that G.name is set
+  // Restore UI, run fresh init
+  document.getElementById('head').style.display='';
+  document.getElementById('tb').style.display='';
   try{init()}catch(e){location.reload()}
+  // Make sure pnick updates
+  var p=document.getElementById('pnick');if(p)p.textContent=G.name;
+  // Force first tab
+  var t0=document.querySelector('#tb button');if(t0)t0.click();
   ST('🎉 欢迎你，'+v+'！');
 };
 
