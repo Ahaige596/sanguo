@@ -35,7 +35,7 @@ function UEQ(){
   var selectedHero=window._equipHero;
   var html="";
   html+='<div class="ti" style="margin-bottom:4px">👤 选择武将（先点武将再穿装备）</div>';
-  html+='<div class="fc" style="margin-bottom:8px">';
+  var _oldEp=document.getElementById("epdetail");var _epc=_oldEp?_oldEp.innerHTML:"";html+='<div id="epdetail-top"></div>';html+='<div class="ti" style="margin:4px 0">📋 装备详情</div><div id="epdetail">'+_epc+'</div>';html+='<div class="fc" style="margin-bottom:8px">';
   G.fm.forEach(function(id){
     var h=GH(id);if(!h)return;
     if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};
@@ -75,7 +75,7 @@ function UEQ(){
   html+=BACKPACK_RENDER(selectedHero);
   html+='<div style="font-size:10px;color:#504030;text-align:center;margin-top:8px">💡 点武将→点背包装备</div>';
   // 保留epdetail容器
-  var _oldEp=document.getElementById("epdetail");var _epc=_oldEp?_oldEp.innerHTML:"";html+='<div class="ti" style="margin-top:8px">📋 装备详情</div><div id="epdetail">'+_epc+'</div>'
+  
   con.innerHTML=html;
 }
 
@@ -855,7 +855,7 @@ html+='<div class="bpgrid">';
     if(h&&h.eq){for(var k in h.eq){if(h.eq[k]&&h.eq[k].id===eq.id)haseq=1}}
     if(haseq)return;
     var lv=eq.eqLevel||1;
-    var cls=heroId!==null&&heroId!==void 0?"Q("+heroId+","+eq.id+",1)":"showEqDetail(0,"+eq.id+")";
+    var cls="showEqDetail("+heroId+","+eq.id+",1)":"showEqDetail(0,"+eq.id+")";
     html+='<div class="bpitem" style="border-color:'+QC[eq.q]+'" onclick="'+cls+'">';
     html+='<div style="font-size:22px">'+eq.i+'</div>';
     html+='<div style="font-size:10px;font-weight:700;color:'+QC[eq.q]+'">'+eq.n.slice(0,6)+'</div>';
