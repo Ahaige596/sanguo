@@ -246,6 +246,64 @@ function SHOW_NICKNAME_DIALOG(){
   }
   d.classList.add("s");
 }
+
+// 强制取名 - 不取名不能玩
+G._forceNameActive = false;
+function FORCE_NAME(){
+  if(G.name)return;
+  G._forceNameActive = true;
+  var d=document.getElementById("nmModal");
+  if(!d)return;
+  d.classList.add("s");
+  // 关闭按钮隐藏
+  var closeBtn=d.querySelector(".mc");
+  if(closeBtn)closeBtn.style.display="none";
+  // 改标题
+  var title=d.querySelector("h2");
+  if(title)title.textContent="⚠️ 请输入你的名字";
+  // 改按钮和提示
+  var saveBtn=d.querySelector("[onclick*='SAVE_NICKNAME']");
+  if(saveBtn)saveBtn.textContent="✅ 确定";
+  var tip=d.querySelector("[style*='10px'][style*='504030']");
+  if(tip)tip.textContent="名字将用于游戏标识，未来不可修改";
+  // 遮罩不可关闭
+  d.onclick=function(e){if(e.target===d)FORCE_NAME()};
+  // 禁用所有主操作按钮
+  disableAllBtns();
+  // 增强保存函数
+  var origSave = window.SAVE_NICKNAME;
+  window.SAVE_NICKNAME = function(){
+    var inp=document.getElementById("nmi");
+    if(!inp)return;
+    var v=inp.value.trim().substring(0,6);
+    if(!v){ST("名字不能为空！");inp.focus();return}
+    var badwords=["毛泽东","习近平","共产党","共党","法轮功","六四","天安门","江泽民","胡锦涛","周永康","薄熙来","令计划","李克强","王岐山","包子","独裁","专制","共匪","暴政","fuck","草你妈","操你妈","傻逼","傻B","妈的","他妈的","去死","垃圾","废物","死全家","尼玛","滚蛋","nmsl","cnm","脑残","疯子","贱人","妓女","畜生","狗娘"];
+    for(var bi=0;bi<badwords.length;bi++){if(v.indexOf(badwords[bi])>=0){ST("名字包含不当内容");return}}
+    G.name=v;
+    G.nrn=Date.now();
+    SV();
+    d.classList.remove("s");
+    // 恢复关闭按钮
+    if(closeBtn)closeBtn.style.display="";
+    // 恢复正常点击关闭
+    d.onclick=function(e){if(e.target===d)d.classList.remove("s")};
+    // 恢复SAVE_NICKNAME
+    window.SAVE_NICKNAME = origSave;
+    G._forceNameActive = false;
+    enableAllBtns();
+    UPDATE_NAME_DISPLAY();
+    ST("✅ 欢迎，" + v + "！");
+  };
+}
+
+function disableAllBtns(){
+  document.querySelectorAll("#tb button").forEach(function(b){b.disabled=true;b.style.opacity="0.5";b.style.cursor="not-allowed"});
+  document.querySelectorAll("button.bt").forEach(function(b){b.disabled=true;b.style.opacity="0.5";b.style.cursor="not-allowed"});
+}
+function enableAllBtns(){
+  document.querySelectorAll("#tb button").forEach(function(b){b.disabled=false;b.style.opacity="";b.style.cursor=""});
+  document.querySelectorAll("button.bt").forEach(function(b){b.disabled=false;b.style.opacity="";b.style.cursor=""});
+}
 function SAVE_NICKNAME(){
   var i=document.getElementById("nmi");
   if(!i)return;
@@ -1543,7 +1601,7 @@ function ADVICE(){
 
 function S_EXP(amt){G.exp=(G.exp||0)+amt;while((G.nexp||10)>0&&G.exp>=(G.nexp||10)){G.exp-=(G.nexp||10);G.lv=(G.lv||1)+1;if(G.lv<=100)G.nexp=Math.floor(10+Math.pow(G.lv,1.5)*0.8);else if(G.lv<=200)G.nexp=Math.floor(100+Math.pow(G.lv,1.6)*1.2);else if(G.lv<=500)G.nexp=Math.floor(500+Math.pow(G.lv,1.7)*3);else if(G.lv<=800)G.nexp=Math.floor(5000+Math.pow(G.lv,1.8)*8);else G.nexp=Math.floor(30000+Math.pow(G.lv,2)*5);if(G.lv>=1000){G.lv=1000;G.nexp=0;break}}SV();UA();ST("升级! 当前Lv."+G.lv,2000)}
 function init(){
-  if(!G.name){setTimeout(function(){SHOW_NICKNAME_DIALOG()},100)}t(){
+  if(!G.name){setTimeout(function(){FORCE_NAME()},100)}
   LD();OA();CE=ME(G.s);UA();
   document.querySelectorAll("#tb button").forEach(function(b){b.onclick=function(){document.querySelectorAll("#tb button").forEach(function(x){x.classList.remove("a")});document.querySelectorAll(".pn").forEach(function(p){p.classList.remove("a")});this.classList.add("a");document.getElementById("p"+this.dataset.tab).classList.add("a");if(this.dataset.tab==="f")UF();if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()};if(this.dataset.tab==="e")UEQ();if(this.dataset.tab==="h")UHL();if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()}}});
   document.getElementById("bob").onclick=SB;
