@@ -35,7 +35,7 @@ function UEQ(){
   var selectedHero=window._equipHero;
   var html="";
   html+='<div class="ti" style="margin-bottom:4px">👤 选择武将（先点武将再穿装备）</div>';
-  var _oldEp=document.getElementById("epdetail");var _epc=_oldEp?_oldEp.innerHTML:"";html+='<div id="epdetail-top"></div>';html+='<div class="ti" style="margin:4px 0">📋 装备详情</div><div id="epdetail">'+_epc+'</div>';html+='<div class="fc" style="margin-bottom:8px">';
+  var _oldEp=document.getElementById("epdetail");var _epc=_oldEp?_oldEp.innerHTML:"";html+='<div id="epdetail-top" style="position:sticky;top:10px;z-index:10"></div>';html+='<div class="ti" style="margin:4px 0">📋 装备详情</div><div id="epdetail">'+_epc+'</div>';html+='<div class="fc" style="margin-bottom:8px">';
   G.fm.forEach(function(id){
     var h=GH(id);if(!h)return;
     if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};
@@ -1579,7 +1579,7 @@ function showEqDetail(heroId,eqId){var eq;if(eqId){eq=G.eqb.find(function(e){ret
   var btn=isEq?'<button class="bt bs br" onclick="Q('+heroId+','+eq.id+',0)">⬇脱下</button>':'<button class="bt bs bg" onclick="Q('+heroId+','+eq.id+',1)">⚔装备</button>';
   var lkBtn=eq.lk?'<button class="bt bs" style="background:linear-gradient(135deg,#6a6a2a,#8a8a3a);font-size:10px" onclick="Q('+heroId+','+eq.id+',4)">🔓解锁</button>':'<button class="bt bs" style="background:linear-gradient(135deg,#3a3a2a,#5a5a3a);font-size:10px" onclick="Q('+heroId+','+eq.id+',4)">🔒上锁</button>';
   d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>⚔攻击:'+eq.atk+'<br>❤生命:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+lkBtn+btn+'<button class="bt bs" onclick="Q('+heroId+','+eq.id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">⬆强化 ['+cost+'💰]</button><button class="bt bs br" onclick="Q('+heroId+','+eq.id+',3)">🗑分解</button></div></div>';
-  d.dataset.eqid=eq.id;var _ep=d;setTimeout(function(){if(_ep)_ep.scrollIntoView({behavior:'smooth',block:'start'})},100);;
+  d.dataset.eqid=eq.id;var _er=d.getBoundingClientRect();if(_er.top<0||_er.top>window.innerHeight-100){if(d.parentElement){var _clone=d.cloneNode(true);_clone.id='_epf';_clone.style.position='fixed';_clone.style.top='50%';_clone.style.left='50%';_clone.style.transform='translate(-50%,-50%)';_clone.style.background='linear-gradient(145deg,#1a0a00,#2a1a0a)';_clone.style.border='2px solid #8b6914';_clone.style.borderRadius='14px';_clone.style.padding='20px';_clone.style.zIndex='999';_clone.style.maxWidth='340px';_clone.style.width='90%';_clone.style.boxShadow='0 8px 32px rgba(0,0,0,.8)';var _close=document.createElement('button');_close.textContent='✖';_close.style.cssText='position:absolute;top:6px;right:10px;font-size:20px;color:#806040;background:0;border:none;cursor:pointer';_close.onclick=function(){this.parentElement.remove()};_clone.prepend(_close);document.body.appendChild(_clone)}}var _ep=d;setTimeout(function(){if(_ep)_ep.scrollIntoView({behavior:'smooth',block:'start'})},100);;
 }function Q(heroId,eqId,action){
   if(heroId===null||heroId===void 0)heroId=0;
   var h=null;if(heroId>0)h=GH(heroId);
