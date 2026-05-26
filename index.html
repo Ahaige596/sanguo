@@ -1685,6 +1685,59 @@ function DO_CHECK_NAME(){
   location.reload();
 }
 // Guarded init
+if(CHECK_NAME()){
+// Force name check
+function CHECK_NAME(){
+  if(!G.name||G.name==='无名'||G.name.trim()===''){
+    var nm=document.getElementById('nmModal');
+    if(nm){
+      nm.onclick=function(){};
+      var mbx=nm.querySelector('.mbx');
+      if(mbx){
+        var mc=mbx.querySelector('.mc');if(mc)mc.style.display='none';
+        var h2=mbx.querySelector('h2');if(h2)h2.textContent='👤 请先取名';
+      }
+      var inp=document.getElementById('nmi');
+      if(inp){inp.placeholder='输入你的名字（最多6字）';inp.value='';inp.onkeydown=function(ev){if(ev.key==='Enter')DO_CHECK_NAME()}}
+      var cd=document.getElementById('nmcd');if(cd)cd.style.display='none';
+      // Replace confirm button handler
+      var btns=nm.querySelectorAll('button');
+      for(var bi=0;bi<btns.length;bi++){
+        if(btns[bi].textContent.includes('确认')||btns[bi].textContent.includes('确定')||btns[bi].className.includes('bg')){
+          btns[bi].textContent='✅ 确定';
+          btns[bi].onclick=DO_CHECK_NAME;
+        }
+      }
+      nm.classList.add('s');
+    }
+    // Hide game content
+    var ps=['pr','pf','ph','pe','ps','pa'];
+    for(var pi=0;pi<ps.length;pi++){var el=document.getElementById(ps[pi]);if(el)el.innerHTML=''}
+    document.getElementById('tb').style.display='none';
+    return false;
+  }
+  return true;
+}
+function DO_CHECK_NAME(){
+  var inp=document.getElementById('nmi');
+  if(!inp)return;
+  var v=inp.value.trim();
+  if(!v){var cd=document.getElementById('nmcd');if(cd){cd.style.display='block';cd.textContent='❌ 名字不能为空！'};return}
+  if(v.length>6){var cd=document.getElementById('nmcd');if(cd){cd.style.display='block';cd.textContent='❌ 名字最多6个字！'};return}
+  // Bad words
+  var bw=["毒品","吸毒","贩毒","冰毒","麻古","k粉","摇头丸","海洛因","大麻","可卡因","鸦片","毒药","赌博","赌场","赌钱","色情","黄色","情色","淫秽","嫖娼","卖淫","枪支","弹药","炸药","暴力","血腥","恐怖","邪教","法轮功","台独","藏独","疆独","港独","六四","天安门","操你妈","傻逼","尼玛","SB"];
+  for(var bi=0;bi<bw.length;bi++){if(v.indexOf(bw[bi])>=0){var cd=document.getElementById('nmcd');if(cd){cd.style.display='block';cd.textContent='❌ 名字包含不当内容！'};return}}
+  if(v==='无名'){var cd=document.getElementById('nmcd');if(cd){cd.style.display='block';cd.textContent='❌ 换个名字！'};return}
+  G.name=v;
+  G.nrn=Date.now();
+  SV();
+  document.getElementById('nmModal').classList.remove('s');
+  document.getElementById('tb').style.display='';
+  document.getElementById('pnick').textContent=G.name;
+  // Reload with cache-busting parameter
+  location.href=location.pathname+'?v='+Date.now();
+}
+// Guarded init
 if(CHECK_NAME()){init();}</script><div class="md" id="dgModal" onclick="if(event.target===this)this.classList.remove('s')">
   <div class="mbx" style="max-width:420px;background:linear-gradient(145deg,#0a0a1a,#1a0a2a);border-color:#6040a0">
     <button class="mc" id="dgClose" onclick="document.getElementById('dgModal').classList.remove('s')">&times;</button>
