@@ -1841,19 +1841,27 @@ var _BAD_WORDS=["毒品","吸毒","贩毒","冰毒","麻古","k粉","摇头丸",
       var mbx=nm.querySelector('.mbx');if(mbx){var h2=mbx.querySelector('h2');if(h2)h2.textContent='👤 请先取名';}
       var inp=document.getElementById('nmi');if(inp){inp.placeholder='输入你的名字（最多6字）';inp.value='';inp.focus();inp.onkeydown=function(ev){if(ev.key==='Enter')DO_FORCE_NAME()}}
       var cd=document.getElementById('nmcd');if(!cd&&mbx){cd=document.createElement('div');cd.id='nmcd';cd.style.cssText='text-align:center;color:#ff6644;font-size:12px;margin-bottom:8px;display:none';mbx.appendChild(cd)}
-      // Replace original confirm button onclick
-      var allBtns=nm.querySelectorAll('button');
-      for(var bi=0;bi<allBtns.length;bi++){
-        var b=allBtns[bi];
-        if(b.textContent.includes('确认')||b.textContent.includes('确定')||b.className.includes('bg')){
-          b.onclick=function(){DO_FORCE_NAME()};
-          b.textContent='✅ 确定';
-        }
-      }
       nm.classList.add('s');
     }, 50);
   }
 })();
+
+// Directly replace the confirm button
+(function(){
+  var nm=document.getElementById('nmModal');
+  if(nm){
+    var allBtns=nm.querySelectorAll('button');
+    for(var bi=0;bi<allBtns.length;bi++){
+      var b=allBtns[bi];
+      if(b.textContent.includes('确认')||b.textContent.includes('确定')||b.onclick&&(b.onclick+'').includes('SAVE_NICKNAME')){
+        b.onclick=DO_FORCE_NAME;
+        b.textContent='✅ 确定';
+        break;
+      }
+    }
+  }
+})();
+
 function DO_FORCE_NAME(){
   var inp=document.getElementById('nmi');if(!inp)return;
   var v=inp.value.trim();var cd=document.getElementById('nmcd');
