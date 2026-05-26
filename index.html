@@ -1739,10 +1739,9 @@ window.DO_FORCE_NAME=function(){
   G.name=v;
   G.nrn=Date.now();
   SV();
-  var el=document.getElementById('pnick');
-  if(el)el.textContent=G.name||"无名";
   document.getElementById('nmModal').classList.remove('s');
-  ST('🎉 欢迎你，'+v+'！');
+  // Reload the page to start the game fresh
+  location.reload();
 };
 
 // ===== 强制取名：主脚本的init()已执行完毕，这里直接检查 =====
