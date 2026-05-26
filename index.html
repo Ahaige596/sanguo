@@ -1604,6 +1604,7 @@ function showEqDetail(heroId,eqId){var eq;if(eqId){eq=G.eqb.find(function(e){ret
     ST("装备成功",1500);SV();UEQ();UA();
   }else if(action===2){
     var eq=findEq(eqId);
+    if(!eq&&h&&h.eq){var slots=["w","a","h","b","r","p"];for(var zi=0;zi<slots.length;zi++){if(h.eq[slots[zi]]&&h.eq[slots[zi]].id===eqId){eq=h.eq[slots[zi]];break}}}
     if(!eq){ST("装备不存在",2000);return}
     if(!eq.eqLevel)eq.eqLevel=1;
     var maxLv=G.lv*2;
