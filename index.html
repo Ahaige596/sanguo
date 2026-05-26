@@ -1740,8 +1740,12 @@ window.DO_FORCE_NAME=function(){
   G.nrn=Date.now();
   SV();
   document.getElementById('nmModal').classList.remove('s');
-  // Reload the page to start the game fresh
-  location.reload();
+  // Restore game content: show head + tb + restore panels
+  var hd=document.getElementById('head');if(hd)hd.style.display='';
+  var tb=document.getElementById('tb');if(tb)tb.style.display='';
+  // Re-init the game now that G.name is set
+  try{init()}catch(e){location.reload()}
+  ST('🎉 欢迎你，'+v+'！');
 };
 
 // ===== 强制取名：主脚本的init()已执行完毕，这里直接检查 =====
