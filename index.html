@@ -1657,4 +1657,19 @@ init();</script><div class="md" id="dgModal" onclick="if(event.target===this)thi
     </div>
   </div>
 </div>
-</body></html>
+
+<script>if(typeof UEQ!=='undefined'){function showEqDetail(heroId,eqId){var eq;if(eqId){eq=G.eqb.find(function(e){return e.id===eqId});if(!eq&&heroId>0){var h=GH(heroId);if(h&&h.eq){for(var _si=0;_si<6;_si++){var _sk=["w","a","h","b","r","p"][_si];if(h.eq[_sk]&&h.eq[_sk].id===eqId){eq=h.eq[_sk];break}}}}}else{eq=G.eqb.find(function(e){return e.id===heroId});eqId=heroId;heroId=0}
+  var d=document.getElementById('epdetail');if(!d)return;
+  var sp='';if(eq.sp)sp='<div style=color:#ff6644>'+eq.sp.n+':'+eq.sp.v+'</div>';
+  var lv=eq.eqLevel||1;var maxLv=G.lv*2;var cost=lv*50+(eq.q+1)*20;
+  var sk=['w','a','h','b','r','p'][eq.ti];
+  var isEq=G.eq[sk]&&G.eq[sk].id===eq.id;
+  var btn=isEq?'<button class="bt bs br" onclick="Q('+heroId+','+eq.id+',0)">⬇脱下</button>':'<button class="bt bs bg" onclick="Q('+heroId+','+eq.id+',1)">⚔装备</button>';
+  var lkBtn=eq.lk?'<button class="bt bs" style="background:linear-gradient(135deg,#6a6a2a,#8a8a3a);font-size:10px" onclick="Q('+heroId+','+eq.id+',4)">🔓解锁</button>':'<button class="bt bs" style="background:linear-gradient(135deg,#3a3a2a,#5a5a3a);font-size:10px" onclick="Q('+heroId+','+eq.id+',4)">🔒上锁</button>';
+  d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div><div class=estats>⚔攻击:'+eq.atk+'<br>❤生命:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+lkBtn+btn+'<button class="bt bs" onclick="Q('+heroId+','+eq.id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">⬆强化 ['+cost+'💰]</button><button class="bt bs br" onclick="Q('+heroId+','+eq.id+',3)">🗑分解</button></div></div>';
+  d.dataset.eqid=eq.id;window._epCache=d.innerHTML;
+  d.style.cssText='position:sticky;top:42px;z-index:10;background:linear-gradient(145deg,#1a0a00,#2a1a0a);border:1px solid #8b6914;border-radius:8px;padding:10px;margin-bottom:6px';
+  var _pe=document.getElementById('pe');if(_pe&&_pe.firstChild!==d){_pe.insertBefore(d,_pe.firstChild)}
+  _pe.scrollIntoView({behavior:'smooth',block:'start'})}
+;var _ueqOld=UEQ;UEQ=function(){_ueqOld();var _ep=document.getElementById('epdetail');if(_ep&&window._epCache&&!_ep.innerHTML.includes('epdetail-card')){_ep.innerHTML=window._epCache;_ep.style.cssText='position:sticky;top:42px;z-index:10;background:linear-gradient(145deg,#1a0a00,#2a1a0a);border:1px solid #8b6914;border-radius:8px;padding:10px;margin-bottom:6px';var _pp=document.getElementById('pe');if(_pp&&_pp.firstChild!==_ep){_pp.insertBefore(_ep,_pp.firstChild)}}}
+</script></body></html>
