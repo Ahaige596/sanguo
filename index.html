@@ -75,7 +75,7 @@ function UEQ(){
   html+=BACKPACK_RENDER(selectedHero);
   html+='<div style="font-size:10px;color:#504030;text-align:center;margin-top:8px">💡 点武将→点背包装备</div>';
   // 保留epdetail容器
-  html+='<div class="ti" style="margin-top:8px">📋 装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div>';
+  var _oldEp=document.getElementById("epdetail");var _epc=_oldEp?_oldEp.innerHTML:"";html+='<div class="ti" style="margin-top:8px">📋 装备详情</div><div id="epdetail">'+_epc+'</div>'
   con.innerHTML=html;
 }
 
