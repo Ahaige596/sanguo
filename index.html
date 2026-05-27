@@ -4,7 +4,7 @@
 .eqbtns{display:flex;gap:5px;flex-wrap:wrap;margin:5px 0;justify-content:center}
 
 @media(min-width:501px){.bf{flex-direction:row;justify-content:space-around;min-height:80px}.bf .fs2{width:auto}.bf .es2{width:auto}.fb{min-width:50px;padding:4px 6px}.fb .fi{font-size:20px}.fb .fn{font-size:9px;max-width:46px}.fb .fbar{width:44px;height:4px}.bhp{width:130px;height:10px}.eic{font-size:48px}.enm{font-size:14px}}</style></head><body><div id="head"><h1>⚔️ 三国神话</h1><span id="pnick" style="font-size:20px;color:#f0d060;font-weight:800;cursor:pointer;margin-left:6px;text-shadow:0 0 6px rgba(240,208,96,0.4);letter-spacing:1px" onclick="SHOW_NICKNAME_DIALOG()">🪪无名</span><div class="rbar"><span class="r" title="推图/扫荡获得"><span>💰</span><span class="rl">金币</span><span class="v" id="gld">0</span></span><span class="r" title="BOSS/兑换获得"><span>💎</span><span class="rl">钻石</span><span class="v" id="jde">0</span></span><span class="r" title="招募武将消耗"><span>📜</span><span class="rl">招募令</span><span class="v" id="rct">0</span></span><span class="r" title="当前等级进度"><span>🏆</span><span class="rl">关卡</span><span class="v" id="stg">1-1</span></span><span class="r"><span>⭐</span><span class="rl">等级</span><span class="v" id="plv">1</span></span><span class="r"><span>📊</span><span class="rl">经验</span><span class="v" id="expBar">0/10</span></span></span></div></div><div id="tb"><button class="a" data-tab="r">⚔️征战</button><button data-tab="f">📋阵容</button><button data-tab="h">👥武将</button><button data-tab="e">⚔️装备</button><button data-tab="s">🏪商店</button><button data-tab="a">⚔️竞技</button></div><div id="pr" class="pn a"><div id="ba"><div class="bf"><div class="es2"><div class="eic" id="eic">👹</div><div class="enm" id="enm">山贼</div><div class="bhp"><div class="bf" id="ehp" style="width:100%"></div></div><div style="font-size:11px;color:#806040"><span id="eht">100/100</span></div></div><div class="vs">⚡</div><div class="fs2"><div style="font-size:11px;color:#80c080;margin-bottom:3px">🛡️我方</div><div class="fhs" id="fhs"></div></div></div><div style="font-size:11px;color:#504030;margin-top:2px;position:relative;z-index:1">关卡 <span id="stg2">1-1</span></div><div class="blog" id="blog">点击"出征"开始战斗</div><div class="binf"><span>战力:<span id="mypw">0</span></span><span>敌方:<span id="epw">0</span></span></div></div><div class="fc"><button class="bt bg" id="bob">⚔️出征</button><button class="bt bb bs" id="boa">▶️自动</button><button class="bt br bs" id="bol" onclick="G.lock=G.lock?0:1;this.textContent=G.lock?'🔒已锁定':'🔓锁定';ST(G.lock?'已锁定':'已解锁',2000);SV()">🔓锁定</button></div><div class="fc" style="margin-top:4px"><button class="bt bg bs" onclick="SWEEP(1)">🔄扫荡(免费)</button><button class="bt br bs" onclick="SWEEP(2)">📺广告扫荡</button><button class="bt bb bs" onclick="DG_ENTER()">🏰秘境</button><button class="bt bgn bs" onclick="EXP_BOOK()">📖经验书(200💰)</button></div>
-<div style="font-size:11px;color:#806040;text-align:center;margin:2px 0"><span id="swinfo" style="margin-right:12px">扫荡:0/5</span><span id="dginfo" style="margin-right:12px">秘境: 第1层 | 今日0/3</span><span style="cursor:pointer;color:#504030" onclick="ADVICE()">💡卡关了?</span></div><div style="font-size:11px;color:#504030;text-align:center;margin:4px 0" id="ofi"></div><div class="ti">🎲招募武将</div><div class="fc"><button class="bt br bs" id="br1">🆓x1(1📜)</button><button class="bt br" id="br10">🔥x10(10📜)</button></div><div class="ti">⭐新招募</div><div class="cg" id="newh"></div></div><div id="pf" class="pn"><div class="ti">📋上阵阵容<span style="font-size:12px;color:#605040;font-weight:normal">(最多6人)</span></div><div class="sg" id="fsl"></div><div class="fc"><button class="bt bgn bs" id="bad">🤖自动编队</button><button class="bt br bs" id="bcf">🗑️清空</button></div><div class="ti">👥武将列表</div><div class="cg" id="hlf"></div></div><div id="ph" class="pn"><div class="fc mb"><button class="bt bgn bs" id="bom">🔄一键升星</button></div><div class="ti">👥所有武将</div><div class="cg" id="hl"></div></div><div id="pe" class="pn"><div class="ti">⚔装备栏</div><div class="esl" id="eqslots"><!-- rendered by UEQ --></div><div class="ti">装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div><div class="ti" style="margin-top:8px">装备强化</div><div class="sr"><span class="l">当前可强化至</span><span class="v" id="eqlCap">Lv.0</span></div><div class="sr"><span class="l">解锁上限</span><span class="v" id="eqlUnlock">Lv.1可升至Lv.2</span></div><div class="sr"><span style="font-size:10px;color:#605040">每级+15%属性，上限=玩家等级×2</span></div><div class="bptabs" id="bpt"></div><div class="bpgrid" id="ebg"></div></div><div id="ps" class="pn"><div class="ti">🏪商店</div><div class="fc"><button class="bt bg bs" id="sb1">📜x5(5000💰)</button><button class="bt bg bs" id="sb2">📜x10(100💎)</button></div><div class="ti">💰兑换</div><div class="fc"><button class="bt bg bs" id="scg">1000💰→10💎</button></div><div class="ti">⚡强化</div><div class="sr"><span class="l">攻击加成</span><span class="v" id="sab">x1.0</span></div><div class="sr"><span class="l">生命加成</span><span class="v" id="shb">x1.0</span></div><div class="fc mt"><button class="bt bb bs" id="sua">⬆️攻击</button><button class="bt bb bs" id="suh">⬆️生命</button></div><div class="ti">🏅成就</div><div class="sgp" id="achv"></div><div class="ti">📊总览</div><div class="sgp" id="sov"></div><div class="ti" style="margin-top:12px;color:#504030">����广告位</div><div id="adslot" style="background:#0a0500;border:1px dashed #3a2a0a;border-radius:8px;padding:20px;text-align:center;color:#504030;font-size:12px;margin:8px 0">[ 横幅广告位 - 替换为你的广告代码 ]</div></div>
+<div style="font-size:11px;color:#806040;text-align:center;margin:2px 0"><span id="swinfo" style="margin-right:12px">扫荡:0/5</span><span id="dginfo" style="margin-right:12px">秘境: 第1层 | 今日0/3</span><span style="cursor:pointer;color:#504030" onclick="ADVICE()">💡卡关了?</span></div><div style="font-size:11px;color:#504030;text-align:center;margin:4px 0" id="ofi"></div><div class="ti">🎲招募武将</div><div class="fc"><button class="bt br bs" id="br1">🆓x1(1📜)</button><button class="bt br" id="br10">🔥x10(10📜)</button></div><div class="ti">⭐新招募</div><div class="cg" id="newh"></div></div><div id="pf" class="pn"><div class="ti">📋上阵阵容<span style="font-size:12px;color:#605040;font-weight:normal">(最多6人)</span></div><div class="sg" id="fsl"></div><div class="fc"><button class="bt bgn bs" id="bad">🤖自动编队</button><button class="bt br bs" id="bcf">🗑️清空</button></div><div class="ti">👥武将列表</div><div class="cg" id="hlf"></div></div><div id="ph" class="pn"><div class="fc mb"><button class="bt bgn bs" id="bom">🔄一键升星</button><button class="bt bb bs" onclick="SHOW_ATTR_TABLE()">📊属性总表</button></div><div class="ti">👥所有武将</div><div class="cg" id="hl"></div></div><div id="pe" class="pn"><div class="ti">⚔装备栏</div><div class="esl" id="eqslots"><!-- rendered by UEQ --></div><div class="ti">装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div><div class="ti" style="margin-top:8px">装备强化</div><div class="sr"><span class="l">当前可强化至</span><span class="v" id="eqlCap">Lv.0</span></div><div class="sr"><span class="l">解锁上限</span><span class="v" id="eqlUnlock">Lv.1可升至Lv.2</span></div><div class="sr"><span style="font-size:10px;color:#605040">每级+15%属性，上限=玩家等级×2</span></div><div class="bptabs" id="bpt"></div><div class="bpgrid" id="ebg"></div></div><div id="ps" class="pn"><div class="ti">🏪商店</div><div class="fc"><button class="bt bg bs" id="sb1">📜x5(5000💰)</button><button class="bt bg bs" id="sb2">📜x10(100💎)</button></div><div class="ti">💰兑换</div><div class="fc"><button class="bt bg bs" id="scg">1000💰→10💎</button></div><div class="ti">⚡强化</div><div class="sr"><span class="l">攻击加成</span><span class="v" id="sab">x1.0</span></div><div class="sr"><span class="l">生命加成</span><span class="v" id="shb">x1.0</span></div><div class="fc mt"><button class="bt bb bs" id="sua">⬆️攻击</button><button class="bt bb bs" id="suh">⬆️生命</button></div><div class="ti">🏅成就</div><div class="sgp" id="achv"></div><div class="ti">📊总览</div><div class="sgp" id="sov"></div><div class="ti" style="margin-top:12px;color:#504030">����广告位</div><div id="adslot" style="background:#0a0500;border:1px dashed #3a2a0a;border-radius:8px;padding:20px;text-align:center;color:#504030;font-size:12px;margin:8px 0">[ 横幅广告位 - 替换为你的广告代码 ]</div></div>
 <div id="pa" class="pn"><div id="ab"><!-- Arena rendered by ARENA_RENDER --><div class="fc" style="margin-top:8px"><button class="bt bg bs" onclick="ARENA_SHOW_REWARDS()">🏆奖励</button></div></div></div>
 
 <div class="md" id="nmModal" onclick="if(event.target===this)this.classList.remove('s')">
@@ -601,6 +601,72 @@ var htm='<div class="tc mb"><div style=font-size:48px>'+h.i+'</div><div style=fo
 if(h.sk&&typeof h.sk==='object')htm+=qSR('技能','⚡'+h.sk.n+' ('+h.sk.d+')');else if(h.sk)htm+=qSR('技能','⚡'+h.sk);
 var _ba=HERO_ATTR_BASE(h.q);var stb=(h.st||0);htm+=qSR("品质",QE[h.q]+QN[h.q])+qSR("职业",cs)+qSR("星级","⭐"+stb+1)+qSR("等级","Lv."+(h.lv||1))+qSR("攻击",h.a)+qSR("生命",h.h)+qSR("战力",PW(h))+qSR("经验",(h.exp||0)+"/"+(10+(h.lv||1)*3));htm+='<div style=margin-top:6px;padding:5px;background:rgba(0,0,0,.3);border-radius:6px;font-size:10px;color:#a08060><span style=color:#d4a017>📊战斗属性</span><table style=width:100%;font-size:9px;margin-top:3px><tr><td>暴击 '+(Math.min(95,_ba.crt+stb*2))+'%</td><td>暴抗 '+(_ba.crtRes+stb)+'%</td><td>闪避 '+(Math.min(80,_ba.dge+stb*2))+'%</td><td>精准 '+Math.min(100,_ba.acc+stb)+'%</td></tr><tr><td>吸血 '+(_ba.drain+stb)+'%</td><td>吸抗 '+(_ba.drainRes+stb)+'%</td><td>爆伤 '+(_ba.crtDmg+stb*3)+'%</td><td>爆抗 '+(_ba.crtDmgRes+stb)+'%</td></tr><tr><td>攻速 '+(_ba.spd+stb*5)+'</td><td colspan=3>减伤 '+Math.min(70,_ba.dmgRed+stb)+'%</td></tr></table></div>';
 document.getElementById("mbd").innerHTML=htm;document.getElementById("md").classList.add("s")}
+function SHOW_ATTR_TABLE(){
+  var d=document.getElementById("md");
+  if(!d){d=document.createElement("div");d.id="md";d.className="md";d.onclick=function(e){if(e.target===this)this.classList.remove("s")};document.body.appendChild(d)}
+  var h='<div class="mbx" style="max-width:420px;max-height:90vh;overflow-y:auto"><div class="tc mb"><div style=font-size:20px;color:#f0d060;margin-bottom:6px>📊武将属性总表</div></div>';
+  h+='<table style="width:100%;font-size:10px;border-collapse:collapse"><tr style="background:#2a1a0a;position:sticky;top:0"><th style=text-align:left;padding:3px 4px;color:#d4a017;border-bottom:1px solid #4a3a1a>武将</th><th style=padding:3px 2px;color:#f44;border-bottom:1px solid #4a3a1a>暴击</th><th style=padding:3px 2px;color:#4af;border-bottom:1px solid #4a3a1a>暴抗</th><th style=padding:3px 2px;color:#8f8;border-bottom:1px solid #4a3a1a>闪避</th><th style=padding:3px 2px;color:#ff8;border-bottom:1px solid #4a3a1a>精准</th><th style=padding:3px 2px;color:#f8f;border-bottom:1px solid #4a3a1a>吸血</th><th style=padding:3px 2px;color:#aaf;border-bottom:1px solid #4a3a1a>吸抗</th><th style=padding:3px 2px;color:#fa0;border-bottom:1px solid #4a3a1a>爆伤</th><th style=padding:3px 2px;color:#f0a;border-bottom:1px solid #4a3a1a>爆抗</th><th style=padding:3px 2px;color:#0fa;border-bottom:1px solid #4a3a1a>攻速</th><th style=padding:3px 2px;color:#0af;border-bottom:1px solid #4a3a1a>减伤</th></tr>';
+  for(var _i=0;_i<G.hs.length;_i++){
+    var _h=G.hs[_i];if(!_h)continue;
+    var _ba=HERO_ATTR_BASE(_h.q);var _st=_h.st||0;
+    var clr=QC[_h.q];
+    h+='<tr style="border-bottom:1px solid #2a1a0a"><td style="padding:4px 4px;color:'+clr+';font-weight:700;white-space:nowrap"><span style=font-size:14px>'+_h.i+'</span> '+_h.n+'</td>';
+    var attrs=[
+      {v:Math.min(95,_ba.crt+_st*2),c:"#f44"},
+      {v:_ba.crtRes+_st,c:"#4af"},
+      {v:Math.min(80,_ba.dge+_st*2),c:"#8f8"},
+      {v:Math.min(100,_ba.acc+_st),c:"#ff8"},
+      {v:_ba.drain+_st,c:"#f8f"},
+      {v:_ba.drainRes+_st,c:"#aaf"},
+      {v:_ba.crtDmg+_st*3,c:"#fa0"},
+      {v:_ba.crtDmgRes+_st,c:"#f0a"},
+      {v:_ba.spd+_st*5,c:"#0fa"},
+      {v:Math.min(70,_ba.dmgRed+_st),c:"#0af"}
+
+    ];
+    for(var _j=0;_j<attrs.length;_j++){
+      h+='<td style="padding:3px 2px;text-align:center;color:'+attrs[_j].c+'">'+attrs[_j].v+'%</td>';
+    }
+    h+='</tr>';
+  }
+  h+='</table></div><button class="mc" onclick="this.parentElement.classList.remove(\'s\')">✖</button></div>';
+  d.innerHTML=h;
+  d.classList.add("s");
+}
+
+    ];
+    for(var _j=0;_j<attrs.length;_j++){
+      h+='<td style="padding:3px 2px;text-align:center;color:'+attrs[_j].c+'">'+attrs[_j].v+'%</td>';
+    }
+    h+='</tr>';
+  }
+  h+='</table></div><button class="mc" onclick="this.parentElement.classList.remove(\'s\')">✖</button></div>';
+  d.innerHTML=h;
+  d.classList.add("s");
+}
+
+    ];
+    for(var _j=0;_j<attrs.length;_j++){
+      h+='<td style="padding:3px 2px;text-align:center;color:'+attrs[_j].c+'">'+attrs[_j].v+'%</td>';
+    }
+    h+='</tr>';
+  }
+  h+='</table></div><button class="mc" onclick="this.parentElement.classList.remove(\'s\')">✖</button></div>';
+  d.innerHTML=h;
+  d.classList.add("s");
+}
+
+    ];
+    for(var _j=0;_j<attrs.length;_j++){
+      h+='<td style="padding:3px 2px;text-align:center;color:'+attrs[_j].c+'">'+attrs[_j].v+'%</td>';
+    }
+    h+='</tr>';
+  }
+  h+='</table></div><button class="mc" onclick="this.parentElement.classList.remove(\'s\')">✖</button></div>';
+  d.innerHTML=h;
+  d.classList.add("s");
+}
+
 function EQ_DIALOG(eq,src){
   var qns=["普通","优秀","稀有","传说","神话"];
   var htm='<div class="tc mb"><div style=font-size:48px>'+eq.i+'</div><div style=font-size:18px;font-weight:700;color:'+QC[eq.q]+'>'+eq.n+'</div><div style=display:inline-block;padding:2px 8px;background:'+QC[eq.q]+';color:#fff;border-radius:4px;font-size:11px;margin-top:4px>'+qns[eq.q]+'</div></div>';
