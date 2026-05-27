@@ -1727,7 +1727,7 @@ function ADVICE(){
 
 function S_EXP(amt){G.exp=(G.exp||0)+amt;while((G.nexp||10)>0&&G.exp>=(G.nexp||10)){G.exp-=(G.nexp||10);G.lv=(G.lv||1)+1;if(G.lv<=100)G.nexp=Math.floor(10+Math.pow(G.lv,1.5)*0.8);else if(G.lv<=200)G.nexp=Math.floor(100+Math.pow(G.lv,1.6)*1.2);else if(G.lv<=500)G.nexp=Math.floor(500+Math.pow(G.lv,1.7)*3);else if(G.lv<=800)G.nexp=Math.floor(5000+Math.pow(G.lv,1.8)*8);else G.nexp=Math.floor(30000+Math.pow(G.lv,2)*5);if(G.lv>=1000){G.lv=1000;G.nexp=0;break}}SV();UA();ST("升级! 当前Lv."+G.lv,2000)}
 
-if((!G.hs||!G.hs.length||G.hs.length<3)&&typeof STATE_RESCUE==="undefined"){var STATE_RESCUE=1;var _rh=[{id:G.nid++,n:"赵云",q:2,lv:25,h:2800,a:320,cls:1,sk:{n:"乱舞",t:"dmg",v:2,d:"乱舞攻击，造成200%×2次伤害",c:"enemy"},passives:[{n:"强攻",desc:"攻击+18%",stat:"atk",val:0.18},{n:"暴击",desc:"暴击率+12%",stat:"crt",val:12}],exp:0,leveled:0},{id:G.nid++,n:"诸葛亮",q:3,lv:22,h:1800,a:450,cls:2,sk:{n:"天火焚城",t:"dmg",v:3,d:"天火降临！造成300%伤害，攻击全体敌人",c:"all"},passives:[{n:"铁壁",desc:"生命+20%",stat:"hp",val:0.20},{n:"精准",desc:"命中+15%",stat:"acc",val:15},{n:"恢复",desc:"每回合恢复3%生命",stat:"regen",val:3}],exp:0,leveled:0},{id:G.nid++,n:"典韦",q:2,lv:24,h:3500,a:280,cls:0,sk:{n:"舍身",t:"heal",v:1,d:"牺牲20%自身生命，为全体己方回满生命",c:"all"},passives:[{n:"铁壁",desc:"生命+20%",stat:"hp",val:0.20},{n:"坚韧",desc:"减伤+10%",stat:"dmgRed",val:10}],exp:0,leveled:0}];G.hs=_rh;G.g=Math.max(G.g||0,5000);G.j=Math.max(G.j||0,500);if(!G.r||Object.keys(G.r).length<10){G.r={};for(var _ri5=0;_ri5<300;_ri5++)G.r[_ri5]=0}G.gd=G.gd||{m:1,f:1};G.tt=G.tt||[];G.arena=G.arena||{ranks:[]};if((!G.nick||G.nick.length<2))G.nick="君临天下";SV();}
+
 
 function init(){
   LD();OA();CE=ME(G.s);UA();UPDATE_NAME_DISPLAY();
