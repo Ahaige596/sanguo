@@ -338,11 +338,11 @@ function assignClass(h){
   if(h.a&&h.h){_ra=h.a;_rh=h.h}
   if(_ra<=0||_rh<=0){_ra=10;_rh=100}
   var _ratio=_rh/_ra;
-  // Shield: HP >= 8x attack (very tanky heroes)
-  if(_ratio>=8)return 0;
-  // Warrior: HP <= 5.5x attack (attack-relevant heroes)
-  if(_ratio<=5.5)return 1;
-  // Strategist: balanced (HP between 5.5x and 8x attack)
+  // Shield: HP >= 10x attack (true tanks like 荀彧, 曹仁)
+  if(_ratio>=10)return 0;
+  // Warrior: HP <= 6x attack (attack-focused like 张辽, 魏延, 文丑)
+  if(_ratio<=6)return 1;
+  // Strategist: balanced
   return 2;
 }
 function getClassSkill(h){
@@ -1273,11 +1273,11 @@ function assignClass(h){
   if(h.a&&h.h){_ra=h.a;_rh=h.h}
   if(_ra<=0||_rh<=0){_ra=10;_rh=100}
   var _ratio=_rh/_ra;
-  // Shield: HP >= 8x attack (very tanky heroes)
-  if(_ratio>=8)return 0;
-  // Warrior: HP <= 5.5x attack (attack-relevant heroes)
-  if(_ratio<=5.5)return 1;
-  // Strategist: balanced (HP between 5.5x and 8x attack)
+  // Shield: HP >= 10x attack (true tanks like 荀彧, 曹仁)
+  if(_ratio>=10)return 0;
+  // Warrior: HP <= 6x attack (attack-focused like 张辽, 魏延, 文丑)
+  if(_ratio<=6)return 1;
+  // Strategist: balanced
   return 2;
 }
 function getClassSkill(h){
