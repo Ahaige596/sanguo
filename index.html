@@ -92,6 +92,7 @@ function TP(){var s=0;for(var i=0;i<G.hs.length;i++)s+=PW(G.hs[i]);return s}
 function FP(){var s=0;for(var i=0;i<G.fm.length;i++){var h=GH(G.fm[i]);if(h)s+=PW(h)}return s}
 function AB(){return 1+G.al*0.1}
 function HB(){return 1+G.hl*0.1}
+function HERO_ATTR_BASE(q){var b={crt:5+q*3,crtRes:0+q*2,dge:3+q*2,acc:80+q*2,drain:0+q*2,drainRes:0+q*2,crtDmg:150+q*3,crtDmgRes:0+q*2,spd:100+q*5,dmgRed:0+q*2};b.crt=Math.min(b.crt,60);b.dge=Math.min(b.dge,50);b.acc=Math.min(b.acc,100);return b}
 function GH(id){for(var i=0;i<G.hs.length;i++)if(G.hs[i].id===id)return G.hs[i];return null}
 function ID(id){for(var i=0;i<G.fm.length;i++)if(G.fm[i]===id)return true;if(G.hs)G.hs.forEach(function(h){if(h.cls===void 0)h.cls=assignClass(h);});return false}
 function HA(id){var h=GH(id);if(!h)return 0;var skb=h.sk?1.15:1;var eqAtk=0;if(h.eq){for(var _k in h.eq){var _e=h.eq[_k];if(_e)eqAtk+=_e.atk||0}};var cam=CLASS_SPECS[assignClass(h)]?CLASS_SPECS[assignClass(h)].atkMod:1;return Math.floor((h.a+eqAtk)*cam*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*skb*AB())}
@@ -371,7 +372,7 @@ function getFrontHero(){for(var i=0;i<Math.min(3,G.fm.length);i++){if(FH[G.fm[i]
 var CE=null,EE=[],BT=null,FH={};
 function SB(){
   if(G.fighting)return;if(!G.fm.length){ST("请先在[阵容]上阵武将");return}
-  EE=ME(G.s);CE=EE[0];G.fighting=1;FH={};for(var i=0;i<G.fm.length;i++){var id=G.fm[i];FH[id]={hp:HH(id),mhp:HH(id)}}
+  EE=ME(G.s);CE=EE[0];G.fighting=1;FH={};for(var i=0;i<G.fm.length;i++){var id=G.fm[i];var _h0=GH(id);if(!_h0)continue;var _ba0=HERO_ATTR_BASE(_h0.q);var _st0=_h0.st||0;var fh0={hp:HH(id),mhp:HH(id),crt:Math.min(95,Math.floor(_ba0.crt+_st0*2)),crtRes:Math.floor(_ba0.crtRes+_st0),crtDmg:Math.floor(_ba0.crtDmg+_st0*3),crtDmgRes:Math.floor(_ba0.crtDmgRes+_st0),dge:Math.min(80,Math.floor(_ba0.dge+_st0*2)),acc:Math.min(100,Math.floor(_ba0.acc+_st0)),drain:Math.floor(_ba0.drain+_st0),drainRes:Math.floor(_ba0.drainRes+_st0),dmgRed:Math.min(70,Math.floor(_ba0.dmgRed+_st0)),spd:Math.floor(_ba0.spd+_st0*5),an:0};if(_h0.eq){for(var _sk0 in _h0.eq){var _eq0=_h0.eq[_sk0];if(_eq0&&_eq0.sp){var sn0=_eq0.sp.n;var sv0=parseInt(_eq0.sp.v)/100;if(sn0.indexOf('暴击')>=0&&sn0.indexOf('爆')<0)fh0.crt=Math.min(95,fh0.crt+sv0*100);if(sn0=='爆伤')fh0.crtDmg+=sv0*100;if(sn0=='吸血')fh0.drain+=sv0*100;if(sn0.indexOf('减伤')>=0)fh0.dmgRed=Math.min(70,fh0.dmgRed+sv0*100);if(sn0.indexOf('闪避')>=0)fh0.dge=Math.min(80,fh0.dge+sv0*100);if(sn0.indexOf('精准')>=0)fh0.acc=Math.min(100,fh0.acc+sv0*100);}}}FH[id]=fh0}
   UBU();LG("全军出击！");if(BT)clearInterval(BT);BT=setInterval(TB,700);
   for(var fi=1;fi<EE.length;fi++){setTimeout(function(){LG("第"+(EE.length)+"个敌人出现！")},300)}
 }function SP(){G.fighting=0;if(BT){clearInterval(BT);BT=null}LG("战斗停止")}
@@ -390,9 +391,20 @@ function TB(){
     }
     if(!us){
       var atk=getEffectiveAtk(id);
-      var dmg=Math.max(1,atk+Math.floor(Math.random()*atk*0.4)-Math.floor(atk*0.2));
-      if(Math.random()<0.12){dmg=Math.floor(dmg*1.8);SF("暴击!","c")}else SF("-"+dmg,"d");
-      ae.hp=Math.max(0,ae.hp-dmg);fh.an=Math.min(100,(fh.an||0)+30);
+      var baseDmg=Math.max(1,atk+Math.floor(Math.random()*atk*0.3)-Math.floor(atk*0.15));
+      var isCrit=Math.random()*100<(fh.crt||5);
+      if(isCrit){
+        var crtM=((fh.crtDmg||150)-0)/100;
+        var resM=1-((ae.crtDmgRes||0)/100);
+        baseDmg=Math.floor(baseDmg*Math.max(1,crtM*resM));
+        SF("暴击! "+baseDmg,"c");
+      }else{SF("-"+baseDmg,"d")}
+      var drainAmt=Math.floor(baseDmg*((fh.drain||0)/100));
+      if(drainAmt>0){fh.hp=Math.min(fh.mhp,fh.hp+drainAmt)}
+      var dmgRed=Math.min(70,(ae.dmgRed||0));baseDmg=Math.floor(baseDmg*(1-dmgRed/100));
+      var dgeChance=(ae.dge||0)-(fh.acc||80);if(dgeChance>0&&Math.random()*100<dgeChance){SF("闪避!","c");baseDmg=Math.floor(baseDmg*0.3)}
+      baseDmg=Math.max(1,baseDmg);
+      ae.hp=Math.max(0,ae.hp-baseDmg);fh.an=Math.min(100,(fh.an||0)+30);
     }
     if(ae.hp<=0)LG(h.n+" 击败了 "+ae.n);
   }
@@ -400,8 +412,8 @@ function TB(){
     var e=EE[i];if(!e||e.hp<=0)continue;if(e.stun){e.stun--;continue}
     
     var tgt=getFrontHero();if(!tgt)break;
-    if(e.an>=100){e.an=0;var sd=Math.floor(e.at*2.0);FH[tgt].hp=Math.max(0,FH[tgt].hp-sd);if(FH[tgt])FH[tgt].an=Math.min(100,(FH[tgt].an||0)+10);if(e)e.an=Math.min(100,(e.an||0)+30);SF("大招!","c");LG(e.n+" 释放技能");}
-    else{var ed=Math.max(1,Math.floor(e.at*0.6+Math.floor(Math.random()*7)-3));FH[tgt].hp=Math.max(0,FH[tgt].hp-ed);if(FH[tgt])FH[tgt].an=Math.min(100,(FH[tgt].an||0)+10);if(e)e.an=Math.min(100,(e.an||0)+30);SF("-"+ed,"d");}
+    if(e.an>=100){e.an=0;var sd=Math.floor(e.at*2.0);var tgtFH2=FH[tgt];if(tgtFH2){var ultDmgRed=(tgtFH2.dmgRed||0);sd=Math.floor(sd*(1-ultDmgRed/100));tgtFH2.hp=Math.max(0,tgtFH2.hp-sd);tgtFH2.an=Math.min(100,(tgtFH2.an||0)+10)}if(e)e.an=Math.min(100,(e.an||0)+30);SF("大招!","c");LG(e.n+" 释放技能");}
+    else{var ed=Math.max(1,Math.floor(e.at*0.6+Math.floor(Math.random()*7)-3));var tgtFH=FH[tgt];if(tgtFH){var eCrit=Math.random()<0.08;var eDmgRed=(tgtFH.dmgRed||0);ed=Math.floor(ed*(1-eDmgRed/100));var eDge=(tgtFH.dge||0)-5;if(eDge>0&&Math.random()*100<eDge){ed=Math.floor(ed*0.3);SF("闪避!","c")}if(eCrit){ed=Math.floor(ed*1.5);SF("暴击! "+ed,"c")}else{SF("-"+ed,"d")}tgtFH.hp=Math.max(0,tgtFH.hp-ed);tgtFH.an=Math.min(100,(tgtFH.an||0)+10)}if(e)e.an=Math.min(100,(e.an||0)+30);}
     if(FH[tgt].hp<=0){var dh=GH(tgt);LG((dh?dh.n:"武将")+" 阵亡");}
   }
   var e3=document.querySelector(".es2");if(e3&&EE.some(function(x){return x.hp>0})&&G.fighting){e3.classList.remove("hs");void e3.offsetWidth;e3.classList.add("hs")}
@@ -587,14 +599,14 @@ document.getElementById("mtt").textContent=h.n;
 var cs='';if(h.cls!==void 0)cs=CLASS_NAMES[h.cls]||'';else cs=CLASS_NAMES[assignClass(h)]||'';
 var htm='<div class="tc mb"><div style=font-size:48px>'+h.i+'</div><div style=font-size:18px;font-weight:700;color:'+QC[h.q]+'>'+h.n+'</div><div style=display:inline-block;padding:2px 8px;background:'+QC[h.q]+';color:#fff;border-radius:4px;font-size:11px;margin-top:4px>'+QN[h.q]+'</div><div style=font-size:12px;margin-top:4px;color:#aaa>'+cs+'</div></div>';
 if(h.sk&&typeof h.sk==='object')htm+=qSR('技能','⚡'+h.sk.n+' ('+h.sk.d+')');else if(h.sk)htm+=qSR('技能','⚡'+h.sk);
-htm+=qSR("品质",QE[h.q]+QN[h.q])+qSR("职业",cs)+qSR("星级","⭐"+((h.st||0)+1))+qSR("等级","Lv."+(h.lv||1))+qSR("攻击",h.a)+qSR("生命",h.h)+qSR("战力",PW(h))+qSR("经验",(h.exp||0)+"/"+(10+(h.lv||1)*3));
+var _ba=HERO_ATTR_BASE(h.q);var stb=(h.st||0);htm+=qSR("品质",QE[h.q]+QN[h.q])+qSR("职业",cs)+qSR("星级","⭐"+stb+1)+qSR("等级","Lv."+(h.lv||1))+qSR("攻击",h.a)+qSR("生命",h.h)+qSR("战力",PW(h))+qSR("经验",(h.exp||0)+"/"+(10+(h.lv||1)*3));htm+='<div style=margin-top:6px;padding:5px;background:rgba(0,0,0,.3);border-radius:6px;font-size:10px;color:#a08060><span style=color:#d4a017>📊战斗属性</span><table style=width:100%;font-size:9px;margin-top:3px><tr><td>暴击 '+(Math.min(95,_ba.crt+stb*2))+'%</td><td>暴抗 '+(_ba.crtRes+stb)+'%</td><td>闪避 '+(Math.min(80,_ba.dge+stb*2))+'%</td><td>精准 '+Math.min(100,_ba.acc+stb)+'%</td></tr><tr><td>吸血 '+(_ba.drain+stb)+'%</td><td>吸抗 '+(_ba.drainRes+stb)+'%</td><td>爆伤 '+(_ba.crtDmg+stb*3)+'%</td><td>爆抗 '+(_ba.crtDmgRes+stb)+'%</td></tr><tr><td>攻速 '+(_ba.spd+stb*5)+'</td><td colspan=3>减伤 '+Math.min(70,_ba.dmgRed+stb)+'%</td></tr></table></div>';
 document.getElementById("mbd").innerHTML=htm;document.getElementById("md").classList.add("s")}
 function EQ_DIALOG(eq,src){
   var qns=["普通","优秀","稀有","传说","神话"];
   var htm='<div class="tc mb"><div style=font-size:48px>'+eq.i+'</div><div style=font-size:18px;font-weight:700;color:'+QC[eq.q]+'>'+eq.n+'</div><div style=display:inline-block;padding:2px 8px;background:'+QC[eq.q]+';color:#fff;border-radius:4px;font-size:11px;margin-top:4px>'+qns[eq.q]+'</div></div>';
   htm+='<div class="es">⚔攻击+'+eq.atk+' ❤生命+'+eq.hp+'</div>';
   if(eq.lvl)htm+='<div class="es">Lv.'+eq.lvl+'</div>';
-  if(eq.sp)htm+='<div class="es" style=color:#ff0>🔥'+eq.sp.n+'+'+eq.sp.v+'</div>';
+  if(eq.sp)htm+='<div class="es" style=color:#ff0>🔥属性:'+eq.sp.n+'+'+eq.sp.v+'</div>';
   htm+='<div class="es">💰分解可得:'+((eq.q+1)*5)+'金币</div>';
   htm+='<div style=display:flex;gap:10px;justify-content:center;margin-top:15px>';
   if(src==='backpack'){
@@ -983,6 +995,7 @@ function TP(){var s=0;for(var i=0;i<G.hs.length;i++)s+=PW(G.hs[i]);return s}
 function FP(){var s=0;for(var i=0;i<G.fm.length;i++){var h=GH(G.fm[i]);if(h)s+=PW(h)}return s}
 function AB(){return 1+G.al*0.1}
 function HB(){return 1+G.hl*0.1}
+function HERO_ATTR_BASE(q){var b={crt:5+q*3,crtRes:0+q*2,dge:3+q*2,acc:80+q*2,drain:0+q*2,drainRes:0+q*2,crtDmg:150+q*3,crtDmgRes:0+q*2,spd:100+q*5,dmgRed:0+q*2};b.crt=Math.min(b.crt,60);b.dge=Math.min(b.dge,50);b.acc=Math.min(b.acc,100);return b}
 function GH(id){for(var i=0;i<G.hs.length;i++)if(G.hs[i].id===id)return G.hs[i];return null}
 function ID(id){for(var i=0;i<G.fm.length;i++)if(G.fm[i]===id)return true;if(G.hs)G.hs.forEach(function(h){if(h.cls===void 0)h.cls=assignClass(h);});return false}
 function HA(id){var h=GH(id);if(!h)return 0;var skb=h.sk?1.15:1;var eqAtk=0;if(h.eq){for(var _k in h.eq){var _e=h.eq[_k];if(_e)eqAtk+=_e.atk||0}};var cam=CLASS_SPECS[assignClass(h)]?CLASS_SPECS[assignClass(h)].atkMod:1;return Math.floor((h.a+eqAtk)*cam*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*skb*AB())}
@@ -1220,7 +1233,7 @@ function getFrontHero(){for(var i=0;i<Math.min(3,G.fm.length);i++){if(FH[G.fm[i]
 var CE=null,EE=[],BT=null,FH={};
 function SB(){
   if(G.fighting)return;if(!G.fm.length){ST("请先在[阵容]上阵武将");return}
-  EE=ME(G.s);CE=EE[0];G.fighting=1;FH={};for(var i=0;i<G.fm.length;i++){var id=G.fm[i];FH[id]={hp:HH(id),mhp:HH(id)}}
+  EE=ME(G.s);CE=EE[0];G.fighting=1;FH={};for(var i=0;i<G.fm.length;i++){var id=G.fm[i];var _h0=GH(id);if(!_h0)continue;var _ba0=HERO_ATTR_BASE(_h0.q);var _st0=_h0.st||0;var fh0={hp:HH(id),mhp:HH(id),crt:Math.min(95,Math.floor(_ba0.crt+_st0*2)),crtRes:Math.floor(_ba0.crtRes+_st0),crtDmg:Math.floor(_ba0.crtDmg+_st0*3),crtDmgRes:Math.floor(_ba0.crtDmgRes+_st0),dge:Math.min(80,Math.floor(_ba0.dge+_st0*2)),acc:Math.min(100,Math.floor(_ba0.acc+_st0)),drain:Math.floor(_ba0.drain+_st0),drainRes:Math.floor(_ba0.drainRes+_st0),dmgRed:Math.min(70,Math.floor(_ba0.dmgRed+_st0)),spd:Math.floor(_ba0.spd+_st0*5),an:0};if(_h0.eq){for(var _sk0 in _h0.eq){var _eq0=_h0.eq[_sk0];if(_eq0&&_eq0.sp){var sn0=_eq0.sp.n;var sv0=parseInt(_eq0.sp.v)/100;if(sn0.indexOf('暴击')>=0&&sn0.indexOf('爆')<0)fh0.crt=Math.min(95,fh0.crt+sv0*100);if(sn0=='爆伤')fh0.crtDmg+=sv0*100;if(sn0=='吸血')fh0.drain+=sv0*100;if(sn0.indexOf('减伤')>=0)fh0.dmgRed=Math.min(70,fh0.dmgRed+sv0*100);if(sn0.indexOf('闪避')>=0)fh0.dge=Math.min(80,fh0.dge+sv0*100);if(sn0.indexOf('精准')>=0)fh0.acc=Math.min(100,fh0.acc+sv0*100);}}}FH[id]=fh0}
   UBU();LG("全军出击！");if(BT)clearInterval(BT);BT=setInterval(TB,700);
   for(var fi=1;fi<EE.length;fi++){setTimeout(function(){LG("第"+(EE.length)+"个敌人出现！")},300)}
 }function SP(){G.fighting=0;if(BT){clearInterval(BT);BT=null}LG("战斗停止")}
@@ -1239,9 +1252,20 @@ function TB(){
     }
     if(!us){
       var atk=getEffectiveAtk(id);
-      var dmg=Math.max(1,atk+Math.floor(Math.random()*atk*0.4)-Math.floor(atk*0.2));
-      if(Math.random()<0.12){dmg=Math.floor(dmg*1.8);SF("暴击!","c")}else SF("-"+dmg,"d");
-      ae.hp=Math.max(0,ae.hp-dmg);fh.an=Math.min(100,(fh.an||0)+30);
+      var baseDmg=Math.max(1,atk+Math.floor(Math.random()*atk*0.3)-Math.floor(atk*0.15));
+      var isCrit=Math.random()*100<(fh.crt||5);
+      if(isCrit){
+        var crtM=((fh.crtDmg||150)-0)/100;
+        var resM=1-((ae.crtDmgRes||0)/100);
+        baseDmg=Math.floor(baseDmg*Math.max(1,crtM*resM));
+        SF("暴击! "+baseDmg,"c");
+      }else{SF("-"+baseDmg,"d")}
+      var drainAmt=Math.floor(baseDmg*((fh.drain||0)/100));
+      if(drainAmt>0){fh.hp=Math.min(fh.mhp,fh.hp+drainAmt)}
+      var dmgRed=Math.min(70,(ae.dmgRed||0));baseDmg=Math.floor(baseDmg*(1-dmgRed/100));
+      var dgeChance=(ae.dge||0)-(fh.acc||80);if(dgeChance>0&&Math.random()*100<dgeChance){SF("闪避!","c");baseDmg=Math.floor(baseDmg*0.3)}
+      baseDmg=Math.max(1,baseDmg);
+      ae.hp=Math.max(0,ae.hp-baseDmg);fh.an=Math.min(100,(fh.an||0)+30);
     }
     if(ae.hp<=0)LG(h.n+" 击败了 "+ae.n);
   }
@@ -1249,8 +1273,8 @@ function TB(){
     var e=EE[i];if(!e||e.hp<=0)continue;if(e.stun){e.stun--;continue}
     
     var tgt=getFrontHero();if(!tgt)break;
-    if(e.an>=100){e.an=0;var sd=Math.floor(e.at*2.0);FH[tgt].hp=Math.max(0,FH[tgt].hp-sd);if(FH[tgt])FH[tgt].an=Math.min(100,(FH[tgt].an||0)+10);if(e)e.an=Math.min(100,(e.an||0)+30);SF("大招!","c");LG(e.n+" 释放技能");}
-    else{var ed=Math.max(1,Math.floor(e.at*0.6+Math.floor(Math.random()*7)-3));FH[tgt].hp=Math.max(0,FH[tgt].hp-ed);if(FH[tgt])FH[tgt].an=Math.min(100,(FH[tgt].an||0)+10);if(e)e.an=Math.min(100,(e.an||0)+30);SF("-"+ed,"d");}
+    if(e.an>=100){e.an=0;var sd=Math.floor(e.at*2.0);var tgtFH2=FH[tgt];if(tgtFH2){var ultDmgRed=(tgtFH2.dmgRed||0);sd=Math.floor(sd*(1-ultDmgRed/100));tgtFH2.hp=Math.max(0,tgtFH2.hp-sd);tgtFH2.an=Math.min(100,(tgtFH2.an||0)+10)}if(e)e.an=Math.min(100,(e.an||0)+30);SF("大招!","c");LG(e.n+" 释放技能");}
+    else{var ed=Math.max(1,Math.floor(e.at*0.6+Math.floor(Math.random()*7)-3));var tgtFH=FH[tgt];if(tgtFH){var eCrit=Math.random()<0.08;var eDmgRed=(tgtFH.dmgRed||0);ed=Math.floor(ed*(1-eDmgRed/100));var eDge=(tgtFH.dge||0)-5;if(eDge>0&&Math.random()*100<eDge){ed=Math.floor(ed*0.3);SF("闪避!","c")}if(eCrit){ed=Math.floor(ed*1.5);SF("暴击! "+ed,"c")}else{SF("-"+ed,"d")}tgtFH.hp=Math.max(0,tgtFH.hp-ed);tgtFH.an=Math.min(100,(tgtFH.an||0)+10)}if(e)e.an=Math.min(100,(e.an||0)+30);}
     if(FH[tgt].hp<=0){var dh=GH(tgt);LG((dh?dh.n:"武将")+" 阵亡");}
   }
   var e3=document.querySelector(".es2");if(e3&&EE.some(function(x){return x.hp>0})&&G.fighting){e3.classList.remove("hs");void e3.offsetWidth;e3.classList.add("hs")}
@@ -1374,14 +1398,14 @@ document.getElementById("mtt").textContent=h.n;
 var cs='';if(h.cls!==void 0)cs=CLASS_NAMES[h.cls]||'';else cs=CLASS_NAMES[assignClass(h)]||'';
 var htm='<div class="tc mb"><div style=font-size:48px>'+h.i+'</div><div style=font-size:18px;font-weight:700;color:'+QC[h.q]+'>'+h.n+'</div><div style=display:inline-block;padding:2px 8px;background:'+QC[h.q]+';color:#fff;border-radius:4px;font-size:11px;margin-top:4px>'+QN[h.q]+'</div><div style=font-size:12px;margin-top:4px;color:#aaa>'+cs+'</div></div>';
 if(h.sk&&typeof h.sk==='object')htm+=qSR('技能','⚡'+h.sk.n+' ('+h.sk.d+')');else if(h.sk)htm+=qSR('技能','⚡'+h.sk);
-htm+=qSR("品质",QE[h.q]+QN[h.q])+qSR("职业",cs)+qSR("星级","⭐"+((h.st||0)+1))+qSR("等级","Lv."+(h.lv||1))+qSR("攻击",h.a)+qSR("生命",h.h)+qSR("战力",PW(h))+qSR("经验",(h.exp||0)+"/"+(10+(h.lv||1)*3));
+var _ba=HERO_ATTR_BASE(h.q);var stb=(h.st||0);htm+=qSR("品质",QE[h.q]+QN[h.q])+qSR("职业",cs)+qSR("星级","⭐"+stb+1)+qSR("等级","Lv."+(h.lv||1))+qSR("攻击",h.a)+qSR("生命",h.h)+qSR("战力",PW(h))+qSR("经验",(h.exp||0)+"/"+(10+(h.lv||1)*3));htm+='<div style=margin-top:6px;padding:5px;background:rgba(0,0,0,.3);border-radius:6px;font-size:10px;color:#a08060><span style=color:#d4a017>📊战斗属性</span><table style=width:100%;font-size:9px;margin-top:3px><tr><td>暴击 '+(Math.min(95,_ba.crt+stb*2))+'%</td><td>暴抗 '+(_ba.crtRes+stb)+'%</td><td>闪避 '+(Math.min(80,_ba.dge+stb*2))+'%</td><td>精准 '+Math.min(100,_ba.acc+stb)+'%</td></tr><tr><td>吸血 '+(_ba.drain+stb)+'%</td><td>吸抗 '+(_ba.drainRes+stb)+'%</td><td>爆伤 '+(_ba.crtDmg+stb*3)+'%</td><td>爆抗 '+(_ba.crtDmgRes+stb)+'%</td></tr><tr><td>攻速 '+(_ba.spd+stb*5)+'</td><td colspan=3>减伤 '+Math.min(70,_ba.dmgRed+stb)+'%</td></tr></table></div>';
 document.getElementById("mbd").innerHTML=htm;document.getElementById("md").classList.add("s")}
 function EQ_DIALOG(eq,src){
   var qns=["普通","优秀","稀有","传说","神话"];
   var htm='<div class="tc mb"><div style=font-size:48px>'+eq.i+'</div><div style=font-size:18px;font-weight:700;color:'+QC[eq.q]+'>'+eq.n+'</div><div style=display:inline-block;padding:2px 8px;background:'+QC[eq.q]+';color:#fff;border-radius:4px;font-size:11px;margin-top:4px>'+qns[eq.q]+'</div></div>';
   htm+='<div class="es">⚔攻击+'+eq.atk+' ❤生命+'+eq.hp+'</div>';
   if(eq.lvl)htm+='<div class="es">Lv.'+eq.lvl+'</div>';
-  if(eq.sp)htm+='<div class="es" style=color:#ff0>🔥'+eq.sp.n+'+'+eq.sp.v+'</div>';
+  if(eq.sp)htm+='<div class="es" style=color:#ff0>🔥属性:'+eq.sp.n+'+'+eq.sp.v+'</div>';
   htm+='<div class="es">💰分解可得:'+((eq.q+1)*5)+'金币</div>';
   htm+='<div style=display:flex;gap:10px;justify-content:center;margin-top:15px>';
   if(src==='backpack'){
