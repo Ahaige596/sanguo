@@ -2013,5 +2013,19 @@ ARENA_REFRESH=function(){
     if(r.isNPC)html+='<span style="font-size:10px;color:'+QC[r.q]+'">'+QE[r.q]+'Lv.'+(r.lv||1)+'</span>';
     else html+='<span style="font-size:10px;color:#a08060">'+(r.w||0)+'胜</span>';html+='</div>'}
   ls.innerHTML=html
-};
+};;(function(){if(typeof G!=='undefined'&&G.hs&&G.hs.length){
+  try{
+    var _needsSave=false;
+    for(var _ci=0;_ci<G.hs.length;_ci++){
+      var _ch=G.hs[_ci];
+      if(_ch.cls!==void 0)delete _ch.cls;
+      if((!_ch.passives||!_ch.passives.length)&&typeof MIGRATE_PASSIVES==='function'){
+        MIGRATE_PASSIVES(_ch);
+        _needsSave=true;
+      }
+      if(typeof assignClass==='function')_ch.cls=assignClass(_ch);
+    }
+    if(_needsSave){G._migrated=true;try{localStorage.setItem("sg7",JSON.stringify(G))}catch(e){}}
+  }catch(e){}
+}})();
 </script></body></html>
