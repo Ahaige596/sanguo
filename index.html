@@ -326,7 +326,7 @@ function NPC_TITLE(){
 
 function SV(){G.ls=Date.now();G.lo=G.lo||Date.now();try{localStorage.setItem("sg7",JSON.stringify(G))}catch(e){}}
   G.hs.forEach(function(h){if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};});
-function LD(){try{var r=localStorage.getItem("sg7");if(r){var s=JSON.parse(r);for(var k in s)G[k]=s[k];G.fm=G.fm||[];G.eq=G.eq||{w:null,a:null,h:null,b:null,r:null,p:null};G.lo=G.lo||Date.now();G.al=G.al||0;G.hl=G.hl||0;G.auto=G.auto||0;G.ach=G.ach||{};G.fighting=0;if(G.ar){for(var _ci=0;_ci<G.ar.length;_ci++){if(G.ar[_ci]&&G.ar[_ci].nome){delete G.ar[_ci].nome}}};if(G.hs&&G.hs.length&&!G._migrated){G.hs.forEach(function(_mh){if(typeof _mh.sk==='string'||!_mh.passives)MIGRATE_PASSIVES(_mh)});G._migrated=true}return true}}catch(e){}  G.hs.forEach(function(h){if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};});
+function LD(){try{var r=localStorage.getItem("sg7");if(r){var s=JSON.parse(r);for(var k in s)G[k]=s[k];G.fm=G.fm||[];G.eq=G.eq||{w:null,a:null,h:null,b:null,r:null,p:null};G.lo=G.lo||Date.now();G.al=G.al||0;G.hl=G.hl||0;G.auto=G.auto||0;G.ach=G.ach||{};G.fighting=0;if(G.ar){for(var _ci=0;_ci<G.ar.length;_ci++){if(G.ar[_ci]&&G.ar[_ci].nome){delete G.ar[_ci].nome}}};return true}}catch(e){}  G.hs.forEach(function(h){if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};});
 return false}
 function RST(){if(!confirm("重置所有数据？"))return;localStorage.removeItem("sg7");location.reload()}
 function OC(){var n=Date.now(),e=n-(G.lo||n);if(e<60000)return null;var h=e/3600000,pw=FP();if(pw<=0)return null;var g=Math.floor((30+G.s*10+Math.floor(pw/5))*h*0.6),t=Math.floor(h*0.3),j=Math.floor(h*0.1);if(g<=0&&t<=0&&j<=0)return null;return{g,t,j,hrs:Math.round(h*10)/10};}
@@ -1834,7 +1834,7 @@ function showEqDetail(heroId,eqId){var eq;if(eqId){eq=G.eqb.find(function(e){ret
     return null;
   }
 }
-init();</script><div class="md" id="dgModal" onclick="if(event.target===this)this.classList.remove('s')">
+init();if(typeof MIGRATE_PASSIVES==='function'){if(G.hs&&G.hs.length&&!G._migrated){G.hs.forEach(function(__mh){if(typeof __mh.sk==='string'||!__mh.passives)MIGRATE_PASSIVES(__mh)});G._migrated=true}}</script><div class="md" id="dgModal" onclick="if(event.target===this)this.classList.remove('s')">
   <div class="mbx" style="max-width:420px;background:linear-gradient(145deg,#0a0a1a,#1a0a2a);border-color:#6040a0">
     <button class="mc" id="dgClose" onclick="document.getElementById('dgModal').classList.remove('s')">&times;</button>
     <div id="dgBody" class="tc">
