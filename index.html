@@ -337,9 +337,11 @@ function assignClass(h){
   var _ra=0;var _rh=0;
   if(h.a&&h.h){_ra=h.a;_rh=h.h}
   if(_ra<=0||_rh<=0){_ra=10;_rh=100}
-  var _ratio=_ra/_rh;
-  if(_ratio<0.15)return 0;
-  if(_ratio>0.20)return 1;
+  // Shield: HP is very dominant (h > 4*a)
+  if(_rh > _ra * 4) return 0;
+  // Warrior: attack is notable (h < 2.5*a)
+  if(_rh < _ra * 2.5) return 1;
+  // Strategist: balanced (h between 2.5*a and 4*a)
   return 2;
 }
 function getClassSkill(h){
@@ -1269,9 +1271,11 @@ function assignClass(h){
   var _ra=0;var _rh=0;
   if(h.a&&h.h){_ra=h.a;_rh=h.h}
   if(_ra<=0||_rh<=0){_ra=10;_rh=100}
-  var _ratio=_ra/_rh;
-  if(_ratio<0.15)return 0;
-  if(_ratio>0.20)return 1;
+  // Shield: HP is very dominant (h > 4*a)
+  if(_rh > _ra * 4) return 0;
+  // Warrior: attack is notable (h < 2.5*a)
+  if(_rh < _ra * 2.5) return 1;
+  // Strategist: balanced (h between 2.5*a and 4*a)
   return 2;
 }
 function getClassSkill(h){
