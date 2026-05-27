@@ -92,7 +92,7 @@ function TP(){var s=0;for(var i=0;i<G.hs.length;i++)s+=PW(G.hs[i]);return s}
 function FP(){var s=0;for(var i=0;i<G.fm.length;i++){var h=GH(G.fm[i]);if(h)s+=PW(h)}return s}
 function AB(){return 1+G.al*0.1}
 function HB(){return 1+G.hl*0.1}
-function HERO_ATTR_BASE(q){var b={crt:5+q*3,crtRes:0+q*2,dge:3+q*2,acc:80+q*2,drain:0+q*2,drainRes:0+q*2,crtDmg:150+q*3,crtDmgRes:0+q*2,spd:100+q*5,dmgRed:0+q*2};b.crt=Math.min(b.crt,60);b.dge=Math.min(b.dge,50);b.acc=Math.min(b.acc,100);return b}
+function HERO_ATTR_BASE(q){var b={crt:1+q*1,crtRes:0,dge:1+q*1,acc:95,drain:0,drainRes:0,crtDmg:130+q*5,crtDmgRes:0,spd:100,dmgRed:0};b.crt=Math.min(b.crt,15);b.dge=Math.min(b.dge,15);b.acc=Math.min(b.acc,100);return b}
 function GH(id){for(var i=0;i<G.hs.length;i++)if(G.hs[i].id===id)return G.hs[i];return null}
 function ID(id){for(var i=0;i<G.fm.length;i++)if(G.fm[i]===id)return true;if(G.hs)G.hs.forEach(function(h){if(h.cls===void 0)h.cls=assignClass(h);});return false}
 function HA(id){var h=GH(id);if(!h)return 0;var skb=h.sk?1.15:1;var eqAtk=0;if(h.eq){for(var _k in h.eq){var _e=h.eq[_k];if(_e)eqAtk+=_e.atk||0}};var cam=CLASS_SPECS[assignClass(h)]?CLASS_SPECS[assignClass(h)].atkMod:1;return Math.floor((h.a+eqAtk)*cam*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*skb*AB())}
@@ -1027,7 +1027,7 @@ function TP(){var s=0;for(var i=0;i<G.hs.length;i++)s+=PW(G.hs[i]);return s}
 function FP(){var s=0;for(var i=0;i<G.fm.length;i++){var h=GH(G.fm[i]);if(h)s+=PW(h)}return s}
 function AB(){return 1+G.al*0.1}
 function HB(){return 1+G.hl*0.1}
-function HERO_ATTR_BASE(q){var b={crt:5+q*3,crtRes:0+q*2,dge:3+q*2,acc:80+q*2,drain:0+q*2,drainRes:0+q*2,crtDmg:150+q*3,crtDmgRes:0+q*2,spd:100+q*5,dmgRed:0+q*2};b.crt=Math.min(b.crt,60);b.dge=Math.min(b.dge,50);b.acc=Math.min(b.acc,100);return b}
+function HERO_ATTR_BASE(q){var b={crt:1+q*1,crtRes:0,dge:1+q*1,acc:95,drain:0,drainRes:0,crtDmg:130+q*5,crtDmgRes:0,spd:100,dmgRed:0};b.crt=Math.min(b.crt,15);b.dge=Math.min(b.dge,15);b.acc=Math.min(b.acc,100);return b}
 function GH(id){for(var i=0;i<G.hs.length;i++)if(G.hs[i].id===id)return G.hs[i];return null}
 function ID(id){for(var i=0;i<G.fm.length;i++)if(G.fm[i]===id)return true;if(G.hs)G.hs.forEach(function(h){if(h.cls===void 0)h.cls=assignClass(h);});return false}
 function HA(id){var h=GH(id);if(!h)return 0;var skb=h.sk?1.15:1;var eqAtk=0;if(h.eq){for(var _k in h.eq){var _e=h.eq[_k];if(_e)eqAtk+=_e.atk||0}};var cam=CLASS_SPECS[assignClass(h)]?CLASS_SPECS[assignClass(h)].atkMod:1;return Math.floor((h.a+eqAtk)*cam*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*skb*AB())}
