@@ -326,7 +326,7 @@ function NPC_TITLE(){
 
 function SV(){G.ls=Date.now();G.lo=G.lo||Date.now();try{localStorage.setItem("sg7",JSON.stringify(G))}catch(e){}}
   G.hs.forEach(function(h){if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};});
-function LD(){try{var r=localStorage.getItem("sg7");if(r){var s=JSON.parse(r);for(var k in s)G[k]=s[k];G.fm=G.fm||[];G.eq=G.eq||{w:null,a:null,h:null,b:null,r:null,p:null};G.lo=G.lo||Date.now();G.al=G.al||0;G.hl=G.hl||0;G.auto=G.auto||0;G.ach=G.ach||{};G.fighting=0;if(G.ar){for(var _ci=0;_ci<G.ar.length;_ci++){if(G.ar[_ci]&&G.ar[_ci].nome){delete G.ar[_ci].nome}}};return true}}catch(e){}  G.hs.forEach(function(h){if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};});
+function LD(){try{var r=localStorage.getItem("sg7");if(r){var s=JSON.parse(r);for(var k in s)G[k]=s[k];G.fm=G.fm||[];G.eq=G.eq||{w:null,a:null,h:null,b:null,r:null,p:null};G.lo=G.lo||Date.now();G.al=G.al||0;G.hl=G.hl||0;G.auto=G.auto||0;G.ach=G.ach||{};G.fighting=0;if(G.ar){for(var _ci=0;_ci<G.ar.length;_ci++){if(G.ar[_ci]&&G.ar[_ci].nome){delete G.ar[_ci].nome}}};if(G.hs&&G.hs.length&&!G._migrated){G.hs.forEach(function(_mh){if(typeof _mh.sk==='string'||!_mh.passives)MIGRATE_PASSIVES(_mh)});G._migrated=true}return true}}catch(e){}  G.hs.forEach(function(h){if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};});
 return false}
 function RST(){if(!confirm("重置所有数据？"))return;localStorage.removeItem("sg7");location.reload()}
 function OC(){var n=Date.now(),e=n-(G.lo||n);if(e<60000)return null;var h=e/3600000,pw=FP();if(pw<=0)return null;var g=Math.floor((30+G.s*10+Math.floor(pw/5))*h*0.6),t=Math.floor(h*0.3),j=Math.floor(h*0.1);if(g<=0&&t<=0&&j<=0)return null;return{g,t,j,hrs:Math.round(h*10)/10};}
@@ -469,11 +469,48 @@ function UBU(){
 }
 function LG(m){document.getElementById("blog").textContent=m}
 
-function RO(){var r=Math.random(),c=0,q=0;for(var i=0;i<5;i++){c+=RC[i];if(r<=c){q=i;break}}var po=[];for(var i=0;i<HP.length;i++)if(HP[i].q===q)po.push(HP[i]);if(!po.length)return null;var b=PK(po);var _h={id:G.nid++,n:b.n,i:b.i,q:b.q,a:b.a+R(-2,2),h:b.h+R(-5,5),sk:b.sk||null,st:0,lv:1,exp:0};var _p=SKILL_POOL[_h.q];var _skOnly=_p?PK(_p):null;_h.sk=_skOnly;var _passCount=_h.q<=2?0:(_h.q<=3?1:3);var _passes=[];if(_p){for(var _psi=0;_psi<_passCount;_psi++){var _ps=PK(_p);if(_ps)_passes.push(_ps)}}_h.passives=_passes.length?_passes:null;
+function RO(){var r=Math.random(),c=0,q=0;for(var i=0;i<5;i++){c+=RC[i];if(r<=c){q=i;break}}var po=[];for(var i=0;i<HP.length;i++)if(HP[i].q===q)po.push(HP[i]);if(!po.length)return null;var b=PK(po);var _h={id:G.nid++,n:b.n,i:b.i,q:b.q,a:b.a+R(-2,2),h:b.h+R(-5,5),sk:b.sk||null,st:0,lv:1,exp:0};var _p=SKILL_POOL[_h.q];var _skOnly=_p?PK(_p):null;_h.sk=_skOnly;var _skOnly=null;if(_p){_skOnly=PK(_p)}_h.sk=_skOnly;MIGRATE_PASSIVES(_h);_h.sk=_h.sk||_skOnly;
 var cls=assignClass(_h);if(_h.q>=3&&Math.random()<0.4)cls=1;else if(_h.q>=2&&Math.random()<0.2)cls=1;
 _h.cls=cls;
 if(!_h.sk||(_h.sk.t==='dmg'&&cls!==1)||(_h.sk.t!=='dmg'&&cls===1)){var ns=getClassSkill(_h);if(ns)_h.sk=ns;}
-return _h;}function DR(n){
+return _h;}
+function MIGRATE_PASSIVES(h){
+  if(h.passives&&Array.isArray(h.passives))return;
+  if(typeof h.sk==='string'||typeof h.sk==='number'){
+    var _oldSk=h.sk; h.sk=null;
+    for(var _qi=0;_qi<=4;_qi++){
+      var _pool=SKILL_POOL[_qi]||[];
+      for(var _si=0;_si<_pool.length;_si++){
+        if(_pool[_si].n===_oldSk||_pool[_si].n===String(_oldSk)){
+          h.sk=_pool[_si]; break;
+        }
+      }
+      if(h.sk)break;
+    }
+    if(!h.sk)h.sk={n:String(_oldSk),d:'攻击',t:'dmg',v:1.0,c:'single'};
+  }
+  var _pq=h.q||0;
+  var _pc=_pq<=0?0:(_pq<=1?1:(_pq<=2?2:(_pq<=3?3:4)));
+  var _lvBonus=Math.min(2,Math.floor((h.lv||1)/20));
+  _pc=Math.min(6,_pc+_lvBonus);
+  if(_pc<=0){h.passives=null;return;}
+  var _passes=[];
+  var _usedNames={};
+  if(h.sk&&h.sk.n)_usedNames[h.sk.n]=true;
+  for(var _pi=0;_pi<_pc;_pi++){
+    var _pool2=SKILL_POOL[h.q]||SKILL_POOL[0];
+    if(!_pool2||!_pool2.length)break;
+    var _candidates=[];
+    for(var _si2=0;_si2<_pool2.length;_si2++){
+      if(!_usedNames[_pool2[_si2].n])_candidates.push(_pool2[_si2]);
+    }
+    if(!_candidates.length)_candidates=_pool2;
+    var _p=_candidates[Math.floor(Math.random()*_candidates.length)];
+    if(_p){_passes.push({n:_p.n,d:_p.d,t:_p.t,v:_p.v,c:_p.c,src:_p});_usedNames[_p.n]=true}
+  }
+  h.passives=_passes.length?_passes:null;
+}
+function DR(n){
   if(G.rt<n){ST("招募令不足");return}G.rt-=n;var rs=[];for(var i=0;i<n;i++){var h=RO();if(!h)continue;var ex=null;for(var j=0;j<G.hs.length;j++){if(G.hs[j].n===h.n){ex=G.hs[j];break}}if(ex){ex.st=(ex.st||0)+1;ex.a=Math.floor(ex.a*1.15);ex.h=Math.floor(ex.h*1.15);rs.push({t:1,nm:h.n,q:h.q,st:ex.st})}else{G.hs.push(h);rs.push({t:0,n:h.n,i:h.i,q:h.q})}}G.tr+=n;
   var ct=document.getElementById("newh");ct.innerHTML="";for(var i=0;i<rs.length;i++){var r=rs[i];var d=document.createElement("div");d.className="hc b"+r.q+" q"+r.q;if(r.t===0){d.innerHTML='<div class=av>'+r.i+'</div><div class="nm q'+r.q+'">'+r.n+'</div><div class=st>'+QE[r.q]+QN[r.q]+'</div>'}else{d.innerHTML='<div class=av>⬆️</div><div class="nm q'+r.q+'">'+r.nm+'</div><div class=st>⭐'+(r.st)+'升星</div>'}ct.appendChild(d)}ST("招募"+rs.length+"名",2500);SV();UA()}
 
@@ -1361,7 +1398,7 @@ function UBU(){
 }
 function LG(m){document.getElementById("blog").textContent=m}
 
-function RO(){var r=Math.random(),c=0,q=0;for(var i=0;i<5;i++){c+=RC[i];if(r<=c){q=i;break}}var po=[];for(var i=0;i<HP.length;i++)if(HP[i].q===q)po.push(HP[i]);if(!po.length)return null;var b=PK(po);var _h={id:G.nid++,n:b.n,i:b.i,q:b.q,a:b.a+R(-2,2),h:b.h+R(-5,5),sk:b.sk||null,st:0,lv:1,exp:0};var _p=SKILL_POOL[_h.q];var _skOnly=_p?PK(_p):null;_h.sk=_skOnly;var _passCount=_h.q<=2?0:(_h.q<=3?1:3);var _passes=[];if(_p){for(var _psi=0;_psi<_passCount;_psi++){var _ps=PK(_p);if(_ps)_passes.push(_ps)}}_h.passives=_passes.length?_passes:null;
+function RO(){var r=Math.random(),c=0,q=0;for(var i=0;i<5;i++){c+=RC[i];if(r<=c){q=i;break}}var po=[];for(var i=0;i<HP.length;i++)if(HP[i].q===q)po.push(HP[i]);if(!po.length)return null;var b=PK(po);var _h={id:G.nid++,n:b.n,i:b.i,q:b.q,a:b.a+R(-2,2),h:b.h+R(-5,5),sk:b.sk||null,st:0,lv:1,exp:0};var _p=SKILL_POOL[_h.q];var _skOnly=_p?PK(_p):null;_h.sk=_skOnly;var _skOnly=null;if(_p){_skOnly=PK(_p)}_h.sk=_skOnly;MIGRATE_PASSIVES(_h);_h.sk=_h.sk||_skOnly;
 var cls=assignClass(_h);if(_h.q>=3&&Math.random()<0.4)cls=1;else if(_h.q>=2&&Math.random()<0.2)cls=1;
 _h.cls=cls;
 if(!_h.sk||(_h.sk.t==='dmg'&&cls!==1)||(_h.sk.t!=='dmg'&&cls===1)){var ns=getClassSkill(_h);if(ns)_h.sk=ns;}
