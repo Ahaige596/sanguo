@@ -105,17 +105,15 @@ for(var ei=0;ei<ec;ei++){var e=p[isBoss?R(0,9):(ei+Math.floor((s_-1)/3))%10];var
 var ARENA_SEED=R(1,999999);
 function ARENA_SHA(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return Math.abs(h)}
 function ARENA_GEN_NPC(idx,seed){
-  var base=100+Math.floor(G.s*120);
-  var mult;
-       if(idx===0){mult=8.0}
-  else if(idx<=2){mult=6.0}
-  else if(idx<=9){mult=4.0}
-  else if(idx<=29){mult=2.5}
-  else if(idx<=49){mult=1.8}
-  else if(idx<=79){mult=1.2}
-  else            {mult=0.7}
-  mult+=R(-5,5)/100;
-  var pw=Math.max(100,Math.floor(base*mult));
+  var pw;
+       if(idx===0){pw=50000}
+  else if(idx<=2){pw=40000}
+  else if(idx<=9){pw=30000}
+  else if(idx<=29){pw=25000}
+  else if(idx<=49){pw=20000}
+  else if(idx<=79){pw=15000}
+  else            {pw=10000}
+  pw+=Math.floor(Math.random()*pw*0.05)-Math.floor(pw*0.025);
   var q=idx<3?4:(idx<10?3:(idx<30?2:(idx<50?1:0)));
   var h=ARENA_SHA("arena"+idx+seed);
   var sk=null;
@@ -998,17 +996,15 @@ for(var ei=0;ei<ec;ei++){var e=p[isBoss?R(0,9):(ei+Math.floor((s_-1)/3))%10];var
 var ARENA_SEED=R(1,999999);
 function ARENA_SHA(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return Math.abs(h)}
 function ARENA_GEN_NPC(idx,seed){
-  var base=100+Math.floor(G.s*120);
-  var mult;
-       if(idx===0){mult=8.0}
-  else if(idx<=2){mult=6.0}
-  else if(idx<=9){mult=4.0}
-  else if(idx<=29){mult=2.5}
-  else if(idx<=49){mult=1.8}
-  else if(idx<=79){mult=1.2}
-  else            {mult=0.7}
-  mult+=R(-5,5)/100;
-  var pw=Math.max(100,Math.floor(base*mult));
+  var pw;
+       if(idx===0){pw=50000}
+  else if(idx<=2){pw=40000}
+  else if(idx<=9){pw=30000}
+  else if(idx<=29){pw=25000}
+  else if(idx<=49){pw=20000}
+  else if(idx<=79){pw=15000}
+  else            {pw=10000}
+  pw+=Math.floor(Math.random()*pw*0.05)-Math.floor(pw*0.025);
   var q=idx<3?4:(idx<10?3:(idx<30?2:(idx<50?1:0)));
   var h=ARENA_SHA("arena"+idx+seed);
   var sk=null;
