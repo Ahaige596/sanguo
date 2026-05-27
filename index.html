@@ -1346,7 +1346,7 @@ function UBU(){
       var p=fh?Math.max(0,Math.floor((fh.hp/fh.mhp)*100)):100;
       var an=fh?fh.an||0:0;
       var cs='';if(h.cls!==void 0)cs=CLASS_EMOJI[h.cls]||'';else cs=CLASS_EMOJI[assignClass(h)]||'';
-      c.innerHTML+='<div class="fb" style=min-width:52px;max-width:52px;border-color:#888><div class=fi>'+CE.i+'</div><div class=fn>'+CE.n+'</div></div><div class=fbar style=height:3px><div class=ff style=width:'+an+'%;background:linear-gradient(90deg,#d4a017,#ffcc44);border-radius:2px></div></div></div>';
+      c.innerHTML+='<div class="fb" style=min-width:52px;max-width:52px;border-color:#888><div class=fi>'+h.i+'</div><div class=fn>'+cs+h.n+'</div></div><div class=fbar style=height:3px><div class=ff style=width:'+an+'%;background:linear-gradient(90deg,#d4a017,#ffcc44);border-radius:2px></div></div></div>';
     });
   }
   _renderIds(backIds);
