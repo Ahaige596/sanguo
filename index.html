@@ -1413,7 +1413,7 @@ ARENA_FIGHT=function(rnk){
   md.classList.add("s");
   ARENA_RENDER_BATTLE();
   if(window._arenaBT)clearInterval(window._arenaBT);
-  window._arenaBT=setInterval(function(){ARENA_TICK()},700);
+  setTimeout(function(){if(window._arenaBT)clearInterval(window._arenaBT);window._arenaBT=setInterval(function(){ARENA_TICK()},1200);},800);
 };
 ARENA_REFRESH=function(){
   var ls=document.getElementById("arl");if(!ls)return;
