@@ -652,8 +652,56 @@ function UBU(){
 function LG(m){document.getElementById("blog").textContent=m}
 
 function RO(){var r=Math.random(),c=0,q=0;for(var i=0;i<5;i++){c+=RC[i];if(r<=c){q=i;break}}var po=[];for(var i=0;i<HP.length;i++)if(HP[i].q===q)po.push(HP[i]);if(!po.length)return null;var b=PK(po);var _h={id:G.nid++,n:b.n,i:b.i,q:b.q,a:b.a+R(-2,2),h:b.h+R(-5,5),sk:b.sk||null,st:0,lv:1,exp:0};MIGRATE_PASSIVES(_h);var cls=assignClass(_h);if(_h.q>=3&&Math.random()<0.4)cls=1;else if(_h.q>=2&&Math.random()<0.2)cls=1;_h.cls=cls;if(!_h.sk){var ns=getClassSkill(_h);if(ns)_h.sk=ns;}return _h;}function MIGRATE_PASSIVES(h){if(!h.passives||!Array.isArray(h.passives)||!h.passives.length){var _pq=h.q||0;var _pqc=_pq<=0?0:(_pq<=1?1:(_pq<=2?2:(_pq<=3?3:4)));_pqc+=Math.floor((h.l||h.lv||1)/20);if(_pqc>6)_pqc=6;var _passArr=[];for(var _pi=0;_pi<_pqc;_pi++){var _rp=PASSIVE_POOL[Math.floor(Math.random()*PASSIVE_POOL.length)];_passArr.push({n:_rp.n,desc:_rp.desc,stat:_rp.stat,val:_rp.val});}h.passives=_passArr.length?_passArr:[];}}function DR(n){
-  if(typeof G.rt!=='number')G.rt=0;if(G.rt<n){ST("招募令不足");return}G.rt-=n;var rs=[];for(var i=0;i<n;i++){var h=RO();if(!h)continue;var ex=null;for(var j=0;j<G.hs.length;j++){if(G.hs[j].n===h.n){ex=G.hs[j];break}}if(ex){ex.st=(ex.st||0)+1;ex.a=Math.floor(ex.a*1.15);ex.h=Math.floor(ex.h*1.15);rs.push({t:1,nm:h.n,q:h.q,st:ex.st})}else{G.hs.push(h);rs.push({t:0,n:h.n,i:h.i,q:h.q})}}G.tr+=n;
-  var ct=document.getElementById("newh");ct.innerHTML="";for(var i=0;i<rs.length;i++){var r=rs[i];var d=document.createElement("div");d.className="hc b"+r.q+" q"+r.q;if(r.t===0){d.innerHTML='<div class=av style="width:32px;height:32px;display:inline-block">'+GEN_AVATAR(r.n,r.q,(typeof r.cls!=='undefined'?r.cls:assignClass(r)))+'</div><div class="nm q'+r.q+'">'+r.n+'</div><div class=st>'+QE[r.q]+QN[r.q]+'</div>'}else{d.innerHTML='<div class=av>⬆️</div><div class="nm q'+r.q+'">'+r.nm+'</div><div class=st>⭐'+(r.st)+'升星</div>'}ct.appendChild(d)}ST("招募"+rs.length+"名",2500);SV();UA()}
+  if(typeof G.rt!=="number")G.rt=0;if(G.rt<n){ST("\u62DB\u52DF\u4EE4\u4E0D\u8DB3");return}
+  G.rt-=n;var rs=[];
+  for(var i=0;i<n;i++){
+    // Get current squad hero names
+    var squadNames=[];
+    for(var si=0;si<G.fm.length;si++){
+      var sh=GH(G.fm[si]);
+      if(sh&&squadNames.indexOf(sh.n)<0)squadNames.push(sh.n);
+    }
+    if(!squadNames.length){ST("\u5148\u4E0A\u9635\u6B66\u5C06");return}
+    // Pick a random squad hero name
+    var pickName=squadNames[Math.floor(Math.random()*squadNames.length)];
+    // Find matching hero in pool for quality/base stats
+    var poolHero=null;
+    for(var pi=0;pi<HP.length;pi++){
+      if(HP[pi].n===pickName){poolHero=HP[pi];break}
+    }
+    // Find existing owned hero with that name
+    var ex=null;
+    for(var j=0;j<G.hs.length;j++){
+      if(G.hs[j].n===pickName){ex=G.hs[j];break}
+    }
+    if(ex){
+      ex.st=(ex.st||0)+1;
+      ex.a=Math.floor(ex.a*1.15);
+      ex.h=Math.floor(ex.h*1.15);
+      rs.push({t:1,nm:pickName,q:ex.q,st:ex.st});
+    }else if(poolHero){
+      var _h={id:G.nid++,n:poolHero.n,i:poolHero.i,q:poolHero.q,a:poolHero.a+R(-2,2),h:poolHero.h+R(-5,5),sk:null,st:0,lv:1,exp:0};
+      MIGRATE_PASSIVES(_h);
+      var cls=assignClass(_h);
+      if(_h.q>=3&&Math.random()<0.4)cls=1;else if(_h.q>=2&&Math.random()<0.2)cls=1;
+      _h.cls=cls;
+      if(!_h.sk){var ns=getClassSkill(_h);if(ns)_h.sk=ns;}
+      G.hs.push(_h);
+      rs.push({t:0,n:pickName,i:poolHero.i,q:poolHero.q,cls:cls});
+    }
+  }
+  G.tr+=n;
+  var ct=document.getElementById("newh");ct.innerHTML="";
+  for(var i=0;i<rs.length;i++){var r=rs[i];var d=document.createElement("div");d.className="hc b"+r.q+" q"+r.q;
+    if(r.t===0){
+      d.innerHTML='<div class=av style="width:32px;height:32px;display:inline-block">'+GEN_AVATAR(r.n,r.q,(typeof r.cls!=="undefined"?r.cls:assignClass(r)))+'</div><div class="nm q'+r.q+'">'+r.n+'</div><div class=st>'+QE[r.q]+QN[r.q]+'</div>';
+    }else{
+      d.innerHTML='<div class=av>\u2B06\uFE0F</div><div class="nm q'+r.q+'">'+r.nm+'</div><div class=st>\u2B50'+(r.st)+'\u5347\u661F</div>';
+    }
+    ct.appendChild(d);
+  }
+  ST("\u62DB\u52DF"+rs.length+"\u540D",2500);SV();UA();
+}
 
 function DM(){var gr={};G.hs.forEach(function(h){var k=h.n;if(!gr[k])gr[k]=[];gr[k].push(h)});var m=0;for(var k in gr){var a=gr[k];if(a.length<=1)continue;for(var i=1;i<a.length;i++){a[0].st=(a[0].st||0)+1;a[0].a=Math.floor(a[0].a*1.15);a[0].h=Math.floor(a[0].h*1.15);var idx=G.hs.indexOf(a[i]);if(idx>=0)G.hs.splice(idx,1);m++}}if(m>0){ST("合并"+m+"名",2500);SV();UA()}else{ST("无可合并",2000)}}
 
