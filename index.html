@@ -117,8 +117,8 @@ function HB(){return 1+G.hl*0.1}
 function HERO_ATTR_BASE(q){var b={crt:1+q*1,crtRes:0,dge:1+q*1,acc:95,drain:0,drainRes:0,crtDmg:130+q*5,crtDmgRes:0,spd:100,dmgRed:0};b.crt=Math.min(b.crt,15);b.dge=Math.min(b.dge,15);b.acc=Math.min(b.acc,100);return b}
 function GH(id){for(var i=0;i<G.hs.length;i++)if(G.hs[i].id===id)return G.hs[i];return null}
 function ID(id){for(var i=0;i<G.fm.length;i++)if(G.fm[i]===id)return true;if(G.hs)G.hs.forEach(function(h){if(h.cls===void 0)h.cls=assignClass(h);});return false}
-function HA(id){var h=GH(id);if(!h)return 0;var skb=h.sk?1.15:1;var eqAtk=0;if(h.eq){for(var _k in h.eq){var _e=h.eq[_k];if(_e)eqAtk+=_e.atk||0}};var cam=CLASS_SPECS[assignClass(h)]?CLASS_SPECS[assignClass(h)].atkMod:1;return Math.floor((h.a+eqAtk)*cam*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*skb*AB())}
-function HH(id){var h=GH(id);if(!h)return 0;var eqHp=0;if(h.eq){for(var _k in h.eq){var _e=h.eq[_k];if(_e)eqHp+=_e.hp||0}};return Math.floor((h.h+eqHp)*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*HB())}
+function HA(id){var h=GH(id);if(!h)return 0;var skb=h.sk?1.15:1;var eqAtk=0;if(h.eq){for(var _k in h.eq){var _e=h.eq[_k];if(_e)eqAtk+=_e.atk||0}};var cam=CLASS_SPECS[assignClass(h)]?CLASS_SPECS[assignClass(h)].atkMod:1;var sb=GET_SET_BONUS(h);var sbAtk=sb&&sb.atkPct?(1+sb.atkPct/100):1;return Math.floor((h.a+eqAtk)*cam*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*skb*AB()*sbAtk)}
+function HH(id){var h=GH(id);if(!h)return 0;var eqHp=0;if(h.eq){for(var _k in h.eq){var _e=h.eq[_k];if(_e)eqHp+=_e.hp||0}};var sb=GET_SET_BONUS(h);var sbHp=sb&&sb.hpPct?(1+sb.hpPct/100):1;return Math.floor((h.h+eqHp)*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*HB()*sbHp)}
 function ME(s_){s_=s_||1;var bp=15+s_*8+Math.floor(s_/5)*15,bhe=80+s_*35+Math.floor(s_/3)*30;
 var p=[{n:"山贼",i:"👹"},{n:"黄巾兵",i:"🎭"},{n:"流寇",i:"🏴"},{n:"乱军",i:"⚔️"},{n:"山贼头目",i:"👺"},{n:"黄巾将领",i:"🗡️"},{n:"���卓余党",i:"👿"},{n:"南蛮勇士",i:"🦣"},{n:"西凉铁骑",i:"🐎"},{n:"虎豹骑",i:"🐯"}];
 var isBoss=s_%10===0;var ec=isBoss?1+R(2,4):Math.min(1+Math.floor(s_/15),5);var em=[];
