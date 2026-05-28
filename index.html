@@ -488,7 +488,7 @@ function UBU(){
   _renderIds(backIds);
   _renderIds(frontIds);
   if(CE){
-    var eic=document.getElementById("eic");eic.innerHTML=GEN_AVATAR(CE.n,CE.q,(typeof CE.cls!=='undefined'?CE.cls:assignClass(CE)));eic.className="eic"+(CE.isBoss?" b":"");
+    var eic=document.getElementById("eic");eic.innerHTML=CE.i;eic.className="eic"+(CE.isBoss?" b":"");
     var en=document.getElementById("enm");en.textContent=CE.n+" ("+SR(G.s,G.ss)+")";en.className="enm"+(CE.isBoss?" b":"");
     var pct=Math.max(0,(CE.hp/CE.mhp)*100);document.getElementById("ehp").style.width=pct+"%";
     document.getElementById("eht").textContent=Math.max(0,Math.floor(CE.hp))+"/"+CE.mhp;document.getElementById("epw").textContent=CE.at;
