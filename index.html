@@ -157,35 +157,30 @@ function ARENA_GEN_TEAM(idx,seed){
     if(hp>maxHP)maxHP=hp;if(at>maxAt)maxAt=at;
     if((_h.lv||1)<minLv)minLv=_h.lv||1;
   }
-  var avgHP=count>0?Math.floor(sumHP/count):1000;
-  var avgAt=count>0?Math.floor(sumAt/count):100;
-  var baseHP=avgHP>1000?avgHP:2000;
-  var baseAt=avgAt>100?avgAt:150;
-  var rankMult=1.0;
-       if(idx===0)rankMult=6.0;
-  else if(idx<=2)rankMult=4.5;
-  else if(idx<=9)rankMult=3.2;
-  else if(idx<=29)rankMult=2.2;
-  else if(idx<=49)rankMult=1.6;
-  else if(idx<=79)rankMult=1.2;
-  else rankMult=1.0;
+  var avgHP=count>0?Math.floor(sumHP/count):2000;
+  var avgAt=count>0?Math.floor(sumAt/count):150;
+  // Linear multiplier: rank1=7.0, rank100=1.0, with smooth curve
+  var t=(100-idx)/100; // t=0.99 for rank1, t=0 for rank100
+  var rankMult=1.0+t*6.0; // rank1=7.0, rank100=1.0
+  var spdMult=1.0+t*1.5;
   var heroes=[];
   var h=ARENA_SHA("arena"+idx+seed);
-  var baseQ=idx<3?4:(idx<10?3:(idx<30?2:(idx<50?1:0)));
+  var baseQ=idx<3?4:(idx<5?3:(idx<10?2:(idx<30?1:0)));
   for(var ei=0;ei<nCount;ei++){
     var rr=((h+ei*137)%100)/100;
-    var q=Math.max(0,Math.min(4,baseQ+Math.floor(rr*1.5)-1));
+    var q=Math.max(0,Math.min(4,Math.floor(baseQ+rr*1.5)));
     var title=NPC_TITLE();
-    var hpMult=1.2+rr*1.5;
-    var atMult=1.2+rr*1.5;
+    var hpMult=1.2+rr*1.8;
+    var atMult=1.2+rr*1.8;
     heroes.push({
       id:"e"+ei,n:title+" "+(idx<3?"\uD83D\uDC51NPC":"NPC")+ei,i:"\uD83D\uDC79",
-      hp:Math.floor(baseHP*rankMult*hpMult),
-      mhp:Math.floor(baseHP*rankMult*hpMult),
-      at:Math.max(1,Math.floor(baseAt*rankMult*atMult)),
+      hp:Math.floor(avgHP*rankMult*hpMult),
+      mhp:Math.floor(avgHP*rankMult*hpMult),
+      at:Math.max(1,Math.floor(avgAt*rankMult*atMult)),
       isBoss:ei===0,q:q,
       crt:Math.floor(5+q*5),dge:Math.floor(3+q*3),crtDmg:150+q*10,dmgRed:q*3,
-      spd:80+q*25,acc:85,an:0,crtRes:0,crtDmgRes:0,drain:0,drainRes:0
+      spd:Math.floor(80*spdMult)+q*25,
+      acc:85+q*3,an:0,crtRes:0,crtDmgRes:0,drain:0,drainRes:0
     });
   }
   return heroes;
