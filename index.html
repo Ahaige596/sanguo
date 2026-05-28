@@ -81,7 +81,7 @@ function UEQ(){
         if(eq){
           html+='<div class="esl-slot" style="border-color:'+QC[eq.q]+'">';
           html+='<div class="esl-icon" onclick="showEqDetail('+selectedHero+','+eq.id+')">'+eq.i+'</div>';
-          html+='<div class="esl-name" style="font-size:10px;color:'+QC[eq.q]+'">'+eq.n+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+('+(eq.set?"🧩套装:"+eq.set:"")+')+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+'+(eq.set?"🧩套装:"+eq.set:"")+'+'</div>'+'<div style="font-size:8px;color:#a0d0a0">'+(eq.set?eq.set:'')+'</div>';
+          html+='<div class="esl-name" style="font-size:10px;color:'+QC[eq.q]+'">'+eq.n+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+(eq.set?"🧩套装:"+eq.set:"")+'</div>'+'<div style=font-size:8px;color:#a0d0a0;margin-top:1px>'+(eq.set?"套装:"+eq.set:"")+'</div>';
           html+='<div class="esl-rm" onclick="Q('+selectedHero+','+eq.id+',0)" style="cursor:pointer">✕</div>';
           html+='</div>';
         }else{
@@ -1273,7 +1273,7 @@ html+='<div class="bpgrid">';
     var cls=heroId!==null&&heroId!==void 0?"showEqDetail("+heroId+","+eq.id+")":"showEqDetail(0,"+eq.id+")";
     html+='<div class="bpitem" style="border-color:'+QC[eq.q]+'" onclick="'+cls+'">';
     html+='<div style="font-size:22px">'+eq.i+'</div>';
-    html+='<div style="font-size:10px;font-weight:700;color:'+QC[eq.q]+'">'+eq.n.slice(0,6)+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+('+(eq.set?"🧩套装:"+eq.set:"")+')+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+'+(eq.set?"🧩套装:"+eq.set:"")+'+'</div>'+'<div style="font-size:8px;color:#a0d0a0">'+(eq.set?eq.set:'')+'</div>';
+    html+='<div style="font-size:10px;font-weight:700;color:'+QC[eq.q]+'">'+eq.n.slice(0,6)+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+(eq.set?"🧩套装:"+eq.set:"")+'</div>'+'<div style=font-size:8px;color:#a0d0a0;margin-top:1px>'+(eq.set?"套装:"+eq.set:"")+'</div>';
     html+='<div style="font-size:8px;color:#aaa">⚔'+eq.atk+' ❤'+eq.hp+'</div>';
     html+=sp;
     if(eq.lk)html+='<div style="font-size:10px;color:#d4a017">🔒</div>';
