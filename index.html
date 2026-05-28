@@ -7,7 +7,7 @@
 <div style="font-size:11px;color:#806040;text-align:center;margin:2px 0"><span id="swinfo" style="margin-right:12px">扫荡:0/5</span><span id="dginfo" style="margin-right:12px">秘境: 第1层 | 今日0/3</span><span style="cursor:pointer;color:#504030" onclick="ADVICE()">💡卡关了?</span></div><div style="font-size:11px;color:#504030;text-align:center;margin:4px 0" id="ofi"></div><div class="ti">🎲招募武将</div><div class="fc"><button class="bt br bs" id="br1">🆓x1(1📜)</button><button class="bt br" id="br10">🔥x10(10📜)</button></div><div class="ti">⭐新招募</div><div class="cg" id="newh"></div></div><div id="pf" class="pn"><div class="ti">📋上阵阵容<span style="font-size:12px;color:#605040;font-weight:normal">(最多6人)</span></div><div class="sg" id="fsl"></div><div class="fc"><button class="bt bgn bs" id="bad">🤖自动编队</button><button class="bt br bs" id="bcf">🗑️清空</button></div><div class="ti">👥武将列表</div><div class="cg" id="hlf"></div></div><div id="ph" class="pn"><div class="fc mb"><button class="bt bgn bs" id="bom">🔄一键升星</button><button class="bt bb bs" onclick="SHOW_ATTR_TABLE()">📊属性总表</button></div><div class="ti">👥所有武将</div><div class="cg" id="hl"></div></div><div id="pe" class="pn"><div class="ti">⚔装备栏</div><div class="esl" id="eqslots"><!-- rendered by UEQ --></div><div class="ti">装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div><div class="ti" style="margin-top:8px">装备强化</div><div class="sr"><span class="l">当前可强化至</span><span class="v" id="eqlCap">Lv.0</span></div><div class="sr"><span class="l">解锁上限</span><span class="v" id="eqlUnlock">Lv.1可升至Lv.2</span></div><div class="sr"><span style="font-size:10px;color:#605040">每级+15%属性，上限=玩家等级×2</span></div><div class="bptabs" id="bpt"></div><div class="bpgrid" id="ebg"></div></div><div id="ps" class="pn"><div class="ti">🏪商店</div><div class="fc"><button class="bt bg bs" id="sb1">📜x5(5000💰)</button><button class="bt bg bs" id="sb2">📜x10(100💎)</button></div><div class="ti">💰兑换</div><div class="fc"><button class="bt bg bs" id="scg">1000💰→10💎</button></div><div class="ti">⚡强化</div><div class="sr"><span class="l">攻击加成</span><span class="v" id="sab">x1.0</span></div><div class="sr"><span class="l">生命加成</span><span class="v" id="shb">x1.0</span></div><div class="fc mt"><button class="bt bb bs" id="sua">⬆️攻击</button><button class="bt bb bs" id="suh">⬆️生命</button></div><div class="ti">🏅成就</div><div class="sgp" id="achv"></div><div class="ti">📊总览</div><div class="sgp" id="sov"></div><div class="ti" style="margin-top:12px;color:#504030">📺广告位</div><div id="adslot" style="background:#0a0500;border:1px dashed #3a2a0a;border-radius:8px;padding:20px;text-align:center;color:#504030;font-size:12px;margin:8px 0">[ 横幅广告位 - 替换为你的广告代码 ]</div></div>
 <div id="pa" class="pn"><div id="ab"><!-- Arena rendered by ARENA_RENDER --><div class="fc" style="margin-top:8px"><button class="bt bg bs" onclick="ARENA_SHOW_REWARDS()">🏆奖励</button>
 <div id="prk" class="pn">
-  <div id="rb"><!-- Rank rendered by RSHP --></div>
+  <div id="rb"></div>
 </div>
 </div></div></div>
 
@@ -544,7 +544,7 @@ function UF(){
 function UFL(){var ct=document.getElementById("hlf");ct.innerHTML="";if(!G.hs.length){ct.innerHTML='<div class=em>暂无武将，先去招募!</div>';return}var s=G.hs.slice().sort(function(a,b){return PW(b)-PW(a)});for(var i=0;i<s.length;i++){var h=s[i];var dep=ID(h.id);var d=document.createElement("div");var _cls2=(h.cls!==void 0?h.cls:assignClass(h));d.className="hc b"+h.q+" q"+h.q;d.style.borderColor="transparent";d.onclick=function(){SM(GH(parseInt(this.dataset.id)))};d.dataset.id=h.id;var cs='';if(h.cls!==void 0)cs=CLASS_EMOJI[h.cls]||'';else cs=CLASS_EMOJI[assignClass(h)]||'';d.innerHTML='<div class=av>'+h.i+'</div><div class="nm q'+h.q+'">'+cs+h.n+'</div><div class=st>'+QE[h.q]+'⭐'+(h.st||0)+'</div><div class=pw>'+PW(h)+'</div>'+(dep?'<div class=db>✓</div>':'')+(h.sk?(typeof h.sk==='object'?'<div style=font-size:9px;color:#f0d060;margin-top:2px>⚡'+h.sk.n+'</div>':'<div style=font-size:9px;color:#f0d060;margin-top:2px>⚡'+h.sk+'</div>'):'')+(h.passives&&Array.isArray(h.passives)&&h.passives.length?'<div style=font-size:8px;color:#8090b0;margin-top:1px>✨'+h.passives.map(function(x){return x.n+':'+x.desc}).join(' | ')+'</div>':'');d.onclick=function(){var id=parseInt(this.dataset.id);var h2=GH(id);if(h2)SM(h2)};ct.appendChild(d)}}
 function UA(){document.getElementById("gld").textContent=G.g.toLocaleString();document.getElementById("jde").textContent=G.j;document.getElementById("rct").textContent=G.rt;document.getElementById("stg").textContent=SR(G.s,G.ss);document.getElementById("plv").textContent=G.lv||1;var e2=document.getElementById("expBar");if(e2)e2.textContent=(G.exp||0)+"/"+(G.nexp||10);UHL();UEQ();US();UAch();UOF();RU()}
 
-function renderEqGrid(filter){var gc=document.getElementById("ebg");if(!gc)return;gc.innerHTML="";var eqs=(filter<0)?G.eqb:G.eqb.filter(function(eq){return eq.ti===filter});for(var i=0;i<eqs.length;i++){var eq=eqs[i];var cd=document.createElement("div");cd.className="bpitem";cd.style.borderColor=QC[eq.q];cd.innerHTML='<div style="position:relative;display:inline-block;font-size:18px">'+eq.i+(eq.lk?"<span style='position:absolute;top:-6px;right:-6px;font-size:11px'>\ud83d\udd12</span>":"")+'</div><div style="font-weight:700;color:'+QC[eq.q]+';font-size:11px">'+eq.n+'</div><div style="font-size:9px;color:#605040">Lv'+(eq.eqLevel||1)+'</div>';cd.onclick=function(){showEqDetail(0,parseInt(this.dataset.id))};cd.dataset.id=eq.id;gc.appendChild(cd)}if(!eqs.length)gc.innerHTML='<div class=em style=grid-column:1/-1>该分类无装备</div>'}function showEqPart(p,si,QC,partNames){var gc=document.getElementById("egc");gc.innerHTML='<div class=epc><div class=epl>'+si[p]+' '+partNames[p]+'</div><div class=epg></div></div>';var pg=gc.querySelector(".epg");var partEqs=G.eqb.filter(function(eq){return eq.ti===p});for(var j=0;j<partEqs.length;j++){var eq=partEqs[j];var cd=document.createElement("div");cd.className="iv";cd.style.borderColor=QC[eq.q];cd.style.cssText+="display:inline-flex;flex-direction:column;align-items:center;padding:6px 8px;margin:4px;border-radius:6px;border:1px solid;background:rgba(0,0,0,.3);cursor:pointer;min-width:70px";cd.innerHTML='<div style=font-size:20px>'+eq.i+'</div><div style=font-weight:700;color:'+QC[eq.q]+';font-size:11px>'+eq.n+'</div><div style=font-size:9px;color:#aaa>⚔+'+eq.atk+' ❤+'+eq.hp+'</div>';cd.onclick=function(){EI2(parseInt(this.dataset.id))};cd.dataset.id=eq.id;pg.appendChild(cd(function(){try{var _sv=document.getElementById('sov');if(!_sv)return;var _fc=_sv.querySelector('.fc');if(!_fc)return;if(typeof RSHP!=='function')return;if(_fc.querySelector('.bb'))return;var _b=document.createElement('button');_b.className='bt bb bs';_b.onclick=RSHP;_b.textContent='🏆排行';_b.style.marginLeft='6px';_fc.appendChild(_b)}catch(__e){}})())}}
+function renderEqGrid(filter){var gc=document.getElementById("ebg");if(!gc)return;gc.innerHTML="";var eqs=(filter<0)?G.eqb:G.eqb.filter(function(eq){return eq.ti===filter});for(var i=0;i<eqs.length;i++){var eq=eqs[i];var cd=document.createElement("div");cd.className="bpitem";cd.style.borderColor=QC[eq.q];cd.innerHTML='<div style="position:relative;display:inline-block;font-size:18px">'+eq.i+(eq.lk?"<span style='position:absolute;top:-6px;right:-6px;font-size:11px'>\ud83d\udd12</span>":"")+'</div><div style="font-weight:700;color:'+QC[eq.q]+';font-size:11px">'+eq.n+'</div><div style="font-size:9px;color:#605040">Lv'+(eq.eqLevel||1)+'</div>';cd.onclick=function(){showEqDetail(0,parseInt(this.dataset.id))};cd.dataset.id=eq.id;gc.appendChild(cd)}if(!eqs.length)gc.innerHTML='<div class=em style=grid-column:1/-1>该分类无装备</div>'}function showEqPart(p,si,QC,partNames){var gc=document.getElementById("egc");gc.innerHTML='<div class=epc><div class=epl>'+si[p]+' '+partNames[p]+'</div><div class=epg></div></div>';var pg=gc.querySelector(".epg");var partEqs=G.eqb.filter(function(eq){return eq.ti===p});for(var j=0;j<partEqs.length;j++){var eq=partEqs[j];var cd=document.createElement("div");cd.className="iv";cd.style.borderColor=QC[eq.q];cd.style.cssText+="display:inline-flex;flex-direction:column;align-items:center;padding:6px 8px;margin:4px;border-radius:6px;border:1px solid;background:rgba(0,0,0,.3);cursor:pointer;min-width:70px";cd.innerHTML='<div style=font-size:20px>'+eq.i+'</div><div style=font-weight:700;color:'+QC[eq.q]+';font-size:11px>'+eq.n+'</div><div style=font-size:9px;color:#aaa>⚔+'+eq.atk+' ❤+'+eq.hp+'</div>';cd.onclick=function(){EI2(parseInt(this.dataset.id))};cd.dataset.id=eq.id;pg.appendChild(cd(function(){try{var _sv=document.getElementById('sov');if(!_sv)return;var _fc=_sv.querySelector('.fc');if(!_fc)return;if(typeof RSHP!=='function')return;if(_fc.querySelector('.bb'))return;var _b=document.createElement('button');_b.className='bt bb bs';_b.onclick=function(){};_b.textContent='🏆排行';_b.style.marginLeft='6px';_fc.appendChild(_b)}catch(__e){}})())}}
 
 function US(){document.getElementById("sab").textContent='x'+AB().toFixed(1)+' (Lv.'+G.al+')';document.getElementById("shb").textContent='x'+HB().toFixed(1)+' (Lv.'+G.hl+')';document.getElementById("sua").textContent='⬆️攻击('+(500+G.al*200)+'💰,'+(5+G.al*2)+'💎)';document.getElementById("suh").textContent='⬆️生命('+(500+G.hl*200)+'💰,'+(5+G.hl*2)+'💎)';var ov=document.getElementById("sov");var qc2=[0,0,0,0,0];G.hs.forEach(function(h){qc2[h.q]++});ov.innerHTML='<h3>📊数据</h3>'+qSR("关卡",SR(G.s,G.ss))+qSR("武将总数",G.hs.length)+qSR("上阵",G.fm.length+"/6")+qSR("战力",FP())+qSR("总战力",TP())+qSR("战斗次数",G.tb)+qSR("击杀",G.tk)+qSR("招募",G.tr)+qSR("🟢"+qc2[0]+" 🔵"+qc2[1]+" 🟣"+qc2[2]+" 🟠"+qc2[3]+" 🔴"+qc2[4],"")+'<div class="fc mt"><button class="bt br bs" onclick="RST()">🗑️重置</button><button class="bt bb bs" onclick="RSHP()" style=margin-left:6px>🏆排行</button></div>'}
 function qSR(l,v){return '<div class=sr><span class=l>'+l+'</span><span class=v>'+v+'</span></div>'}
@@ -1372,55 +1372,31 @@ function RU(){if(!G.name||G.name==="无名")return;
   if(!f)RS.list.push(e);RSV()
 }
 function RSHP(){RL();RU();
-  var _h="<div class=mbx style=max-width:480px;margin:0 auto><h2>🏆 排行榜</h2>";
-  
-  // 战力排行
+  var h="<div class=mbx style=max-width:420px><h2>🏆 排行榜</h2>";
   var s1=RS.list.slice().sort(function(a,b){return b.pw-a.pw});
-  _h+='<div class=sgp><h3>⚔️ 战力排行</h3><div style=max-height:300px;overflow-y:auto>';
-  for(var i=0;i<Math.min(100,s1.length);i++){var e=s1[i];
-    _h+='<div class=sr><span class=l>'+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+' '+e.n+'</span><span class=v>⚔'+e.pw+'</span></div>'}
-  if(!s1.length)_h+='<div class=em>暂无记录</div>';
-  var pwr=-1;for(var i=0;i<s1.length;i++){if(s1[i].n===G.name){pwr=i+1;break}}
-  if(pwr>100||(pwr<0&&G.name&&G.name!="无名")){
-    if(pwr<0)pwr=s1.length+1;
-    _h+='<div class=sr style="border-top:1px dashed #3a2a0a;margin-top:4px"><span class=l>📍 你的排名</span><span class=v>#'+pwr+' ⚔'+TP()+'</span></div>'}
-  _h+='</div></div>';
+  h+="<div class=sgp><h3>⚔️ 战力排行</h3>";
+  for(var i=0;i<Math.min(10,s1.length);i++){var e=s1[i];
+    h+="<div class=sr><span class=l>"+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+" "+e.n+"</span><span class=v>⚔"+e.pw+"</span></div>"}
+  if(!s1.length)h+="<div class=em>暂无记录</div>";h+="</div>";
 
-  // 关卡排行
   var s2=RS.list.slice().sort(function(a,b){var as=a.stg.split(".").map(Number),bs=b.stg.split(".").map(Number);return(bs[0]-as[0])||(bs[1]-as[1])});
-  _h+='<div class=sgp><h3>🏁 关卡排行</h3><div style=max-height:300px;overflow-y:auto>';
-  for(var i=0;i<Math.min(100,s2.length);i++){var e=s2[i];
-    _h+='<div class=sr><span class=l>'+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+' '+e.n+'</span><span class=v>🏁第'+e.stg+'关</span></div>'}
-  if(!s2.length)_h+='<div class=em>暂无记录</div>';
-  var sgr=-1;for(var i=0;i<s2.length;i++){if(s2[i].n===G.name){sgr=i+1;break}}
-  if(sgr>100||(sgr<0&&G.name&&G.name!="无名")){
-    if(sgr<0)sgr=s2.length+1;
-    _h+='<div class=sr style="border-top:1px dashed #3a2a0a;margin-top:4px"><span class=l>📍 你的排名</span><span class=v>#'+sgr+' 🏁第'+G.s+"."+G.ss+'关</span></div>'}
-  _h+='</div></div>';
+  h+="<div class=sgp><h3>🏁 关卡排行</h3>";
+  for(var i=0;i<Math.min(10,s2.length);i++){var e=s2[i];
+    h+="<div class=sr><span class=l>"+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+" "+e.n+"</span><span class=v>🏁第"+e.stg+"关</span></div>"}
+  if(!s2.length)h+="<div class=em>暂无记录</div>";h+="</div>";
 
-  // 金币排行
   var s3=RS.list.slice().sort(function(a,b){return b.g-a.g});
-  _h+='<div class=sgp><h3>💰 金币排行</h3><div style=max-height:300px;overflow-y:auto>';
-  for(var i=0;i<Math.min(100,s3.length);i++){var e=s3[i];
-    _h+='<div class=sr><span class=l>'+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+' '+e.n+'</span><span class=v>💰'+e.g.toLocaleString()+'</span></div>'}
-  if(!s3.length)_h+='<div class=em>暂无记录</div>';
-  var ggr=-1;for(var i=0;i<s3.length;i++){if(s3[i].n===G.name){ggr=i+1;break}}
-  if(ggr>100||(ggr<0&&G.name&&G.name!="无名")){
-    if(ggr<0)ggr=s3.length+1;
-    _h+='<div class=sr style="border-top:1px dashed #3a2a0a;margin-top:4px"><span class=l>📍 你的排名</span><span class=v>#'+ggr+' 💰'+G.g.toLocaleString()+'</span></div>'}
-  _h+='</div></div>';
+  h+="<div class=sgp><h3>💰 金币排行</h3>";
+  for(var i=0;i<Math.min(10,s3.length);i++){var e=s3[i];
+    h+="<div class=sr><span class=l>"+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+" "+e.n+"</span><span class=v>💰"+e.g.toLocaleString()+"</span></div>"}
+  if(!s3.length)h+="<div class=em>暂无记录</div>";h+="</div>";
 
-  _h+='</div>';
-  // Render into #rb
-  var rb=document.getElementById("rb");
-  if(rb){rb.innerHTML=_h;return}
-  // Fallback modal
+  h+='<div class="fc"><button class="bt bg bs" onclick="document.getElementById(&quot;rankmodal&quot;).classList.remove(&quot;s&quot;)">关闭</button></div></div>';
   var md=document.getElementById("rankmodal");
   if(!md){md=document.createElement("div");md.id="rankmodal";md.className="md";
-    md.onclick=function(e){if(e.target===this)this.classList.remove("s")};
+    md.onclick=function(e){if(e.target===md)this.classList.remove("s")};
     document.body.appendChild(md)}
-  md.innerHTML=_h+'<div class="fc"><button class="bt bg bs" onclick="this.parentElement.parentElement.classList.remove(\'s\')">关闭</button></div>';
-  md.classList.add("s")
+  md.innerHTML=h;md.classList.add("s")
 }
 
 init();(function(){try{if(typeof MIGRATE_PASSIVES==="function"&&G.hs&&G.hs.length){var __d=0;for(var __i=0;__i<G.hs.length;__i++){var __mh=G.hs[__i];if(typeof __mh.sk==="string"||!__mh.passives){delete __mh.cls;MIGRATE_PASSIVES(__mh);__mh.cls=assignClass(__mh);__d++}}if(__d>0){G._migrated=true;;if(typeof assignClass==="function"&&G.hs&&G.hs.length){for(var __ci=0;__ci<G.hs.length;__ci++){G.hs[__ci].cls=assignClass(G.hs[__ci])}}try{localStorage.setItem("sg7",JSON.stringify(G))}catch(e){}}}}catch(e){}})()</script><div class="md" id="dgModal" onclick="if(event.target===this)this.classList.remove('s')">
