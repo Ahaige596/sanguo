@@ -883,11 +883,8 @@ function DG_TICK(){
 
 
 // 3.吃经验书快速升级
-function EXP_BOOK(){
-  if(G.g<200){ST("金币不足(200💰)",2500);return}
-  if(!G.fm.length){ST("上阵武将才给吃书");return}
-  G.g-=200;
-  S_EXP(G.lv*2+R(1,5));
+function EXP_BOOK(){if(G.g<200){ST("金币不足",2500);return}G.g-=200;S_EXP(G.lv*2+R(1,5));
+  if(!G.fm.length){ST("上阵武将才给吃书");return}G.g-=200;
   for(var j=0;j<G.fm.length;j++){
     var h=GH(G.fm[j]);
     if(h){
