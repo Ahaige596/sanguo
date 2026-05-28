@@ -1371,33 +1371,7 @@ function RU(){if(!G.name||G.name==="无名")return;
     if(e.pw>RS.list[i].pw||e.stg>RS.list[i].stg||e.g>RS.list[i].g){RS.list[i]=e}f=true;break}}
   if(!f)RS.list.push(e);RSV()
 }
-function RSHP(){RL();RU();
-  var h="<div class=mbx style=max-width:420px><h2>🏆 排行榜</h2>";
-  var s1=RS.list.slice().sort(function(a,b){return b.pw-a.pw});
-  h+="<div class=sgp><h3>⚔️ 战力排行</h3>";
-  for(var i=0;i<Math.min(10,s1.length);i++){var e=s1[i];
-    h+="<div class=sr><span class=l>"+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+" "+e.n+"</span><span class=v>⚔"+e.pw+"</span></div>"}
-  if(!s1.length)h+="<div class=em>暂无记录</div>";h+="</div>";
-
-  var s2=RS.list.slice().sort(function(a,b){var as=a.stg.split(".").map(Number),bs=b.stg.split(".").map(Number);return(bs[0]-as[0])||(bs[1]-as[1])});
-  h+="<div class=sgp><h3>🏁 关卡排行</h3>";
-  for(var i=0;i<Math.min(10,s2.length);i++){var e=s2[i];
-    h+="<div class=sr><span class=l>"+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+" "+e.n+"</span><span class=v>🏁第"+e.stg+"关</span></div>"}
-  if(!s2.length)h+="<div class=em>暂无记录</div>";h+="</div>";
-
-  var s3=RS.list.slice().sort(function(a,b){return b.g-a.g});
-  h+="<div class=sgp><h3>💰 金币排行</h3>";
-  for(var i=0;i<Math.min(10,s3.length);i++){var e=s3[i];
-    h+="<div class=sr><span class=l>"+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+" "+e.n+"</span><span class=v>💰"+e.g.toLocaleString()+"</span></div>"}
-  if(!s3.length)h+="<div class=em>暂无记录</div>";h+="</div>";
-
-  h+='<div class="fc"><button class="bt bg bs" onclick="document.getElementById(&quot;rankmodal&quot;).classList.remove(&quot;s&quot;)">关闭</button></div></div>';
-  var md=document.getElementById("rankmodal");
-  if(!md){md=document.createElement("div");md.id="rankmodal";md.className="md";
-    md.onclick=function(e){if(e.target===md)this.classList.remove("s")};
-    document.body.appendChild(md)}
-  md.innerHTML=h;md.classList.add("s")
-}
+function RSHP(){RL();RU();var h="<div class=mbx style=max-width:480px;margin:0 auto><h2>🏆 排行榜</h2>";var s1=RS.list.slice().sort(function(a,b){return b.pw-a.pw});h+="<div class=sgp><h3>⚔战力排行</h3><div style=max-height:300px;overflow-y:auto>";for(var i=0;i<Math.min(100,s1.length);i++){var e=s1[i];h+="<div class=sr><span class=l>"+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+" "+e.n+"</span><span class=v>⚔"+e.pw+"</span></div>"}if(!s1.length)h+="<div class=em>暂无记录</div>";var pwr=-1;for(var i=0;i<s1.length;i++){if(s1[i].n===G.name){pwr=i+1;break}}if(pwr>100||(pwr<0&&G.name)){if(pwr<0)pwr=s1.length+1;h+="<div class=sr style=border-top:1px dashed #3a2a0a;margin-top:4px><span class=l>📍 你的排名</span><span class=v>#"+pwr+" ⚔"+TP()+"</span></div>"}h+="</div></div>";var s2=RS.list.slice().sort(function(a,b){var as=a.stg.split(".").map(Number),bs=b.stg.split(".").map(Number);return(bs[0]-as[0])||(bs[1]-as[1])});h+="<div class=sgp><h3>🏁 关卡排行</h3><div style=max-height:300px;overflow-y:auto>";for(var i=0;i<Math.min(100,s2.length);i++){var e=s2[i];h+="<div class=sr><span class=l>"+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+" "+e.n+"</span><span class=v>🏁第"+e.stg+"关</span></div>"}if(!s2.length)h+="<div class=em>暂无记录</div>";var sgr=-1;for(var i=0;i<s2.length;i++){if(s2[i].n===G.name){sgr=i+1;break}}if(sgr>100||(sgr<0&&G.name)){if(sgr<0)sgr=s2.length+1;h+="<div class=sr style=border-top:1px dashed #3a2a0a;margin-top:4px><span class=l>📍 你的排名</span><span class=v>#"+sgr+" 🏁第"+G.s+"."+G.ss+"关</span></div>"}h+="</div></div>";var s3=RS.list.slice().sort(function(a,b){return b.g-a.g});h+="<div class=sgp><h3>💰 金币排行</h3><div style=max-height:300px;overflow-y:auto>";for(var i=0;i<Math.min(100,s3.length);i++){var e=s3[i];h+="<div class=sr><span class=l>"+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+" "+e.n+"</span><span class=v>💰"+e.g.toLocaleString()+"</span></div>"}if(!s3.length)h+="<div class=em>暂无记录</div>";var ggr=-1;for(var i=0;i<s3.length;i++){if(s3[i].n===G.name){ggr=i+1;break}}if(ggr>100||(ggr<0&&G.name)){if(ggr<0)ggr=s3.length+1;h+="<div class=sr style=border-top:1px dashed #3a2a0a;margin-top:4px><span class=l>📍 你的排名</span><span class=v>#"+ggr+" 💰"+G.g.toLocaleString()+"</span></div>"}h+="</div></div>";h+="</div>";var rb=document.getElementById("rb");if(rb){rb.innerHTML=h;return}}
 
 init();(function(){try{if(typeof MIGRATE_PASSIVES==="function"&&G.hs&&G.hs.length){var __d=0;for(var __i=0;__i<G.hs.length;__i++){var __mh=G.hs[__i];if(typeof __mh.sk==="string"||!__mh.passives){delete __mh.cls;MIGRATE_PASSIVES(__mh);__mh.cls=assignClass(__mh);__d++}}if(__d>0){G._migrated=true;;if(typeof assignClass==="function"&&G.hs&&G.hs.length){for(var __ci=0;__ci<G.hs.length;__ci++){G.hs[__ci].cls=assignClass(G.hs[__ci])}}try{localStorage.setItem("sg7",JSON.stringify(G))}catch(e){}}}}catch(e){}})()</script><div class="md" id="dgModal" onclick="if(event.target===this)this.classList.remove('s')">
   <div class="mbx" style="max-width:420px;background:linear-gradient(145deg,#0a0a1a,#1a0a2a);border-color:#6040a0">
