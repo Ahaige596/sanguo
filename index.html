@@ -53,6 +53,19 @@ var NPC_TITLES=["天帝","战神","鬼王","霸王","武圣","飞将","神机","
 
 
 
+
+var SB={};
+SB['虎啸']={setBonus:[{need:'2件',pct:'攻击+8%'},{need:'4件',pct:'攻击+8%、生命+12%'},{need:'6件',pct:'攻击+15%、生命+18%、闪避2%'}]};
+SB['龙吟']={setBonus:[{need:'2件',pct:'生命+8%'},{need:'4件',pct:'生命+15%、攻击+6%'},{need:'6件',pct:'生命+20%、攻击+10%、闪避5%'}]};
+SB['凤鸣']={setBonus:[{need:'2件',pct:'攻击+10%'},{need:'4件',pct:'攻击+18%、生命+6%'},{need:'6件',pct:'攻击+25%、生命+12%、暴击5%'}]};
+SB['玄武']={setBonus:[{need:'2件',pct:'生命+12%'},{need:'4件',pct:'生命+20%、闪避4%'},{need:'6件',pct:'生命+30%、闪避8%、反击15%'}]};
+SB['青龙']={setBonus:[{need:'2件',pct:'攻击+12%'},{need:'4件',pct:'攻击+20%、暴击4%'},{need:'6件',pct:'攻击+30%、暴击8%、暴伤15%'}]};
+SB['白虎']={setBonus:[{need:'2件',pct:'攻击+8%、生命+8%'},{need:'4件',pct:'攻击+15%、生命+12%'},{need:'6件',pct:'攻击+20%、生命+20%、暴伤10%'}]};
+SB['朱雀']={setBonus:[{need:'2件',pct:'生命+10%、攻击+6%'},{need:'4件',pct:'生命+18%、攻击+10%'},{need:'6件',pct:'生命+25%、攻击+15%、暴击5%'}]};
+SB['炫火']={setBonus:[{need:'2件',pct:'攻击+15%'},{need:'4件',pct:'攻击+25%、暴击6%'},{need:'6件',pct:'攻击+35%、暴击10%、暴伤20%'}]};
+SB['冰霜']={setBonus:[{need:'2件',pct:'生命+15%'},{need:'4件',pct:'生命+25%、闪避6%'},{need:'6件',pct:'生命+40%、闪避12%、反击20%'}]};
+SB['雷霆']={setBonus:[{need:'2件',pct:'攻击+10%、生命+10%'},{need:'4件',pct:'攻击+18%、生命+15%、暴击4%'},{need:'6件',pct:'攻击+25%、生命+22%、暴击8%、暴伤15%'}]};
+function getSetDesc(sn,q){if(q<4||!sn)return '';var b=SB[sn];if(!b)return '\uD83E\uDDE9'+sn;var r='\uD83E\uDDE9'+sn;for(var i=0;i<b.setBonus.length;i++){r+=' '+b.setBonus[i].need+':'+b.setBonus[i].pct}return r}
 function UEQ(){
   var con=document.getElementById("pe");if(!con)return;
   var selectedHero=window._equipHero;
@@ -81,7 +94,7 @@ function UEQ(){
         if(eq){
           html+='<div class="esl-slot" style="border-color:'+QC[eq.q]+'">';
           html+='<div class="esl-icon" onclick="showEqDetail('+selectedHero+','+eq.id+')">'+eq.i+'</div>';
-          html+='<div class="esl-name" style="font-size:10px;color:'+QC[eq.q]+'">'+eq.n+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+(eq.set?'🧩套装:'+eq.set:'')+'</div>';
+          html+='<div class="esl-name" style="font-size:10px;color:'+QC[eq.q]+'">'+eq.n+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+(getSetDesc(eq.set,eq.q))+'</div>';
           html+='<div class="esl-rm" onclick="Q('+selectedHero+','+eq.id+',0)" style="cursor:pointer">✕</div>';
           html+='</div>';
         }else{
@@ -1273,7 +1286,7 @@ html+='<div class="bpgrid">';
     var cls=heroId!==null&&heroId!==void 0?"showEqDetail("+heroId+","+eq.id+")":"showEqDetail(0,"+eq.id+")";
     html+='<div class="bpitem" style="border-color:'+QC[eq.q]+'" onclick="'+cls+'">';
     html+='<div style="font-size:22px">'+eq.i+'</div>';
-    html+='<div style="font-size:10px;font-weight:700;color:'+QC[eq.q]+'">'+eq.n.slice(0,6)+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+(eq.set?'🧩套装:'+eq.set:'')+'</div>';
+    html+='<div style="font-size:10px;font-weight:700;color:'+QC[eq.q]+'">'+eq.n.slice(0,6)+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+(getSetDesc(eq.set,eq.q))+'</div>';
     html+='<div style="font-size:8px;color:#aaa">⚔'+eq.atk+' ❤'+eq.hp+'</div>';
     html+=sp;
     if(eq.lk)html+='<div style="font-size:10px;color:#d4a017">🔒</div>';
@@ -1459,7 +1472,7 @@ function showEqDetail(heroId,eqId){var eq;if(eqId){eq=G.eqb.find(function(e){ret
   var isEq=G.eq[sk]&&G.eq[sk].id===eq.id;
   var btn=isEq?'<button class="bt bs br" onclick="Q('+heroId+','+eq.id+',0)">⬇脱下</button>':'<button class="bt bs bg" onclick="Q('+heroId+','+eq.id+',1)">⚔装备</button>';
   var lkBtn=eq.lk?'<button class="bt bs" style="background:linear-gradient(135deg,#6a6a2a,#8a8a3a);font-size:10px" onclick="Q('+heroId+','+eq.id+',4)">🔓解锁</button>':'<button class="bt bs" style="background:linear-gradient(135deg,#3a3a2a,#5a5a3a);font-size:10px" onclick="Q('+heroId+','+eq.id+',4)">🔒上锁</button>';
-  d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+(eq.set?'🧩套装:'+eq.set:'')+'</div>'+'<div class=estats>⚔攻击:'+eq.atk+'<br>❤生命:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+lkBtn+btn+'<button class="bt bs" onclick="Q('+heroId+','+eq.id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">⬆强化 ['+cost+'💰]</button><button class="bt bs br" onclick="Q('+heroId+','+eq.id+',3)">🗑分解</button></div></div>';
+  d.innerHTML='<div class=epdetail-card><div class=eicon>'+eq.i+'</div><div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div><div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+(getSetDesc(eq.set,eq.q))+'</div>'+'<div class=estats>⚔攻击:'+eq.atk+'<br>❤生命:'+eq.hp+(sp?'<br>'+sp:'')+'</div><div class=fc style="flex-wrap:wrap">'+lkBtn+btn+'<button class="bt bs" onclick="Q('+heroId+','+eq.id+',2)" style="background:linear-gradient(135deg,#2a5a8a,#3a7abc);color:#fff">⬆强化 ['+cost+'💰]</button><button class="bt bs br" onclick="Q('+heroId+','+eq.id+',3)">🗑分解</button></div></div>';
   d.dataset.eqid=eq.id;window._epCache=d.innerHTML;
   d.style.position='sticky';d.style.top='42px';d.style.zIndex='10';d.style.background='linear-gradient(145deg,#1a0a00,#2a1a0a)';d.style.border='1px solid #8b6914';d.style.borderRadius='8px';d.style.padding='10px';d.style.marginBottom='6px';
   var _pe=document.getElementById('pe');if(_pe&&_pe.firstChild!==d){_pe.insertBefore(d,_pe.firstChild)}
@@ -1579,7 +1592,7 @@ window.showEqDetail=function(heroId,eqId){
   if(eq){
     htm+='<div class=eicon>'+eq.i+'</div>';
     htm+='<div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div>';
-    htm+='<div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+(eq.set?'🧩套装:'+eq.set:'')+'</div>';htm+=sp;
+    htm+='<div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+(getSetDesc(eq.set,eq.q))+'</div>';htm+=sp;
     if(eq.atk)htm+='<div><span style=color:#ff6644>⚔'+eq.atk+'</span></div>';
     if(eq.hp)htm+='<div><span style=color:#44bb44>❤'+eq.hp+'</span></div>';
     htm+='<div style=font-size:10px;color:#a08060>品质:Lv.'+eq.q+'</div>';
