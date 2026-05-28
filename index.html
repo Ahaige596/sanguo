@@ -1098,13 +1098,9 @@ function ARENA_FIGHT(rnk){
     if(_h.eq){for(var sk in _h.eq){var eq=_h.eq[sk];if(eq&&eq.sp){var sn=eq.sp.n;var sv=parseInt(eq.sp.v)/100;if(sn.indexOf("暴击")>=0&&sn.indexOf("爆")<0)_fh[id].crt=Math.min(95,_fh[id].crt+sv*100);if(sn=="爆伤")_fh[id].crtDmg+=sv*100;if(sn=="吸血")_fh[id].drain+=sv*100;if(sn.indexOf("减伤")>=0)_fh[id].dmgRed=Math.min(70,_fh[id].dmgRed+sv*100);if(sn.indexOf("闪避")>=0)_fh[id].dge=Math.min(80,_fh[id].dge+sv*100);}}}
     if(_h.passives&&Array.isArray(_h.passives)){for(var pi=0;pi<_h.passives.length;pi++){var p=_h.passives[pi];if(p.stat=="hp"){_fh[id].mhp=Math.floor(_fh[id].mhp*(1+p.val));_fh[id].hp=Math.floor(_fh[id].hp*(1+p.val));}else if(p.stat=="crt")_fh[id].crt=Math.min(95,(_fh[id].crt||0)+p.val);else if(p.stat=="dge")_fh[id].dge=Math.min(80,(_fh[id].dge||0)+p.val);else if(p.stat=="dmgRed")_fh[id].dmgRed=Math.min(70,(_fh[id].dmgRed||0)+p.val);else if(p.stat=="crtDmg")_fh[id].crtDmg+=p.val;}}
   }
-  var npc=ARENA_GEN_NPC(targetIdx,ARENA_SEED);
-  var npcCount=Math.min(G.fm.length||1,5);
-  var _ee=[];
-  for(var ei=0;ei<npcCount;ei++){
-    _ee.push({n:(npc.title||"")+" "+(npc.n.replace(/[0-9]/g,"")),i:"👹",at:Math.floor(npc.a/npcCount*(1.5-Math.random()*0.5)),mhp:Math.floor(npc.h/npcCount*(1.5-Math.random()*0.5)),hp:Math.floor(npc.h/npcCount*(1.5-Math.random()*0.5)),isBoss:ei===0});
-  }
-  window._aFH=_fh;window._aEE=_ee;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;
+  var enemies=ARENA_GEN_NPC(targetIdx,ARENA_SEED);
+  for(var ei=0;ei<enemies.length;ei++){var e=enemies[ei];if(e.crt===undefined)e.crt=5;if(e.dge===undefined)e.dge=3;if(e.crtDmg===undefined)e.crtDmg=150;if(e.dmgRed===undefined)e.dmgRed=0;if(e.spd===undefined)e.spd=100;if(e.acc===undefined)e.acc=85;if(e.crtRes===undefined)e.crtRes=0;if(e.crtDmgRes===undefined)e.crtDmgRes=0;if(e.drain===undefined)e.drain=0;if(e.drainRes===undefined)e.drainRes=0;e.an=0;}
+  window._aFH=_fh;window._aEE=enemies;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;window._aEE=_ee;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;
   var md=document.getElementById("md");var mbd=document.getElementById("mbd");var mtt=document.getElementById("mtt");
   mtt.textContent="⚔️竞技挑战";
   mbd.innerHTML="<div id=abattle style=padding:8px;min-height:200px><div style=display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap><div id=apFriends style=display:flex;flex-direction:column;align-items:center;gap:6px><div style=font-size:11px;color:#80c080>🛡️我方</div><div id=apFH style=display:flex;gap:6px;flex-wrap:wrap;justify-content:center;min-height:80px></div></div><div style=font-size:24px;color:#8b6914>⚡</div><div id=apEnemies style=display:flex;flex-direction:column;align-items:center;gap:6px><div style=font-size:11px;color:#ff7070>👹敌方</div><div id=apEE style=display:flex;gap:6px;flex-wrap:wrap;justify-content:center;min-height:80px></div></div></div><div id=apBlog style=text-align:center;font-size:12px;color:#a08040;margin-top:8px;min-height:20px>决斗开始！</div></div>";
@@ -1415,13 +1411,9 @@ ARENA_FIGHT=function(rnk){
     if(_h.eq){for(var sk in _h.eq){var eq=_h.eq[sk];if(eq&&eq.sp){var sn=eq.sp.n;var sv=parseInt(eq.sp.v)/100;if(sn.indexOf("暴击")>=0&&sn.indexOf("爆")<0)_fh[id].crt=Math.min(95,_fh[id].crt+sv*100);if(sn=="爆伤")_fh[id].crtDmg+=sv*100;if(sn=="吸血")_fh[id].drain+=sv*100;if(sn.indexOf("减伤")>=0)_fh[id].dmgRed=Math.min(70,_fh[id].dmgRed+sv*100);if(sn.indexOf("闪避")>=0)_fh[id].dge=Math.min(80,_fh[id].dge+sv*100);}}}
     if(_h.passives&&Array.isArray(_h.passives)){for(var pi=0;pi<_h.passives.length;pi++){var p=_h.passives[pi];if(p.stat=="hp"){_fh[id].mhp=Math.floor(_fh[id].mhp*(1+p.val));_fh[id].hp=Math.floor(_fh[id].hp*(1+p.val));}else if(p.stat=="crt")_fh[id].crt=Math.min(95,(_fh[id].crt||0)+p.val);else if(p.stat=="dge")_fh[id].dge=Math.min(80,(_fh[id].dge||0)+p.val);else if(p.stat=="dmgRed")_fh[id].dmgRed=Math.min(70,(_fh[id].dmgRed||0)+p.val);else if(p.stat=="crtDmg")_fh[id].crtDmg+=p.val;}}
   }
-  var npc=ARENA_GEN_NPC(targetIdx,ARENA_SEED);
-  var npcCount=Math.min(G.fm.length||1,5);
-  var _ee=[];
-  for(var ei=0;ei<npcCount;ei++){
-    _ee.push({n:(npc.title||"")+" "+(npc.n.replace(/[0-9]/g,"")),i:"👹",at:Math.floor(npc.a/npcCount*(1.5-Math.random()*0.5)),mhp:Math.floor(npc.h/npcCount*(1.5-Math.random()*0.5)),hp:Math.floor(npc.h/npcCount*(1.5-Math.random()*0.5)),isBoss:ei===0});
-  }
-  window._aFH=_fh;window._aEE=_ee;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;
+  var enemies=ARENA_GEN_NPC(targetIdx,ARENA_SEED);
+  for(var ei=0;ei<enemies.length;ei++){var e=enemies[ei];if(e.crt===undefined)e.crt=5;if(e.dge===undefined)e.dge=3;if(e.crtDmg===undefined)e.crtDmg=150;if(e.dmgRed===undefined)e.dmgRed=0;if(e.spd===undefined)e.spd=100;if(e.acc===undefined)e.acc=85;if(e.crtRes===undefined)e.crtRes=0;if(e.crtDmgRes===undefined)e.crtDmgRes=0;if(e.drain===undefined)e.drain=0;if(e.drainRes===undefined)e.drainRes=0;e.an=0;}
+  window._aFH=_fh;window._aEE=enemies;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;window._aEE=_ee;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;
   var md=document.getElementById("md");var mbd=document.getElementById("mbd");var mtt=document.getElementById("mtt");
   mtt.textContent="⚔️竞技挑战";
   mbd.innerHTML="<div id=abattle style=padding:8px;min-height:200px><div style=display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap><div id=apFriends style=display:flex;flex-direction:column;align-items:center;gap:6px><div style=font-size:11px;color:#80c080>🛡️我方</div><div id=apFH style=display:flex;gap:6px;flex-wrap:wrap;justify-content:center;min-height:80px></div></div><div style=font-size:24px;color:#8b6914>⚡</div><div id=apEnemies style=display:flex;flex-direction:column;align-items:center;gap:6px><div style=font-size:11px;color:#ff7070>👹敌方</div><div id=apEE style=display:flex;gap:6px;flex-wrap:wrap;justify-content:center;min-height:80px></div></div></div><div id=apBlog style=text-align:center;font-size:12px;color:#a08040;margin-top:8px;min-height:20px>决斗开始！</div></div>";
