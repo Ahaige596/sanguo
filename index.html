@@ -148,23 +148,26 @@ function ARENA_GEN_NPC(idx,seed){
 }
 function ARENA_GEN_TEAM(idx,seed){
   var nCount=Math.min(G.fm.length||1,Math.max(1,G.fm.length));
-  var maxHP=1000,maxAt=100,sumHP=0,sumAt=0,count=0;
+  var maxHP=50000,maxAt=5000,sumHP=0,sumAt=0,count=0,minLv=999;
   for(var fi=0;fi<G.fm.length;fi++){
     var id=G.fm[fi];var _h=GH(id);
     if(!_h)continue;
     var hp=HH(id);var at=HA(id);
     sumHP+=hp;sumAt+=at;count++;
     if(hp>maxHP)maxHP=hp;if(at>maxAt)maxAt=at;
+    if((_h.lv||1)<minLv)minLv=_h.lv||1;
   }
   var avgHP=count>0?Math.floor(sumHP/count):1000;
   var avgAt=count>0?Math.floor(sumAt/count):100;
+  var baseHP=avgHP>1000?avgHP:2000;
+  var baseAt=avgAt>100?avgAt:150;
   var rankMult=1.0;
-       if(idx===0)rankMult=4.5;
-  else if(idx<=2)rankMult=3.5;
-  else if(idx<=9)rankMult=2.5;
-  else if(idx<=29)rankMult=1.8;
-  else if(idx<=49)rankMult=1.4;
-  else if(idx<=79)rankMult=1.15;
+       if(idx===0)rankMult=6.0;
+  else if(idx<=2)rankMult=4.5;
+  else if(idx<=9)rankMult=3.2;
+  else if(idx<=29)rankMult=2.2;
+  else if(idx<=49)rankMult=1.6;
+  else if(idx<=79)rankMult=1.2;
   else rankMult=1.0;
   var heroes=[];
   var h=ARENA_SHA("arena"+idx+seed);
@@ -173,12 +176,15 @@ function ARENA_GEN_TEAM(idx,seed){
     var rr=((h+ei*137)%100)/100;
     var q=Math.max(0,Math.min(4,baseQ+Math.floor(rr*1.5)-1));
     var title=NPC_TITLE();
+    var hpMult=1.2+rr*1.5;
+    var atMult=1.2+rr*1.5;
     heroes.push({
       id:"e"+ei,n:title+" "+(idx<3?"\uD83D\uDC51NPC":"NPC")+ei,i:"\uD83D\uDC79",
-      hp:Math.floor(avgHP*rankMult*(0.7+rr*0.6)),mhp:Math.floor(avgHP*rankMult*(0.7+rr*0.6)),
-      at:Math.max(1,Math.floor(avgAt*rankMult*(0.7+rr*0.6))),
+      hp:Math.floor(baseHP*rankMult*hpMult),
+      mhp:Math.floor(baseHP*rankMult*hpMult),
+      at:Math.max(1,Math.floor(baseAt*rankMult*atMult)),
       isBoss:ei===0,q:q,
-      crt:Math.floor(3+q*3),dge:Math.floor(2+q*2),crtDmg:140+q*8,dmgRed:q*2,
+      crt:Math.floor(5+q*5),dge:Math.floor(3+q*3),crtDmg:150+q*10,dmgRed:q*3,
       spd:80+q*25,acc:85,an:0,crtRes:0,crtDmgRes:0,drain:0,drainRes:0
     });
   }
@@ -278,57 +284,105 @@ function ARENA_TICK(){
   var fh=window._aFH,ee=window._aEE;
   if(!fh||!ee){clearInterval(window._arenaBT);window._arenaBT=null;return;}
   var blog=document.getElementById("apBlog");
-  for(var fi=0;fi<G.fm.length;fi++){
-    var id=G.fm[fi];var f=fh[id];if(!f||f.hp<=0)continue;
-    var h=GH(id);if(!h)continue;
-    var ae=null;
-    for(var ei=0;ei<ee.length;ei++){if(ee[ei].hp>0){ae=ee[ei];break}}
-    if(!ae)break;
-    if(f.an>=100){f.an=0;var _sk=h.sk||((SKILL_POOL[h.q]||SKILL_POOL[0]||[])[0]||null);if(_sk){_ARENA_SKILL(id,ae,_sk,HA(id));if(ae.hp<=0&&blog)blog.textContent=h.n+" 技能击败了 "+ae.n;continue;}}
-    var atk=HA(id);var dmg=Math.max(1,atk+Math.floor(Math.random()*atk*0.3)-Math.floor(atk*0.15));
-    if(Math.random()*100<(f.crt||5)){var crtM=Math.max(1,((f.crtDmg||150)-(ae.crtDmgRes||0))/100);dmg=Math.floor(dmg*crtM);if(blog)blog.textContent="⚡爆击! "+h.n+" 造成 "+dmg+" 伤害!";}else{if(blog)blog.textContent=h.n+" 攻击 "+ae.n+" -"+dmg;}
-    dmg=Math.floor(dmg*(1-Math.min(70,(ae.dmgRed||0))/100));
-    var dgeCh=(ae.dge||0)-(f.acc||80);if(dgeCh>0&&Math.random()*100<dgeCh){dmg=Math.floor(dmg*0.3);if(blog)blog.textContent=ae.n+" 闪避!";}
-    dmg=Math.max(1,dmg);ae.hp=Math.max(0,ae.hp-dmg);f.an=Math.min(100,(f.an||0)+30);
-    if(ae.hp<=0&&blog)blog.textContent=h.n+" 击败了 "+ae.n;
-  }
-  for(var ei=0;ei<ee.length;ei++){
-    var e=ee[ei];if(!e||e.hp<=0)continue;var tgt=null;
-    for(var fi=0;fi<G.fm.length;fi++){var _f2=fh[G.fm[fi]];if(_f2&&_f2.hp>0){tgt=G.fm[fi];break}}
-    if(!tgt||!fh[tgt])break;
-    var f2=fh[tgt];
-    if(e.an>=100){e.an=0;var sd=Math.floor(e.at*2.0);sd=Math.floor(sd*(1-(f2.dmgRed||0)/100));f2.hp=Math.max(0,f2.hp-sd);f2.an=Math.min(100,(f2.an||0)+10);if(blog)blog.textContent="大招! "+e.n+" 造成 "+sd+" 伤害!";}
-    else{var ed=Math.max(1,Math.floor(e.at*0.6+Math.floor(Math.random()*7)-3));ed=Math.floor(ed*(1-(f2.dmgRed||0)/100));var edge=(f2.dge||0)-5;if(edge>0&&Math.random()*100<edge)ed=Math.floor(ed*0.3);if(Math.random()<0.08)ed=Math.floor(ed*1.5);f2.hp=Math.max(0,f2.hp-ed);f2.an=Math.min(100,(f2.an||0)+10);}
-    if(e)e.an=Math.min(100,(e.an||0)+30);
-    if(f2.hp<=0){var dh=GH(tgt);if(dh&&blog)blog.textContent=dh.n+" 阵亡!";}
-  }
-  ARENA_RENDER_BATTLE();
-  var allDead=true;
-  for(var ei=0;ei<ee.length;ei++){if(ee[ei].hp>0){allDead=false;break}}
-  if(allDead){
+  var actions=[];
+  // 1. Build living lists
+  var friendIds=G.fm.slice();
+  var livingFriends=friendIds.filter(function(id){return fh[id]&&fh[id].hp>0});
+  var livingEnemies=ee.filter(function(e){return e.hp>0});
+  if(livingEnemies.length===0){
     clearInterval(window._arenaBT);window._arenaBT=null;
-    if(blog)blog.textContent="🎉 胜利!";
+    if(blog)blog.textContent="\uD83C\uDF89 胜利! 敌方全灭!";
     setTimeout(function(){
       document.getElementById("md").classList.remove("s");
       var mi=window._aMyIdx,ti=window._aTargetIdx;
-      if(mi>=0){var od=G.ar[ti];G.ar[ti]={n:G.name||"我",p:"⚔️你·"+Math.floor(Math.random()*899+100),pw:100000,sq:Math.floor(Math.random()*4+1),w:(G.ar[ti]?G.ar[ti].w||0:0)+1};G.ar[mi]=od;}
-      else{G.ar[ti]={n:G.name||"我",p:"⚔️你·"+Math.floor(Math.random()*899+100),pw:100000,sq:Math.floor(Math.random()*4+1),w:1};}
+      if(mi>=0){var od=G.ar[ti];G.ar[ti]={n:G.name||"\u6211",p:"\u2694\uFE0F\u4F60\u00B7"+Math.floor(Math.random()*899+100),pw:100000,sq:Math.floor(Math.random()*4+1),w:(G.ar[ti]?G.ar[ti].w||0:0)+1};G.ar[mi]=od;}
+      else{G.ar[ti]={n:G.name||"\u6211",p:"\u2694\uFE0F\u4F60\u00B7"+Math.floor(Math.random()*899+100),pw:100000,sq:Math.floor(Math.random()*4+1),w:1};}
       if(!G.abest||ti+1<G.abest)G.abest=ti+1;
-      ST("✅ 胜利! 排名上升到#"+(ti+1),2500);
+      ST("\u2705 \u80DC\u5229! \u6392\u540D\u4E0A\u5347\u5230#"+(ti+1),2500);
       SV();ARENA_REFRESH();ARENA_RENDER();
     },1500);return;
   }
-  var pd=true;
-  for(var fi=0;fi<G.fm.length;fi++){if(fh[G.fm[fi]]&&fh[G.fm[fi]].hp>0){pd=false;break}}
-  if(pd){
+  if(livingFriends.length===0){
     clearInterval(window._arenaBT);window._arenaBT=null;
-    if(blog)blog.textContent="❌ 失败! 所有武将阵亡!";
+    if(blog)blog.textContent="\u274C \u5931\u8D25! \u6240\u6709\u6B66\u5C06\u9635\u4EA1!";
     setTimeout(function(){
       document.getElementById("md").classList.remove("s");
-      ST("❌ 挑战失败",2500);
+      ST("\u274C \u6311\u6218\u5931\u8D25",2500);
       SV();ARENA_REFRESH();ARENA_RENDER();
-    },1500);
+    },1500);return;
   }
+  // 2. Each friend attacks a random enemy
+  for(var fi=0;fi<friendIds.length;fi++){
+    var id=friendIds[fi];var f=fh[id];if(!f||f.hp<=0)continue;
+    var h=GH(id);if(!h)continue;
+    // Find living enemies
+    var le=[];
+    for(var ei=0;ei<ee.length;ei++){if(ee[ei].hp>0)le.push(ee[ei]);}
+    if(le.length===0)break;
+    var ae=le[Math.floor(Math.random()*le.length)];
+    // Skill check
+    if(f.an>=100){
+      f.an=0;
+      var skList=[];
+      for(var skKey in SKILL_POOL){if(SKILL_POOL[skKey]&&SKILL_POOL[skKey].length)skList=skList.concat(SKILL_POOL[skKey]);}
+      var _sk=h.sk||(skList[Math.floor(Math.random()*skList.length)]||null);
+      if(_sk){
+        var sd=Math.floor(HA(id)*2.0);
+        sd=Math.floor(sd*(1-Math.min(70,(ae.dmgRed||0))/100));
+        sd=Math.max(1,sd);
+        ae.hp=Math.max(0,ae.hp-sd);
+        actions.push(h.n+" \u2600\uFE0F "+_sk+" -> "+ae.n+" \u2212"+sd);
+        continue;
+      }
+    }
+    // Normal attack
+    var atk=HA(id);
+    var dmg=Math.max(1,atk+Math.floor(Math.random()*atk*0.3)-Math.floor(atk*0.15));
+    var isCrit=false;
+    if(Math.random()*100<(f.crt||5)){
+      var crtM=Math.max(1,((f.crtDmg||150)-(ae.crtDmgRes||0))/100);
+      dmg=Math.floor(dmg*crtM);isCrit=true;
+    }
+    dmg=Math.floor(dmg*(1-Math.min(70,(ae.dmgRed||0))/100));
+    var dgeCh=(ae.dge||0)-(f.acc||80);
+    if(dgeCh>0&&Math.random()*100<dgeCh){dmg=Math.floor(dmg*0.3);actions.push(ae.n+" \u8EBF\u907F! "+h.n+"\u7684\u653B\u51FB\u53EA\u9020\u6210\u4E86"+dmg+"\u4F24\u5BB3");}
+    else if(isCrit){actions.push("\u26A1\u7206\u51FB! "+h.n+" \u7206\u51FB "+ae.n+" -"+dmg);}
+    else{actions.push(h.n+" \u653B\u51FB "+ae.n+" \u2212"+dmg);}
+    dmg=Math.max(1,dmg);ae.hp=Math.max(0,ae.hp-dmg);
+    if(ae.hp<=0)actions.push(ae.n+" \u51FB\u6740!");
+    f.an=Math.min(100,(f.an||0)+30);
+  }
+  // 3. Each enemy attacks a random friend
+  for(var ei=0;ei<ee.length;ei++){
+    var e=ee[ei];if(!e||e.hp<=0)continue;
+    var lf=[];
+    for(var fi=0;fi<friendIds.length;fi++){var _f=fh[friendIds[fi]];if(_f&&_f.hp>0)lf.push(friendIds[fi]);}
+    if(lf.length===0)break;
+    var tid=lf[Math.floor(Math.random()*lf.length)];
+    var f2=fh[tid];
+    // Skill
+    if(e.an>=100){
+      e.an=0;
+      var sd=Math.floor(e.at*2.0);
+      sd=Math.floor(sd*(1-(f2.dmgRed||0)/100));
+      sd=Math.max(1,sd);
+      f2.hp=Math.max(0,f2.hp-sd);
+      actions.push("\u2600\uFE0F "+e.n+" \u6280\u80FD -> "+GH(tid).n+" \u2212"+sd);
+    } else {
+      var ed=Math.max(1,Math.floor(e.at*0.6+Math.floor(Math.random()*7)-3));
+      ed=Math.floor(ed*(1-(f2.dmgRed||0)/100));
+      var edge=(f2.dge||0)-5;
+      if(edge>0&&Math.random()*100<edge)ed=Math.floor(ed*0.3);
+      if(Math.random()<0.08)ed=Math.floor(ed*1.5);
+      f2.hp=Math.max(0,f2.hp-ed);
+      actions.push(e.n+" \u653B\u51FB "+GH(tid).n+" \u2212"+ed);
+    }
+    e.an=Math.min(100,(e.an||0)+30);
+    if(f2.hp<=0){var dh=GH(tid);if(dh)actions.push("\u2620 "+dh.n+" \u9635\u4EA1!");}
+  }
+  // Show last 2-3 actions
+  if(blog)blog.textContent=actions.slice(-3).join(" | ");
+  ARENA_RENDER_BATTLE();
 }
 function _ARENA_SKILL(casterId,target,sk,atk){
   if(!sk||!target)return;var ee=window._aEE;if(!ee)return;
