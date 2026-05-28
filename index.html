@@ -192,53 +192,124 @@ function ARENA_REFRESH(){
   G.ar=G.ar||[];while(G.ar.length<100)G.ar.push(null);
   var targetIdx=rnk-1;
   var myIdx=G.ar.findIndex(function(ri){return ri&&ri.p&&ri.p.indexOf("你")>=0});
-  // Check we're fighting someone ahead of us (or any if we're unranked)
-  if(myIdx>=0&&targetIdx>=myIdx){ST("只能挑战���名高于自己的对手！");return}
+  if(myIdx>=0&&targetIdx>=myIdx){ST("只能挑战排名高于自己的对手！");return}
   G.af--;
-  // Calculate player power
-  var myPW=0;
-  for(var fi=0;fi<G.fm.length;fi++){var id=G.fm[fi];var h=FH[id];if(h){myPW+=PW(h)}}
-  if(myPW<=0){myPW=G.hs.reduce(function(s,h){return s+PW(h)},0)};
-  myPW=Math.max(myPW,1);
-  // Get target data
-  var targetData=G.ar[targetIdx]||null;
-  var targetPW;
-  if(targetData&&!targetData.p)targetPW=targetData.pw||0;
-  else{
-    var n=ARENA_GEN_NPC(targetIdx,ARENA_SEED);
-    targetPW=n.pw;
+  var _fh={};
+  for(var fi=0;fi<G.fm.length;fi++){
+    var id=G.fm[fi];var _h=GH(id);
+    if(!_h)continue;
+    var _ba=HERO_ATTR_BASE(_h.q);var _st=_h.st||0;
+    _fh[id]={id:id,hp:HH(id),mhp:HH(id),crt:Math.min(95,Math.floor(_ba.crt+_st*2)),crtRes:Math.floor(_ba.crtRes+_st),crtDmg:Math.floor(_ba.crtDmg+_st*3),crtDmgRes:Math.floor(_ba.crtDmgRes+_st),dge:Math.min(80,Math.floor(_ba.dge+_st*2)),acc:Math.min(100,Math.floor(_ba.acc+_st)),drain:Math.floor(_ba.drain+_st),drainRes:Math.floor(_ba.drainRes+_st),dmgRed:Math.min(70,Math.floor(_ba.dmgRed+_st)),spd:Math.floor(_ba.spd+_st*5),an:0};
+    if(_h.eq){for(var sk in _h.eq){var eq=_h.eq[sk];if(eq&&eq.sp){var sn=eq.sp.n;var sv=parseInt(eq.sp.v)/100;if(sn.indexOf("暴击")>=0&&sn.indexOf("爆")<0)_fh[id].crt=Math.min(95,_fh[id].crt+sv*100);if(sn=="爆伤")_fh[id].crtDmg+=sv*100;if(sn=="吸血")_fh[id].drain+=sv*100;if(sn.indexOf("减伤")>=0)_fh[id].dmgRed=Math.min(70,_fh[id].dmgRed+sv*100);if(sn.indexOf("闪避")>=0)_fh[id].dge=Math.min(80,_fh[id].dge+sv*100);}}}
+    if(_h.passives&&Array.isArray(_h.passives)){for(var pi=0;pi<_h.passives.length;pi++){var p=_h.passives[pi];if(p.stat=="hp"){_fh[id].mhp=Math.floor(_fh[id].mhp*(1+p.val));_fh[id].hp=Math.floor(_fh[id].hp*(1+p.val));}else if(p.stat=="crt")_fh[id].crt=Math.min(95,(_fh[id].crt||0)+p.val);else if(p.stat=="dge")_fh[id].dge=Math.min(80,(_fh[id].dge||0)+p.val);else if(p.stat=="dmgRed")_fh[id].dmgRed=Math.min(70,(_fh[id].dmgRed||0)+p.val);else if(p.stat=="crtDmg")_fh[id].crtDmg+=p.val;}}
   }
-  // Determine win
-  var win=myPW>targetPW*R(5,15)/10;
-  var targetName=G.ar[targetIdx]?G.ar[targetIdx].n||ARENA_GEN_NPC(targetIdx,ARENA_SEED).n:"对手";
-  if(win){
-    // Save target data at my old position (swap)
-    if(myIdx>=0){
-      var oldData=G.ar[targetIdx];
-      G.ar[targetIdx]={n:G.name||"我",p:"⚔️你·"+R(100,999),pw:myPW,sq:R(1,5),w:(G.ar[targetIdx]?G.ar[targetIdx].w||0:0)+1};
-      G.ar[myIdx]=oldData;  // Move target to player's old position
-    }else{
-      // First time: just put player at target's position
-      G.ar[targetIdx]={n:G.name||"我",p:"⚔️你·"+R(100,999),pw:myPW,sq:R(1,5),w:1};
-    }
-    if(!G.abest||(targetIdx+1)<G.abest)G.abest=targetIdx+1;
-    ST("✅ 胜利! 排名上升到#"+(targetIdx+1),2500);
-  }else{
-    ST("❌ 失败! 战力不足",2500);
+  var npc=ARENA_GEN_NPC(targetIdx,ARENA_SEED);
+  var npcCount=Math.min(G.fm.length||1,5);
+  var _ee=[];
+  for(var ei=0;ei<npcCount;ei++){
+    _ee.push({n:(npc.title||"")+" "+(npc.n.replace(/[0-9]/g,"")),i:"👹",at:Math.floor(npc.a/npcCount*(1.5-Math.random()*0.5)),mhp:Math.floor(npc.h/npcCount*(1.5-Math.random()*0.5)),hp:Math.floor(npc.h/npcCount*(1.5-Math.random()*0.5)),isBoss:ei===0});
   }
-  SV();ARENA_REFRESH();ARENA_RENDER();
-}function ARENA_RENDER(){
-  var t=G.ar||[];
-  var ls=document.getElementById("arl");
-  var ab=document.getElementById("ab");
-  if(!ls&&!ab)return;
-  if(ab){ab.innerHTML='<div style="padding:12px"><h2 style="margin-bottom:8px">⚔️竞技场</h2><div style="font-size:12px;color:#a08060;margin-bottom:8px">排名100名内可挑战，胜利取代对方排名</div><div style="display:flex;gap:10px;margin-bottom:10px"><span>🏆排名:<b id="arank">未参加</b></span><span>⚔️剩余:<b id="afight">5/5</b></span><span>🏆最高:<b id="abest">-</b></span></div><div style="margin-bottom:8px"><button class="bt" onclick="ARENA_REFRESH()" style="background:linear-gradient(135deg,#6a2a6a,#9a3a9a)">↻刷新对手</button><button class="bt bg bs" onclick="ARENA_SHOW_REWARDS()" style="float:right">🏆奖励</button></div></div><div id="arl" style="max-height:60vh;overflow-y:auto;padding:0 8px"></div></div>'}
-  ARENA_REFRESH()
+  window._aFH=_fh;window._aEE=_ee;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;
+  var md=document.getElementById("md");var mbd=document.getElementById("mbd");var mtt=document.getElementById("mtt");
+  mtt.textContent="⚔️竞技挑战";
+  mbd.innerHTML="<div id=abattle style=padding:8px;min-height:200px><div style=display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap><div id=apFriends style=display:flex;flex-direction:column;align-items:center;gap:6px><div style=font-size:11px;color:#80c080>🛡️我方</div><div id=apFH style=display:flex;gap:6px;flex-wrap:wrap;justify-content:center;min-height:80px></div></div><div style=font-size:24px;color:#8b6914>⚡</div><div id=apEnemies style=display:flex;flex-direction:column;align-items:center;gap:6px><div style=font-size:11px;color:#ff7070>👹敌方</div><div id=apEE style=display:flex;gap:6px;flex-wrap:wrap;justify-content:center;min-height:80px></div></div></div><div id=apBlog style=text-align:center;font-size:12px;color:#a08040;margin-top:8px;min-height:20px>决斗开始！</div></div>";
+  md.classList.add("s");
+  ARENA_RENDER_BATTLE();
+  if(window._arenaBT)clearInterval(window._arenaBT);
+  window._arenaBT=setInterval(function(){ARENA_TICK()},700);
 }
-if((G.armx||5)&&(G.af||0)<(G.armx||5)&&(!G.afr||G.afr<Math.floor(Date.now()/86400000))){G.af=(G.armx||5);G.afr=Math.floor(Date.now()/86400000)}
 
+function ARENA_RENDER_BATTLE(){
+  var fh=window._aFH,ee=window._aEE;
+  if(!fh||!ee)return;
+  var fhDiv=document.getElementById("apFH");var eeDiv=document.getElementById("apEE");
+  if(!fhDiv||!eeDiv)return;
+  fhDiv.innerHTML="";
+  for(var i=0;i<G.fm.length;i++){
+    var id=G.fm[i];var h=GH(id);if(!h)continue;
+    var f=fh[id];if(!f)continue;
+    if(!f.hp)f.hp=HH(id);if(!f.mhp)f.mhp=HH(id);
+    var pct=Math.max(0,(f.hp/f.mhp)*100);
+    fhDiv.innerHTML+="<div style=background:rgba(0,40,0,.2);border:1px solid "+(f.hp>0?"rgba(64,192,64,.3)":"#333")+";border-radius:6px;padding:4px;min-width:60px;text-align:center;font-size:10px><div style=font-size:16px;font-weight:700>"+GEN_AVATAR(h.n,h.q,(h.cls!==void 0?h.cls:assignClass(h)))+"</div><div style=font-size:8px;color:#a0c0a0>"+h.n+"</div><div style=width:50px;height:4px;background:#2a0a0a;border-radius:2px;margin:2px auto><div style=height:100%;width:"+pct+"%;background:linear-gradient(90deg,#40c040,#80e080);border-radius:2px;transition:width .3s></div></div><div style=font-size:8px;color:#a0c0a0>"+Math.floor(f.hp)+"/"+f.mhp+"</div></div>";
+  }
+  eeDiv.innerHTML="";
+  for(var i=0;i<ee.length;i++){
+    var e=ee[i];if(!e)continue;
+    var pct2=Math.max(0,(e.hp/e.mhp)*100);
+    eeDiv.innerHTML+="<div style=background:"+(e.isBoss?"rgba(200,50,50,.3)":"rgba(150,50,50,.15)")+";border:1px solid "+(e.isBoss?"rgba(200,50,50,.5)":"rgba(100,30,30,.3)")+";border-radius:6px;padding:4px;min-width:60px;text-align:center;font-size:10px><div style=font-size:18px>"+(e.isBoss?"👾":"👹")+"</div><div style=font-size:8px;color:#ff9090>"+e.n+"</div><div style=width:50px;height:4px;background:#2a0a0a;border-radius:2px;margin:2px auto><div style=height:100%;width:"+pct2+"%;background:linear-gradient(90deg,#cc2222,#ff4444);border-radius:2px;transition:width .3s></div></div><div style=font-size:8px;color:#ff9090>"+Math.floor(e.hp)+"/"+e.mhp+"</div></div>";
+  }
+}
 
-// ====== 竞技场每日刷新 ======
+function ARENA_TICK(){
+  var fh=window._aFH,ee=window._aEE;
+  if(!fh||!ee){clearInterval(window._arenaBT);window._arenaBT=null;return;}
+  var blog=document.getElementById("apBlog");
+  for(var fi=0;fi<G.fm.length;fi++){
+    var id=G.fm[fi];var f=fh[id];if(!f||f.hp<=0)continue;
+    var h=GH(id);if(!h)continue;
+    var ae=null;
+    for(var ei=0;ei<ee.length;ei++){if(ee[ei].hp>0){ae=ee[ei];break}}
+    if(!ae)break;
+    if(f.an>=100){f.an=0;var _sk=h.sk||((SKILL_POOL[h.q]||SKILL_POOL[0]||[])[0]||null);if(_sk){_ARENA_SKILL(id,ae,_sk,HA(id));if(ae.hp<=0&&blog)blog.textContent=h.n+" 技能击败了 "+ae.n;continue;}}
+    var atk=HA(id);var dmg=Math.max(1,atk+Math.floor(Math.random()*atk*0.3)-Math.floor(atk*0.15));
+    if(Math.random()*100<(f.crt||5)){var crtM=Math.max(1,((f.crtDmg||150)-(ae.crtDmgRes||0))/100);dmg=Math.floor(dmg*crtM);if(blog)blog.textContent="⚡爆击! "+h.n+" 造成 "+dmg+" 伤害!";}else{if(blog)blog.textContent=h.n+" 攻击 "+ae.n+" -"+dmg;}
+    dmg=Math.floor(dmg*(1-Math.min(70,(ae.dmgRed||0))/100));
+    var dgeCh=(ae.dge||0)-(f.acc||80);if(dgeCh>0&&Math.random()*100<dgeCh){dmg=Math.floor(dmg*0.3);if(blog)blog.textContent=ae.n+" 闪避!";}
+    dmg=Math.max(1,dmg);ae.hp=Math.max(0,ae.hp-dmg);f.an=Math.min(100,(f.an||0)+30);
+    if(ae.hp<=0&&blog)blog.textContent=h.n+" 击败了 "+ae.n;
+  }
+  for(var ei=0;ei<ee.length;ei++){
+    var e=ee[ei];if(!e||e.hp<=0)continue;var tgt=null;
+    for(var fi=0;fi<G.fm.length;fi++){var _f2=fh[G.fm[fi]];if(_f2&&_f2.hp>0){tgt=G.fm[fi];break}}
+    if(!tgt||!fh[tgt])break;
+    var f2=fh[tgt];
+    if(e.an>=100){e.an=0;var sd=Math.floor(e.at*2.0);sd=Math.floor(sd*(1-(f2.dmgRed||0)/100));f2.hp=Math.max(0,f2.hp-sd);f2.an=Math.min(100,(f2.an||0)+10);if(blog)blog.textContent="大招! "+e.n+" 造成 "+sd+" 伤害!";}
+    else{var ed=Math.max(1,Math.floor(e.at*0.6+Math.floor(Math.random()*7)-3));ed=Math.floor(ed*(1-(f2.dmgRed||0)/100));var edge=(f2.dge||0)-5;if(edge>0&&Math.random()*100<edge)ed=Math.floor(ed*0.3);if(Math.random()<0.08)ed=Math.floor(ed*1.5);f2.hp=Math.max(0,f2.hp-ed);f2.an=Math.min(100,(f2.an||0)+10);}
+    if(e)e.an=Math.min(100,(e.an||0)+30);
+    if(f2.hp<=0){var dh=GH(tgt);if(dh&&blog)blog.textContent=dh.n+" 阵亡!";}
+  }
+  ARENA_RENDER_BATTLE();
+  var allDead=true;
+  for(var ei=0;ei<ee.length;ei++){if(ee[ei].hp>0){allDead=false;break}}
+  if(allDead){
+    clearInterval(window._arenaBT);window._arenaBT=null;
+    if(blog)blog.textContent="🎉 胜利!";
+    setTimeout(function(){
+      document.getElementById("md").classList.remove("s");
+      var mi=window._aMyIdx,ti=window._aTargetIdx;
+      if(mi>=0){var od=G.ar[ti];G.ar[ti]={n:G.name||"我",p:"⚔️你·"+Math.floor(Math.random()*899+100),pw:100000,sq:Math.floor(Math.random()*4+1),w:(G.ar[ti]?G.ar[ti].w||0:0)+1};G.ar[mi]=od;}
+      else{G.ar[ti]={n:G.name||"我",p:"⚔️你·"+Math.floor(Math.random()*899+100),pw:100000,sq:Math.floor(Math.random()*4+1),w:1};}
+      if(!G.abest||ti+1<G.abest)G.abest=ti+1;
+      ST("✅ 胜利! 排名上升到#"+(ti+1),2500);
+      SV();ARENA_REFRESH();ARENA_RENDER();
+    },1500);return;
+  }
+  var pd=true;
+  for(var fi=0;fi<G.fm.length;fi++){if(fh[G.fm[fi]]&&fh[G.fm[fi]].hp>0){pd=false;break}}
+  if(pd){
+    clearInterval(window._arenaBT);window._arenaBT=null;
+    if(blog)blog.textContent="❌ 失败! 所有武将阵亡!";
+    setTimeout(function(){
+      document.getElementById("md").classList.remove("s");
+      ST("❌ 挑战失败",2500);
+      SV();ARENA_REFRESH();ARENA_RENDER();
+    },1500);
+  }
+}
+function _ARENA_SKILL(casterId,target,sk,atk){
+  if(!sk||!target)return;var ee=window._aEE;if(!ee)return;
+  var h=GH(casterId);if(!h)return;
+  var sa=Math.floor(atk*(CLASS_SPECS[assignClass(h)]?CLASS_SPECS[assignClass(h)].atkMod:1));
+  if(sk.t=="dmg"){
+    var ts=[];if(sk.c=="all"){for(var i=0;i<ee.length;i++)if(ee[i].hp>0)ts.push(ee[i]);}else ts.push(target);
+    for(var i=0;i<ts.length;i++){var d=Math.floor(sa*sk.v);ts[i].hp=Math.max(0,ts[i].hp-d);}
+  }else if(sk.t=="heal"){
+    if(sk.c=="all"){for(var fi=0;fi<G.fm.length;fi++){var fh2=window._aFH&&window._aFH[G.fm[fi]];if(fh2&&fh2.hp>0)fh2.hp=Math.min(fh2.mhp,fh2.hp+Math.floor(fh2.mhp*sk.v));}}
+    else{var li=-1,lp=999;for(var fi=0;fi<G.fm.length;fi++){var fh2=window._aFH&&window._aFH[G.fm[fi]];if(fh2&&fh2.hp>0&&fh2.hp/fh2.mhp<lp){lp=fh2.hp/fh2.mhp;li=G.fm[fi];}}if(li>=0&&window._aFH&&window._aFH[li])window._aFH[li].hp=Math.min(window._aFH[li].mhp,window._aFH[li].hp+Math.floor(window._aFH[li].mhp*sk.v));}
+  }else if(sk.t=="debuff"){if(target.hp>0)target.at=Math.max(1,Math.floor(target.at*sk.v));}
+  else if(sk.t=="stun"){if(target.hp>0&&Math.random()<sk.v)target.stun=(target.stun||0)+1;}
+  else if(sk.t=="buff"){var _fh2=window._aFH&&window._aFH[casterId];if(_fh2)_fh2.atkBuff=(_fh2.atkBuff||1)*sk.v;}
+}
 function ARENA_DAILY(){var today=Math.floor(Date.now()/86400000);if(!G.afr||G.afr<today){G.af=G.armx||5;G.afr=today}}
 // ====== 竞技场奖励 ======
 function ARENA_CALC_REWARD(type){var idx=G.ar?G.ar.findIndex(function(x){return x&&x.p&&x.p.indexOf("你")>=0}):-1;var rank=idx>=0?idx+1:0;if(rank<=0){RU();RSV();ST("未��与排名，无奖励");return}var gold=0,dia=0,recruit=0;if(type==='daily'){if(rank===1){gold=5000;dia=50;recruit=5}else if(rank<=3){gold=3000;dia=30;recruit=3}else if(rank<=10){gold=2000;dia=15;recruit=2}else if(rank<=30){gold=1000;dia=8;recruit=1}else if(rank<=50){gold=500;dia=5}else{gold=200;dia=2}}else{if(rank===1){gold=20000;dia=200;recruit=20}else if(rank<=3){gold=12000;dia=100;recruit=10}else if(rank<=10){gold=6000;dia=50;recruit=5}else if(rank<=30){gold=3000;dia=20;recruit=3}else if(rank<=50){gold=1000;dia=10;recruit=1}else{gold=500;dia=5}}G.g=(G.g||0)+gold;G.j=(G.j||0)+dia;G.rt=(G.rt||0)+recruit;var label=type==='daily'?'🏆日奖励':'🏆周奖励';ST(label+' #'+rank+'：💰'+gold+' 💎'+dia+' 📜'+recruit,4000);SV();}
