@@ -128,6 +128,25 @@ for(var ei=0;ei<ec;ei++){var e=p[isBoss?R(0,9):(ei+Math.floor((s_-1)/3))%10];var
 var ARENA_SEED=R(1,999999);
 function ARENA_SHA(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return Math.abs(h)}
 function ARENA_GEN_NPC(idx,seed){
+  var pw;
+       if(idx===0){pw=50000}
+  else if(idx<=2){pw=40000}
+  else if(idx<=9){pw=30000}
+  else if(idx<=29){pw=25000}
+  else if(idx<=49){pw=20000}
+  else if(idx<=79){pw=15000}
+  else            {pw=10000}
+  pw+=Math.floor(Math.random()*pw*0.05)-Math.floor(pw*0.025);
+  var q=idx<3?4:(idx<10?3:(idx<30?2:(idx<50?1:0)));
+  var h=ARENA_SHA("arena"+idx+seed);
+  var sk=null;
+  var skp=SKILL_POOL[q];
+  if(skp&&skp.length&&h%4===0){sk=skp[Math.floor(h%skp.length)]}
+  var title=NPC_TITLE();
+  var lv=Math.max(1,Math.min(1000,Math.floor(G.s*1.5)));
+  return{n:idx<3?"\uD83D\uDC51NPC"+(100+idx):"NPC"+(200+idx-4),q:q,lv:lv,a:Math.max(1,Math.floor(pw*0.3)),h:Math.max(1,Math.floor(pw*0.7)),pw:pw,sk:sk,title:title}
+}
+function ARENA_GEN_TEAM(idx,seed){
   var nCount=Math.min(G.fm.length||1,Math.max(1,G.fm.length));
   var maxHP=1000,maxAt=100,sumHP=0,sumAt=0,count=0;
   for(var fi=0;fi<G.fm.length;fi++){
@@ -155,7 +174,7 @@ function ARENA_GEN_NPC(idx,seed){
     var q=Math.max(0,Math.min(4,baseQ+Math.floor(rr*1.5)-1));
     var title=NPC_TITLE();
     heroes.push({
-      id:"e"+ei,n:title+" "+(idx<3?"👑NPC":"NPC")+ei,i:"👹",
+      id:"e"+ei,n:title+" "+(idx<3?"\uD83D\uDC51NPC":"NPC")+ei,i:"\uD83D\uDC79",
       hp:Math.floor(avgHP*rankMult*(0.7+rr*0.6)),mhp:Math.floor(avgHP*rankMult*(0.7+rr*0.6)),
       at:Math.max(1,Math.floor(avgAt*rankMult*(0.7+rr*0.6))),
       isBoss:ei===0,q:q,
@@ -222,7 +241,7 @@ function ARENA_REFRESH(){
     if(_h.eq){for(var sk in _h.eq){var eq=_h.eq[sk];if(eq&&eq.sp){var sn=eq.sp.n;var sv=parseInt(eq.sp.v)/100;if(sn.indexOf("暴击")>=0&&sn.indexOf("爆")<0)_fh[id].crt=Math.min(95,_fh[id].crt+sv*100);if(sn=="爆伤")_fh[id].crtDmg+=sv*100;if(sn=="吸血")_fh[id].drain+=sv*100;if(sn.indexOf("减伤")>=0)_fh[id].dmgRed=Math.min(70,_fh[id].dmgRed+sv*100);if(sn.indexOf("闪避")>=0)_fh[id].dge=Math.min(80,_fh[id].dge+sv*100);}}}
     if(_h.passives&&Array.isArray(_h.passives)){for(var pi=0;pi<_h.passives.length;pi++){var p=_h.passives[pi];if(p.stat=="hp"){_fh[id].mhp=Math.floor(_fh[id].mhp*(1+p.val));_fh[id].hp=Math.floor(_fh[id].hp*(1+p.val));}else if(p.stat=="crt")_fh[id].crt=Math.min(95,(_fh[id].crt||0)+p.val);else if(p.stat=="dge")_fh[id].dge=Math.min(80,(_fh[id].dge||0)+p.val);else if(p.stat=="dmgRed")_fh[id].dmgRed=Math.min(70,(_fh[id].dmgRed||0)+p.val);else if(p.stat=="crtDmg")_fh[id].crtDmg+=p.val;}}
   }
-  var enemies=ARENA_GEN_NPC(targetIdx,ARENA_SEED);
+  var enemies=ARENA_GEN_TEAM(targetIdx,ARENA_SEED);
   for(var ei=0;ei<enemies.length;ei++){var e=enemies[ei];if(e.crt===undefined)e.crt=5;if(e.dge===undefined)e.dge=3;if(e.crtDmg===undefined)e.crtDmg=150;if(e.dmgRed===undefined)e.dmgRed=0;if(e.spd===undefined)e.spd=100;if(e.acc===undefined)e.acc=85;if(e.crtRes===undefined)e.crtRes=0;if(e.crtDmgRes===undefined)e.crtDmgRes=0;if(e.drain===undefined)e.drain=0;if(e.drainRes===undefined)e.drainRes=0;e.an=0;}
   window._aFH=_fh;window._aEE=enemies;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;window._aFH=_fh;window._aEE=_ee;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;
   var md=document.getElementById("md");var mbd=document.getElementById("mbd");var mtt=document.getElementById("mtt");
@@ -1098,7 +1117,7 @@ function ARENA_FIGHT(rnk){
     if(_h.eq){for(var sk in _h.eq){var eq=_h.eq[sk];if(eq&&eq.sp){var sn=eq.sp.n;var sv=parseInt(eq.sp.v)/100;if(sn.indexOf("暴击")>=0&&sn.indexOf("爆")<0)_fh[id].crt=Math.min(95,_fh[id].crt+sv*100);if(sn=="爆伤")_fh[id].crtDmg+=sv*100;if(sn=="吸血")_fh[id].drain+=sv*100;if(sn.indexOf("减伤")>=0)_fh[id].dmgRed=Math.min(70,_fh[id].dmgRed+sv*100);if(sn.indexOf("闪避")>=0)_fh[id].dge=Math.min(80,_fh[id].dge+sv*100);}}}
     if(_h.passives&&Array.isArray(_h.passives)){for(var pi=0;pi<_h.passives.length;pi++){var p=_h.passives[pi];if(p.stat=="hp"){_fh[id].mhp=Math.floor(_fh[id].mhp*(1+p.val));_fh[id].hp=Math.floor(_fh[id].hp*(1+p.val));}else if(p.stat=="crt")_fh[id].crt=Math.min(95,(_fh[id].crt||0)+p.val);else if(p.stat=="dge")_fh[id].dge=Math.min(80,(_fh[id].dge||0)+p.val);else if(p.stat=="dmgRed")_fh[id].dmgRed=Math.min(70,(_fh[id].dmgRed||0)+p.val);else if(p.stat=="crtDmg")_fh[id].crtDmg+=p.val;}}
   }
-  var enemies=ARENA_GEN_NPC(targetIdx,ARENA_SEED);
+  var enemies=ARENA_GEN_TEAM(targetIdx,ARENA_SEED);
   for(var ei=0;ei<enemies.length;ei++){var e=enemies[ei];if(e.crt===undefined)e.crt=5;if(e.dge===undefined)e.dge=3;if(e.crtDmg===undefined)e.crtDmg=150;if(e.dmgRed===undefined)e.dmgRed=0;if(e.spd===undefined)e.spd=100;if(e.acc===undefined)e.acc=85;if(e.crtRes===undefined)e.crtRes=0;if(e.crtDmgRes===undefined)e.crtDmgRes=0;if(e.drain===undefined)e.drain=0;if(e.drainRes===undefined)e.drainRes=0;e.an=0;}
   window._aFH=_fh;window._aEE=enemies;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;window._aEE=_ee;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;
   var md=document.getElementById("md");var mbd=document.getElementById("mbd");var mtt=document.getElementById("mtt");
@@ -1411,7 +1430,7 @@ ARENA_FIGHT=function(rnk){
     if(_h.eq){for(var sk in _h.eq){var eq=_h.eq[sk];if(eq&&eq.sp){var sn=eq.sp.n;var sv=parseInt(eq.sp.v)/100;if(sn.indexOf("暴击")>=0&&sn.indexOf("爆")<0)_fh[id].crt=Math.min(95,_fh[id].crt+sv*100);if(sn=="爆伤")_fh[id].crtDmg+=sv*100;if(sn=="吸血")_fh[id].drain+=sv*100;if(sn.indexOf("减伤")>=0)_fh[id].dmgRed=Math.min(70,_fh[id].dmgRed+sv*100);if(sn.indexOf("闪避")>=0)_fh[id].dge=Math.min(80,_fh[id].dge+sv*100);}}}
     if(_h.passives&&Array.isArray(_h.passives)){for(var pi=0;pi<_h.passives.length;pi++){var p=_h.passives[pi];if(p.stat=="hp"){_fh[id].mhp=Math.floor(_fh[id].mhp*(1+p.val));_fh[id].hp=Math.floor(_fh[id].hp*(1+p.val));}else if(p.stat=="crt")_fh[id].crt=Math.min(95,(_fh[id].crt||0)+p.val);else if(p.stat=="dge")_fh[id].dge=Math.min(80,(_fh[id].dge||0)+p.val);else if(p.stat=="dmgRed")_fh[id].dmgRed=Math.min(70,(_fh[id].dmgRed||0)+p.val);else if(p.stat=="crtDmg")_fh[id].crtDmg+=p.val;}}
   }
-  var enemies=ARENA_GEN_NPC(targetIdx,ARENA_SEED);
+  var enemies=ARENA_GEN_TEAM(targetIdx,ARENA_SEED);
   for(var ei=0;ei<enemies.length;ei++){var e=enemies[ei];if(e.crt===undefined)e.crt=5;if(e.dge===undefined)e.dge=3;if(e.crtDmg===undefined)e.crtDmg=150;if(e.dmgRed===undefined)e.dmgRed=0;if(e.spd===undefined)e.spd=100;if(e.acc===undefined)e.acc=85;if(e.crtRes===undefined)e.crtRes=0;if(e.crtDmgRes===undefined)e.crtDmgRes=0;if(e.drain===undefined)e.drain=0;if(e.drainRes===undefined)e.drainRes=0;e.an=0;}
   window._aFH=_fh;window._aEE=enemies;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;window._aEE=_ee;window._aMyIdx=myIdx;window._aTargetIdx=targetIdx;window._aRnk=rnk;
   var md=document.getElementById("md");var mbd=document.getElementById("mbd");var mtt=document.getElementById("mtt");
