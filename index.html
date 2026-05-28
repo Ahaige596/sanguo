@@ -1579,7 +1579,7 @@ window.showEqDetail=function(heroId,eqId){
   if(eq){
     htm+='<div class=eicon>'+eq.i+'</div>';
     htm+='<div style="font-size:10px;color:#806040">Lv.'+lv+'/'+maxLv+' <span style=color:'+QC[eq.q]+'>'+QN[eq.q]+'</span></div>';
-    htm+='<div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+'+(eq.set?"🧩套装:"+eq.set:"")+'+'</div>';htm+=sp;
+    htm+='<div class=ename style=color:'+QC[eq.q]+'>'+eq.n+'</div>'+'<div style=font-size:10px;color:#a0d0a0>'+(eq.set?'🧩套装:'+eq.set:'')+'</div>';htm+=sp;
     if(eq.atk)htm+='<div><span style=color:#ff6644>⚔'+eq.atk+'</span></div>';
     if(eq.hp)htm+='<div><span style=color:#44bb44>❤'+eq.hp+'</span></div>';
     htm+='<div style=font-size:10px;color:#a08060>品质:Lv.'+eq.q+'</div>';
