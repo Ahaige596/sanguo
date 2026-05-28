@@ -655,21 +655,17 @@ function RO(){var r=Math.random(),c=0,q=0;for(var i=0;i<5;i++){c+=RC[i];if(r<=c)
   if(typeof G.rt!=="number")G.rt=0;if(G.rt<n){ST("\u62DB\u52DF\u4EE4\u4E0D\u8DB3");return}
   G.rt-=n;var rs=[];
   for(var i=0;i<n;i++){
-    // Get current squad hero names
     var squadNames=[];
     for(var si=0;si<G.fm.length;si++){
       var sh=GH(G.fm[si]);
       if(sh&&squadNames.indexOf(sh.n)<0)squadNames.push(sh.n);
     }
     if(!squadNames.length){ST("\u5148\u4E0A\u9635\u6B66\u5C06");return}
-    // Pick a random squad hero name
     var pickName=squadNames[Math.floor(Math.random()*squadNames.length)];
-    // Find matching hero in pool for quality/base stats
     var poolHero=null;
     for(var pi=0;pi<HP.length;pi++){
       if(HP[pi].n===pickName){poolHero=HP[pi];break}
     }
-    // Find existing owned hero with that name
     var ex=null;
     for(var j=0;j<G.hs.length;j++){
       if(G.hs[j].n===pickName){ex=G.hs[j];break}
@@ -678,7 +674,7 @@ function RO(){var r=Math.random(),c=0,q=0;for(var i=0;i<5;i++){c+=RC[i];if(r<=c)
       ex.st=(ex.st||0)+1;
       ex.a=Math.floor(ex.a*1.15);
       ex.h=Math.floor(ex.h*1.15);
-      rs.push({t:1,nm:pickName,q:ex.q,st:ex.st});
+      rs.push({t:1,nm:pickName,q:ex.q,st:ex.st,cls:ex.cls});
     }else if(poolHero){
       var _h={id:G.nid++,n:poolHero.n,i:poolHero.i,q:poolHero.q,a:poolHero.a+R(-2,2),h:poolHero.h+R(-5,5),sk:null,st:0,lv:1,exp:0};
       MIGRATE_PASSIVES(_h);
@@ -696,7 +692,7 @@ function RO(){var r=Math.random(),c=0,q=0;for(var i=0;i<5;i++){c+=RC[i];if(r<=c)
     if(r.t===0){
       d.innerHTML='<div class=av style="width:32px;height:32px;display:inline-block">'+GEN_AVATAR(r.n,r.q,(typeof r.cls!=="undefined"?r.cls:assignClass(r)))+'</div><div class="nm q'+r.q+'">'+r.n+'</div><div class=st>'+QE[r.q]+QN[r.q]+'</div>';
     }else{
-      d.innerHTML='<div class=av>\u2B06\uFE0F</div><div class="nm q'+r.q+'">'+r.nm+'</div><div class=st>\u2B50'+(r.st)+'\u5347\u661F</div>';
+      d.innerHTML='<div class=av style="width:32px;height:32px;display:inline-block">'+GEN_AVATAR(r.nm,r.q,(typeof r.cls!=="undefined"?r.cls:assignClass(r)))+'</div><div class="nm q'+r.q+'">'+r.nm+'</div><div class=st>\u2B50'+(r.st)+'\u5347\u661F</div>';
     }
     ct.appendChild(d);
   }
