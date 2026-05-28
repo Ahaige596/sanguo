@@ -659,7 +659,6 @@ function EQ_DIALOG(eq,src){
   if(eq.sp)htm+='<div class="es" style=color:#ff0>🔥属性:'+eq.sp.n+'+'+eq.sp.v+'</div>';
   htm+='<div class="es">💰分解可得:'+((eq.q+1)*5)+'金币</div>';
   htm+='<div style=display:flex;gap:10px;justify-content:center;margin-top:15px>';
-  htm+='<button class="bt" style="background:linear-gradient(135deg,#3a5a7a,#5a7aaa)" onclick="EQ_STRENGTHEN('+eq.id+')">⬆️强化</button>';
   if(src==='backpack'){
     htm+='<button class="bt" style="background:linear-gradient(135deg,#2a6a2a,#3a8a3a)" onclick="EQ_ACTION('+eq.id+',1)">✅装备</button>';
   htm+='<button class="bt" style="background:linear-gradient(135deg,#3a5a7a,#5a7aaa)" onclick="EQ_STRENGTHEN('+eq.id+')">⬆️强化</button>';
@@ -667,7 +666,6 @@ function EQ_DIALOG(eq,src){
     htm+='<button class="bt" style="background:linear-gradient(135deg,#8a2a2a,#aa3a3a)" onclick="EQ_ACTION('+eq.id+',2)">🗑️分解</button>';
   } else {
     htm+='<button class="bt" style="background:linear-gradient(135deg,#6a5a2a,#8a7a3a)" onclick="EQ_ACTION('+eq.id+',3)">⬇️卸下</button>';
-  htm+='<button class="bt" style="background:linear-gradient(135deg,#3a5a7a,#5a7aaa)" onclick="EQ_STRENGTHEN('+eq.id+')">⬆️强化</button>';
     htm+='<button class="bt" style="background:linear-gradient(135deg,#8a2a2a,#aa3a3a)" onclick="EQ_ACTION('+eq.id+',2)">🗑️分解</button>';
   }
   htm+='<button class="bt" style="background:linear-gradient(135deg,#3a3a3a,#5a5a5a)" onclick="document.getElementById("md").classList.remove("s")">↩️取消</button>';
@@ -1281,8 +1279,9 @@ window.showEqDetail=function(heroId,eqId){
     if(eq.lk)htm+='<div style=color:#f0f060>🔒已上锁</div>';
     var isOnHero=!!eqType&&eqType.length===1;
     if(!isOnHero&&heroId>0&&h){htm+='<button class="bt bb bs" style="margin:4px 2px" onclick="Q('+heroId+','+eq.id+',1)">👕穿上</button>'}
+    // Show 强化 for all equipment
+    htm+='<button class="bt" style="margin:4px 2px;background:linear-gradient(135deg,#2a5a8a,#3a7abc)" onclick="Q('+heroId+','+eq.id+',2)">⬆强化('+cost+'💰)</button>';
     if(isOnHero&&h){
-      htm+='<button class="bt" style="margin:4px 2px;background:linear-gradient(135deg,#5a3a1a,#7a4a2a)" onclick="Q('+heroId+','+eq.id+',2)">⚡强化('+cost+'💰)</button>';
       htm+='<button class="bt" style="margin:4px 2px;background:linear-gradient(135deg,#5a3a1a,#7a4a2a)" onclick="Q('+heroId+','+eq.id+',3)">⬆进阶</button>';
       htm+='<button class="bt bg bs" style="margin:4px 2px" onclick="Q('+heroId+','+eq.id+',1)">⬇卸下</button>';
     }else if(eq&&!eq.lk){htm+='<button class="bt bg bs" style="margin:4px 2px" onclick="Q(0,'+eq.id+',4)">🔒上锁</button>'}
