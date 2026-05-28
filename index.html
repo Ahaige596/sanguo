@@ -945,53 +945,6 @@ var NPC_TITLES=["天帝","战神","鬼王","霸王","武圣","飞将","神机","
 
 
 
-  var con=document.getElementById("pe");if(!con)return;
-  var selectedHero=window._equipHero;
-  var html="";
-  html+='<div class="ti" style="margin-bottom:4px">👤 选择武将（先点武将再穿装备）</div>';
-  html+='<div class="fc" style="margin-bottom:8px">';
-  G.fm.forEach(function(id){
-    var h=GH(id);if(!h)return;
-    if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};
-    var border=selectedHero===id?"border:1.5px solid #f0d060;background:rgba(240,208,96,.15)":"";
-    html+='<div class="hc" style="min-width:60px;padding:6px 8px;'+border+'" onclick="window._equipHero='+id+';UEQ()">'+CLASS_EMOJI[assignClass(h)]+' '+h.n+'</div>';
-  });
-  if(!G.fm.length)html+='<div class="em">暂无上阵武将</div>';
-  html+='</div>';
-  if(selectedHero!==null&&selectedHero!==void 0){
-    var h=GH(selectedHero);
-    if(h){
-      if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};
-      html+='<div class="ti">🎯 '+h.n+' 的装备</div>';
-      html+='<div class="esl">';
-      var slots=["w","a","h","b","r","p"];
-      var slotIcons=["🗡️","🛡️","⛑️","👢","🪢","💎"];
-      var slotNames=["武器","铠甲","头盔","战靴","护腕","玉佩"];
-      for(var si=0;si<6;si++){
-        var sk=slots[si];var eq=h.eq[sk];
-        if(eq){
-          html+='<div class="esl-slot" style="border-color:'+QC[eq.q]+'">';
-          html+='<div class="esl-icon" onclick="showEqDetail('+selectedHero+','+eq.id+')">'+eq.i+'</div>';
-          html+='<div class="esl-name" style="font-size:10px;color:'+QC[eq.q]+'">'+eq.n+'</div>';
-          html+='<div class="esl-rm" onclick="Q('+selectedHero+','+eq.id+',0)" style="cursor:pointer">✕</div>';
-          html+='</div>';
-        }else{
-          html+='<div class="esl-slot esl-empty"><div style="font-size:16px;opacity:.3">'+slotIcons[si]+'</div><div style="font-size:9px;color:#504030">'+slotNames[si]+'</div></div>';
-        }
-      }
-      html+='</div>';
-      var eqAtk=0,eqHp=0;
-      for(var si=0;si<6;si++){var _e=h.eq[slots[si]];if(_e){eqAtk+=_e.atk||0;eqHp+=_e.hp||0}}
-      if(eqAtk||eqHp)html+='<div style="font-size:11px;color:#80a080;text-align:center;margin-bottom:8px">📊 装备加成: ⚔+'+eqAtk+' ❤+'+eqHp+'</div>';
-    }
-  }
-  html+='<div class="ti" style="margin-top:8px">🎒 装备背包</div>';
-  html+=BACKPACK_RENDER(selectedHero);
-  html+='<div style="font-size:10px;color:#504030;text-align:center;margin-top:8px">💡 点武将→点背包装备</div>';
-  // 保留epdetail容器
-  html+='<div class="ti" style="margin-top:8px">📋 装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div>';
-  con.innerHTML=html;
-}
 
 function BACKPACK_RENDER(heroId){
   var h=heroId?GH(heroId):null;
@@ -1037,70 +990,9 @@ html+='<div class="bpgrid">';
 
 
 
-var p=[{n:"山贼",i:"👹"},{n:"黄巾兵",i:"🎭"},{n:"流寇",i:"🏴"},{n:"乱军",i:"⚔️"},{n:"山贼头目",i:"👺"},{n:"黄巾将领",i:"🗡️"},{n:"董卓余党",i:"👿"},{n:"南蛮勇士",i:"🦣"},{n:"西凉铁骑",i:"🐎"},{n:"虎豹骑",i:"🐯"}];
-var isBoss=s_%10===0;var ec=isBoss?1+R(2,4):Math.min(1+Math.floor(s_/15),5);var em=[];
-for(var ei=0;ei<ec;ei++){var e=p[isBoss?R(0,9):(ei+Math.floor((s_-1)/3))%10];var att=bp*(1+R(0,2)*0.2);var hpp=bhe*(1+R(0,2)*0.3);if(isBoss&&ei===0){att=bp*3;hpp=bhe*5;em.push({n:"⚡BOSS "+e.n,i:"👾",at:Math.floor(att),mhp:Math.floor(hpp),hp:Math.floor(hpp),isBoss:true,idx:ei})}else{em.push({n:e.n,i:Math.random()<0.1?"🏴":e.i,at:Math.floor(att),mhp:Math.floor(hpp),hp:Math.floor(hpp),isBoss:false,idx:ei})}}em.forEach(function(e){if(e.cls===void 0)e.cls=assignClass(e);});return em;}
 
 //========== Arena ==========
 var ARENA_SEED=R(1,999999);
-  var pw;
-       if(idx===0){pw=50000}
-  else if(idx<=2){pw=40000}
-  else if(idx<=9){pw=30000}
-  else if(idx<=29){pw=25000}
-  else if(idx<=49){pw=20000}
-  else if(idx<=79){pw=15000}
-  else            {pw=10000}
-  pw+=Math.floor(Math.random()*pw*0.05)-Math.floor(pw*0.025);
-  var q=idx<3?4:(idx<10?3:(idx<30?2:(idx<50?1:0)));
-  var h=ARENA_SHA("arena"+idx+seed);
-  var sk=null;
-  var skp=SKILL_POOL[q];
-  if(skp&&skp.length&&h%4===0){sk=skp[Math.floor(h%skp.length)]}
-  var title=NPC_TITLE();
-  var lv=Math.max(1,Math.min(1000,Math.floor(G.s*1.5)));
-  return{n:idx<3?"👑NPC"+(100+idx):"NPC"+(200+idx-4),q:q,lv:lv,a:Math.max(1,Math.floor(pw*0.3)),h:Math.max(1,Math.floor(pw*0.7)),pw:pw,sk:sk,title:title}
-}
-  var ls=document.getElementById("arl");if(!ls)return;
-  var ar=G.ar||[];
-  var myIdx=ar.findIndex(function(e){return e&&e.p&&e.p.indexOf("你")>=0});
-  var ranks=[];
-  for(var i=0;i<100;i++){
-    if(ar[i]&&myIdx>=0&&i!==myIdx){
-      ranks.push({r:i+1,n:ar[i].n||ar[i].nome,p:ar[i].p||0,w:ar[i].w||0,sq:ar[i].sq||0})
-    }else if(!ar[i]||myIdx<0){
-      var n=ARENA_GEN_NPC(i,ARENA_SEED);
-      ranks.push({r:i+1,n:n.n,q:n.q,lv:n.lv,a:n.a,h:n.h,pw:n.pw,sk:n.sk,isNPC:true,title:n.title})
-    }
-  }
-  var myR=myIdx>=0?myIdx+1:0;
-  var arank=document.getElementById("arank");
-  if(arank)arank.textContent=myR>0?"#"+myR:"未参加";
-  var afight=document.getElementById("afight");
-  if(afight)afight.textContent=(G.af||0)+"/"+(G.armx||5);
-  var abest=document.getElementById("abest");
-  if(abest&&G.abest>0)abest.textContent="#"+G.abest;
-  var html='';
-  var targetIdx=null;
-  for(var i=0;i<ranks.length;i++){
-    var r=ranks[i];
-    if(r.isNPC&&!targetIdx&&myR>0&&myR<100&&r.r>myR){targetIdx=r.r}
-    if(html.length>30000){html+='<div style="color:#504030;text-align:center;padding:8px;font-size:11px">⋯ 已显示部分排名</div>';break}
-    html+='<div class="sr" style="cursor:pointer" onclick="ARENA_FIGHT('+r.r+')">';
-    html+='<span class="l">#'+r.r+'</span>';
-    if(r.isNPC)html+='<span style="font-size:12px">'+(r.title?r.title+" ": "")+r.n+'</span>';
-    else html+='<span style="font-size:12px;color:#f0d060">'+(r.n||r.nome||"未知")+(r.p?' <span style="font-size:10px;color:#a08060">'+r.p+'</span>':'')+'</span>';
-    if(r.isNPC){html+='<span style="font-size:10px;color:'+QC[r.q]+'">'+QE[r.q]+'Lv.'+(r.lv||1)+'</span>'}
-    else{html+='<span style="font-size:10px;color:#a08060">'+'战力'+r.pw+'</span>'}
-    html+='<span style="font-size:11px;color:#a08060">⚔'+r.pw+'</span>';
-    html+='</div>'
-  }
-  ls.innerHTML=html||'<div class="em">暂无排名数据</div>';
-  if(targetIdx){
-    var el=ls.children[targetIdx-1];
-    if(el){el.style.border='1px solid #60c0ff';el.style.borderRadius='6px'}
-  }
-}
 function ARENA_FIGHT(rnk){
   if(G.af<=0){ST("挑战次数已用完！每日刷新");return}
   var rankList=[];
@@ -1163,224 +1055,18 @@ if((G.armx||5)&&(G.af||0)<(G.armx||5)&&(!G.afr||G.afr<Math.floor(Date.now()/8640
 //========== End Arena ==========
 
 
-  var d=document.getElementById("nmModal");
-  if(!d)return;
-  var i=document.getElementById("nmi");
-  if(!i)return;
-  i.value=G.name||"";
-  var ts=G.nrn||0;
-  var cd=document.getElementById("nmcd");
-  if(cd){
-    if(ts>0){
-      var left=259200000-(Date.now()-ts);
-      if(left>0){
-        var h=Math.floor(left/3600000);
-        var m=Math.floor((left%3600000)/60000);
-        cd.textContent="⏳冷却中 "+h+"小时"+m+"分";
-        cd.style.display="block";
-      }else{cd.style.display="none"}
-    }else{cd.style.display="none"}
-  }
-  d.classList.add("s");
-}
-  var i=document.getElementById("nmi");
-  if(!i)return;
-  var v=i.value.trim().substring(0,6);
-  if(!v){ST("昵称不能为空");return}
-  var badwords=["毛泽东","习近平","共产党","共党","法轮功","六四","天安门","郓小平","江泽民","胡锦涛","温家宝","周永康","薄熙来","令计划","赵紫阳","李克强","王岐山","惟尼","包子","独裁","专制","共匪","暴政","fuck","草你妈","操你妈","傻逼","傻B","妈的","他妈的","去死","垃圾","废物","死全家","尼玛","滚蛋","nmsl","cnm","wcnm","沙逼","烢笔","狗日","日你","狗屁","蠢货","脑残","疯子","变态","恶心","贱人","妓女","畜生","杂种","婁子","狗娘"];
-  for(var bi=0;bi<badwords.length;bi++){if(v.indexOf(badwords[bi])>=0){ST("昵称包含不当内容");return}}
-  var ts=G.nrn||0;
-  if(ts>0&&Date.now()-ts<259200000){
-    var left=259200000-(Date.now()-ts);
-    var h=Math.floor(left/3600000);
-    var m=Math.floor((left%3600000)/60000);
-    ST("冷却中，剩余"+h+"小时"+m+"分");
-    return;
-  }
-  G.name=v;
-  G.nrn=Date.now();
-  SV();
-  document.getElementById("nmModal").classList.remove("s");
-  UPDATE_NAME_DISPLAY();
-  ST("✅ 昵称已修改（3天冷却）");
-}
-  var el=document.getElementById("pnick");
-  if(el)el.textContent=G.name||"无名";
-}
-  return NPC_TITLES[R(0,NPC_TITLES.length-1)]+"·"+NPC_TITLES[R(0,NPC_TITLES.length-1)];
-}
 
 
   G.hs.forEach(function(h){if(!h.eq)h.eq={w:null,a:null,h:null,b:null,r:null,p:null};});
-return false}
 
 
-  var _ra=0;var _rh=0;
-  if(h.a&&h.h){_ra=h.a;_rh=h.h}
-  if(_ra<=0||_rh<=0){_ra=10;_rh=100}
-  var _ratio=_rh/_ra;
-  // Shield: HP >= 10x attack (true tanks like 荀彧, 曹仁)
-  if(_ratio>=10)return 0;
-  // Warrior: HP <= 6x attack (attack-focused like 张辽, 魏延, 文丑)
-  if(_ratio<=6)return 1;
-  // Strategist: balanced
-  return 2;
-}
-  var cls=h.cls!==void 0?h.cls:assignClass(h);
-  var pool=SKILL_POOL[h.q]||SKILL_POOL[0];if(!pool||!pool.length)return null;
-  var c=[];
-  for(var i=0;i<pool.length;i++){var s=pool[i];
-    if(cls===0&&(s.t==='heal'||s.t==='stun'||s.t==='debuff'||s.t==='buff'))c.push(s);
-    else if(cls===1&&s.t==='dmg')c.push(s);
-    else if(cls===2&&(s.t==='heal'||s.t==='debuff'||s.t==='stun'||s.t==='buff'))c.push(s);
-  }
-  return(c.length?c:pool)[Math.floor(Math.random()*(c.length||pool.length))];
-}
-  if(!sk||!target)return;var fh=FH[casterId];var _h=GH(casterId);if(!fh||!_h)return;
-  var cam=CLASS_SPECS[assignClass(_h)]?CLASS_SPECS[assignClass(_h)].atkMod:1;
-  var sa=Math.floor(atk*cam);
-  if(sk.t==='dmg'){
-    var ts=[];if(sk.c==='all'){for(var i=0;i<EE.length;i++)if(EE[i].hp>0)ts.push(EE[i]);}else ts.push(target);
-    for(var i=0;i<ts.length;i++){var d=Math.floor(sa*sk.v);ts[i].hp=Math.max(0,ts[i].hp-d);SF('-'+d+'!','c');}
-  }else if(sk.t==='heal'){
-    if(sk.c==='all'){for(var i=0;i<G.fm.length;i++){var hf=FH[G.fm[i]];if(hf&&hf.hp>0){hf.hp=Math.min(hf.mhp,hf.hp+Math.floor(hf.mhp*sk.v));}}}
-    else if(sk.c==='lowest'){var li=-1,lp=999;for(var i=0;i<G.fm.length;i++){var hf=FH[G.fm[i]];if(hf&&hf.hp>0&&hf.hp/hf.mhp<lp){lp=hf.hp/hf.mhp;li=G.fm[i];}}if(li>=0){FH[li].hp=Math.min(FH[li].mhp,FH[li].hp+Math.floor(FH[li].mhp*sk.v));}}
-    SF('治疗!','c');
-  }else if(sk.t==='debuff'){if(target&&target.hp>0){target.at=Math.max(1,Math.floor(target.at*sk.v));target.debuff=2;SF('削弱!','c');}}
-  else if(sk.t==='stun'){if(target&&target.hp>0&&Math.random()<sk.v){target.stun=(target.stun||0)+1;SF('眩晕!','c');}}
-  else if(sk.t==='buff'){fh.atkBuff=(fh.atkBuff||1)*sk.v;SF('强化!','c');}
-  LG(_h.n+' ◀ '+sk.n+'!');
-}
 var CE=null,EE=[],BT=null,FH={};
-  if(G.fighting)return;if(!G.fm.length){ST("请先在[阵容]上阵武将");return}
-  EE=ME(G.s);CE=EE[0];G.fighting=1;FH={};for(var i=0;i<G.fm.length;i++){var id=G.fm[i];var _h0=GH(id);if(!_h0)continue;var _ba0=HERO_ATTR_BASE(_h0.q);var _st0=_h0.st||0;var fh0={hp:HH(id),mhp:HH(id),crt:Math.min(95,Math.floor(_ba0.crt+_st0*2)),crtRes:Math.floor(_ba0.crtRes+_st0),crtDmg:Math.floor(_ba0.crtDmg+_st0*3),crtDmgRes:Math.floor(_ba0.crtDmgRes+_st0),dge:Math.min(80,Math.floor(_ba0.dge+_st0*2)),acc:Math.min(100,Math.floor(_ba0.acc+_st0)),drain:Math.floor(_ba0.drain+_st0),drainRes:Math.floor(_ba0.drainRes+_st0),dmgRed:Math.min(70,Math.floor(_ba0.dmgRed+_st0)),spd:Math.floor(_ba0.spd+_st0*5),an:0};if(_h0.eq){for(var _sk0 in _h0.eq){var _eq0=_h0.eq[_sk0];if(_eq0&&_eq0.sp){var sn0=_eq0.sp.n;var sv0=parseInt(_eq0.sp.v)/100;if(sn0.indexOf('暴击')>=0&&sn0.indexOf('爆')<0)fh0.crt=Math.min(95,fh0.crt+sv0*100);if(sn0=='爆伤')fh0.crtDmg+=sv0*100;if(sn0=='吸血')fh0.drain+=sv0*100;if(sn0.indexOf('减伤')>=0)fh0.dmgRed=Math.min(70,fh0.dmgRed+sv0*100);if(sn0.indexOf('闪避')>=0)fh0.dge=Math.min(80,fh0.dge+sv0*100);if(sn0.indexOf('精准')>=0)fh0.acc=Math.min(100,fh0.acc+sv0*100);}}}if(_h0.passives&&Array.isArray(_h0.passives)){fh0.passives=_h0.passives;for(var _pap=0;_pap<_h0.passives.length;_pap++){var _pp=_h0.passives[_pap];if(_pp.stat==="atk")fh0.atk=Math.floor(fh0.atk*(1+_pp.val));else if(_pp.stat==="hp"){fh0.mhp=Math.floor(fh0.mhp*(1+_pp.val));fh0.hp=Math.floor(fh0.hp*(1+_pp.val));}else if(_pp.stat==="crt")fh0.crt=Math.min(95,(fh0.crt||0)+_pp.val);else if(_pp.stat==="dge")fh0.dge=Math.min(80,(fh0.dge||0)+_pp.val);else if(_pp.stat==="drain")fh0.drain=Math.min(100,(fh0.drain||0)+_pp.val);else if(_pp.stat==="dmgRed")fh0.dmgRed=Math.min(70,(fh0.dmgRed||0)+_pp.val);else if(_pp.stat==="acc")fh0.acc=Math.min(100,(fh0.acc||0)+_pp.val);else if(_pp.stat==="crtDmg")fh0.crtDmg+=_pp.val;else if(_pp.stat==="regen")fh0.regen=_pp.val;else if(_pp.stat==="crtBoth"){fh0.crt=Math.min(95,(fh0.crt||0)+8);fh0.crtDmg=(fh0.crtDmg||0)+10;}}};FH[id]=fh0}
-  UBU();LG("全军出击！");if(BT)clearInterval(BT);BT=setInterval(TB,700);
-  for(var fi=1;fi<EE.length;fi++){setTimeout(function(){LG("第"+(EE.length)+"个敌人出现！")},300)}
-}function SP(){G.fighting=0;if(BT){clearInterval(BT);BT=null}LG("战斗停止")}
-  if(!G.fighting){SP();return}
-  for(var fi=0;fi<G.fm.length;fi++){
-    var id=G.fm[fi];var fh=FH[id];if(!fh||fh.hp<=0)continue;
-    var h=GH(id);if(!h)continue;
-    var ae=getFrontEnemy();if(!ae)break;
-    
-    var us=false;
-    if(fh.an>=100){
-      fh.an=0;
-      var _skMain=h.sk||((SKILL_POOL[h.q]||SKILL_POOL[0]||[])[0]||null);
-      if(_skMain){executeSkill(id,ae,_skMain,getEffectiveAtk(id));us=true;if(ae&&ae.hp<=0)continue;}
-    }
-    if(!us){
-      var atk=getEffectiveAtk(id);
-      var baseDmg=Math.max(1,atk+Math.floor(Math.random()*atk*0.3)-Math.floor(atk*0.15));
-      var isCrit=Math.random()*100<(fh.crt||5);
-      if(isCrit){
-        var crtM=((fh.crtDmg||150)-0)/100;
-        var resM=1-((ae.crtDmgRes||0)/100);
-        baseDmg=Math.floor(baseDmg*Math.max(1,crtM*resM));
-        SF("暴击! "+baseDmg,"c");
-      }else{SF("-"+baseDmg,"d")}
-      var drainAmt=Math.floor(baseDmg*((fh.drain||0)/100));
-      if(drainAmt>0){fh.hp=Math.min(fh.mhp,fh.hp+drainAmt)}
-      var dmgRed=Math.min(70,(ae.dmgRed||0));baseDmg=Math.floor(baseDmg*(1-dmgRed/100));
-      var dgeChance=(ae.dge||0)-(fh.acc||80);if(dgeChance>0&&Math.random()*100<dgeChance){SF("闪避!","c");baseDmg=Math.floor(baseDmg*0.3)}
-      baseDmg=Math.max(1,baseDmg);
-      ae.hp=Math.max(0,ae.hp-baseDmg);fh.an=Math.min(100,(fh.an||0)+30);
-    }
-    if(ae.hp<=0)LG(h.n+" 击败了 "+ae.n);
-  }
-  for(var i=0;i<EE.length;i++){
-    var e=EE[i];if(!e||e.hp<=0)continue;if(e.stun){e.stun--;continue}
-    
-    var tgt=getFrontHero();if(!tgt)break;
-    if(e.an>=100){e.an=0;var sd=Math.floor(e.at*2.0);var tgtFH2=FH[tgt];if(tgtFH2){var ultDmgRed=(tgtFH2.dmgRed||0);sd=Math.floor(sd*(1-ultDmgRed/100));tgtFH2.hp=Math.max(0,tgtFH2.hp-sd);tgtFH2.an=Math.min(100,(tgtFH2.an||0)+10)}if(e)e.an=Math.min(100,(e.an||0)+30);SF("大招!","c");LG(e.n+" 释放技能");}
-    else{var ed=Math.max(1,Math.floor(e.at*0.6+Math.floor(Math.random()*7)-3));var tgtFH=FH[tgt];if(tgtFH){var eCrit=Math.random()<0.08;var eDmgRed=(tgtFH.dmgRed||0);ed=Math.floor(ed*(1-eDmgRed/100));var eDge=(tgtFH.dge||0)-5;if(eDge>0&&Math.random()*100<eDge){ed=Math.floor(ed*0.3);SF("闪避!","c")}if(eCrit){ed=Math.floor(ed*1.5);SF("暴击! "+ed,"c")}else{SF("-"+ed,"d")}tgtFH.hp=Math.max(0,tgtFH.hp-ed);tgtFH.an=Math.min(100,(tgtFH.an||0)+10)}if(e)e.an=Math.min(100,(e.an||0)+30);}
-    if(FH[tgt].hp<=0){var dh=GH(tgt);LG((dh?dh.n:"武将")+" 阵亡");}
-  }
-  var e3=document.querySelector(".es2");if(e3&&EE.some(function(x){return x.hp>0})&&G.fighting){e3.classList.remove("hs");void e3.offsetWidth;e3.classList.add("hs")}
-  UBU();
-  if(EE.every(function(x){return x.hp<=0})){
-    SP();var e4=document.getElementById("eic");if(e4)e4.classList.add("ed2");
-    var hb=EE.some(function(x){return x.isBoss});
-    var gr=10+G.s*3+R(1,10)*EE.length+(hb?50:0);G.g+=gr;G.tg+=gr;G.tk++;G.tb++;
-    var msg=hb?"🎉BOSS战胜利! +"+gr+"💰":"胜利! +"+gr+"💰";
-    if(Math.random()<0.2+hb*0.3){var eq=GE(G.s);G.eqb.push(eq);msg+=" 获得"+eq.n}
-    if(hb){var eq2=GE(G.s+5);G.eqb.push(eq2);msg+=" BOSS掉落"+eq2.n;G.j+=10}
-    S_EXP(EE.length*2+(hb?5:0));
-    G.ss++;if(G.ss>3){G.ss=1;if(!G.lock){G.s++;msg+=" 进入第"+G.s+"章"}else{msg+=" 锁定中"}}
-    LG(msg);ST(msg,3000);
-    for(var fi=0;fi<G.fm.length;fi++){var h=GH(G.fm[fi]);if(h){h.exp=(h.exp||0)+R(1,3);if(h.exp>=10+(h.lv||1)*3){h.exp=0;h.lv=(h.lv||1)+1}}}
-    SV();CE=null;EE=[];UA();if(G.auto)setTimeout(function(){if(G.auto)SB()},600);return;
-  }
-  if(G.fm.every(function(id){var f=FH[id];return!f||f.hp<=0})){
-    SP();if(G.lock){G.ss=1;ST("锁定 第"+G.s+"章 重新出征",1500)}
-    else{G.s=Math.max(1,G.s-1);G.ss=1;ST("退至第"+G.s+"章 重新出征",1500)}
-    setTimeout(function(){SB()},1200);
-  }
-  SV();UA();
-}
-  var c=document.getElementById("fhs");c.innerHTML="";c.style.display="flex";c.style.flexDirection="row";c.style.flexWrap="wrap";c.style.justifyContent="center";c.style.gap="8px";c.style.maxWidth="220px";c.style.margin="0 auto";
-  
-  var frontIds=[],backIds=[];
-  for(var i=0;i<G.fm.length;i++){
-    var id=G.fm[i];var h=GH(id);if(!h)continue;
-    var hc=h.cls!==void 0?h.cls:assignClass(h);
-    if(hc===0)frontIds.push(id);else backIds.push(id);
-  }
-    ids.forEach(function(id){
-      var h=GH(id);var fh=FH[id];if(!h)return;
-      var p=fh?Math.max(0,Math.floor((fh.hp/fh.mhp)*100)):100;
-      var an=fh?fh.an||0:0;
-      var cs='';if(h.cls!==void 0)cs=CLASS_EMOJI[h.cls]||'';else cs=CLASS_EMOJI[assignClass(h)]||'';
-      c.innerHTML+='<div class="fb q'+h.q+'" style=min-width:52px;max-width:52px><div class=fi>'+h.i+'</div><div class=fn>'+cs+h.n+'</div></div><div class=fbar style=height:3px><div class=ff style=width:'+an+'%;background:linear-gradient(90deg,#d4a017,#ffcc44);border-radius:2px></div></div></div>';
-    });
-  }
-  _renderIds(backIds);
-  _renderIds(frontIds);
-  if(CE){
-    var eic=document.getElementById("eic");eic.textContent=CE.i;eic.className="eic"+(CE.isBoss?" b":"");
-    var en=document.getElementById("enm");en.textContent=CE.n+" ("+SR(G.s,G.ss)+")";en.className="enm"+(CE.isBoss?" b":"");
-    var pct=Math.max(0,(CE.hp/CE.mhp)*100);document.getElementById("ehp").style.width=pct+"%";
-    document.getElementById("eht").textContent=Math.max(0,Math.floor(CE.hp))+"/"+CE.mhp;document.getElementById("epw").textContent=CE.at;
-  }
-  document.getElementById("mypw").textContent=FP();document.getElementById("stg2").textContent=SR(G.s,G.ss);
-}
 
-var cls=assignClass(_h);if(_h.q>=3&&Math.random()<0.4)cls=1;else if(_h.q>=2&&Math.random()<0.2)cls=1;
-_h.cls=cls;
-if(!_h.sk||(_h.sk.t==='dmg'&&cls!==1)||(_h.sk.t!=='dmg'&&cls===1)){var ns=getClassSkill(_h);if(ns)_h.sk=ns;}
-return _h;}function DR(n){
-  if(G.rt<n){ST("招募令不足");return}G.rt-=n;var rs=[];for(var i=0;i<n;i++){var h=RO();if(!h)continue;var ex=null;for(var j=0;j<G.hs.length;j++){if(G.hs[j].n===h.n){ex=G.hs[j];break}}if(ex){ex.st=(ex.st||0)+1;ex.a=Math.floor(ex.a*1.15);ex.h=Math.floor(ex.h*1.15);rs.push({t:1,nm:h.n,q:h.q,st:ex.st})}else{G.hs.push(h);rs.push({t:0,n:h.n,i:h.i,q:h.q})}}G.tr+=n;
-  var ct=document.getElementById("newh");ct.innerHTML="";for(var i=0;i<rs.length;i++){var r=rs[i];var d=document.createElement("div");d.className="hc b"+r.q+" q"+r.q;if(r.t===0){d.innerHTML='<div class=av>'+r.i+'</div><div class="nm q'+r.q+'">'+r.n+'</div><div class=st>'+QE[r.q]+QN[r.q]+'</div>'}else{d.innerHTML='<div class=av>⬆️</div><div class="nm q'+r.q+'">'+r.nm+'</div><div class=st>⭐'+(r.st)+'升星</div>'}ct.appendChild(d)}ST("招募"+rs.length+"名",2500);SV();UA()}
 
 
 var SK={0:"w",1:"a",2:"h",3:"b",4:"r",5:"p"};var SN=["武器","铠甲","头盔","战靴","护腕","玉佩"];
 
 
-  var s=G.hs.slice().sort(function(a,b){return PW(b)-PW(a)});
-  G.fm=[];
-  var sHP=s.slice().sort(function(a,b){return HH(b.id)-HH(a.id)});
-  var fcnt=Math.min(3,s.length);
-  for(var i=0;i<fcnt;i++)G.fm.push(sHP[i].id);
-  var u={};for(var i=0;i<G.fm.length;i++)u[G.fm[i]]=1;
-  var rem=s.filter(function(h){return!u[h.id]}).sort(function(a,b){return PW(b)-PW(a)});
-  for(var i=0;i<Math.min(3,rem.length);i++)G.fm.push(rem[i].id);
-  SV();UF();UA();ST("自动编队完成");
-}
-  var sc=document.getElementById("fsl");sc.innerHTML="";
-  sc.innerHTML+='<div style="width:100%;text-align:center;font-size:13px;color:#d4a017;margin-bottom:4px;border-bottom:1px solid #3a2a0a;padding-bottom:4px">🛡️前排（1-3号位）</div><div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%;margin-bottom:8px">';
-  for(var i=0;i<3;i++){var id=G.fm[i];var h=id?GH(id):null;
-    if(h){var clsS=(h.cls!==void 0?CLASS_EMOJI[h.cls]:CLASS_EMOJI[assignClass(h)])||'';
-      sc.innerHTML+='<div class="f u"><div style=font-size:11px;color:#605040>#'+(i+1)+'</div><div style=font-size:24px;cursor:pointer onclick=SM('+id+')>'+h.i+'</div><div class="nm q'+h.q+'" style=font-size:12px;cursor:pointer onclick=SM('+id+')>'+h.n+'</div><div style=font-size:10px;color:#f0d060>'+clsS+' '+QE[h.q]+'⭐'+(h.st||0)+'</div><div style=font-size:10px;color:#f44;cursor:pointer onclick=UND('+id+')>✕卸下</div></div>'
-    }else{sc.innerHTML+='<div class="f"><div style=font-size:11px;color:#605040>#'+(i+1)+'</div><div style=font-size:28px;color:#605040>＋</div><div style=font-size:10px;color:#605040>前排空位</div></div>'}
-  }
-  sc.innerHTML+='</div><div style="width:100%;text-align:center;font-size:13px;color:#6090ff;margin-bottom:4px;border-bottom:1px solid #3a2a0a;padding-bottom:4px">💺后排（4-6号位）</div><div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%">';
-  for(var i=3;i<6;i++){var id=G.fm[i];var h=id?GH(id):null;
-    if(h){var clsS=(h.cls!==void 0?CLASS_EMOJI[h.cls]:CLASS_EMOJI[assignClass(h)])||'';
-      sc.innerHTML+='<div class="f u"><div style=font-size:11px;color:#605040>#'+(i+1)+'</div><div style=font-size:24px;cursor:pointer onclick=SM('+id+')>'+h.i+'</div><div class="nm q'+h.q+'" style=font-size:12px;cursor:pointer onclick=SM('+id+')>'+h.n+'</div><div style=font-size:10px;color:#f0d060>'+clsS+' '+QE[h.q]+'⭐'+(h.st||0)+'</div><div style=font-size:10px;color:#f44;cursor:pointer onclick=UND('+id+')>✕卸下</div></div>'
-    }else{sc.innerHTML+='<div class="f"><div style=font-size:11px;color:#605040>#'+(i+1)+'</div><div style=font-size:28px;color:#605040>＋</div><div style=font-size:10px;color:#605040>后排空位</div></div>'}
-  }
-  sc.innerHTML+='</div>';UFL();
-}
 
 function UHL(){var ct=document.getElementById("hl");ct.innerHTML="";if(!G.hs.length){ct.innerHTML='<div class=em>暂无武将</div>';return}var s=G.hs.slice().sort(function(a,b){if(b.q!==a.q)return b.q-a.q;return PW(b)-PW(a)});for(var i=0;i<s.length;i++){var h=s[i];var d=document.createElement("div");var _cls2=(h.cls!==void 0?h.cls:assignClass(h));d.className="hc b"+h.q+" q"+h.q;d.style.borderColor="transparent";d.onclick=function(){SM(GH(parseInt(this.dataset.id)))};d.dataset.id=h.id;var cs='';if(h.cls!==void 0)cs=CLASS_EMOJI[h.cls]||'';else cs=CLASS_EMOJI[assignClass(h)]||'';d.innerHTML='<div class=av>'+h.i+'</div><div class="nm q'+h.q+'">'+cs+h.n+'</div><div class=st>'+"⭐".repeat((h.st||0)+1)+'</div><div class=lv>Lv.'+(h.lv||1)+'</div><div class=pw>'+PW(h)+'</div>'+(h.sk?(typeof h.sk==='object'?'<div style=font-size:9px;color:#f0d060;margin-top:2px>⚡'+h.sk.n+'</div>':'<div style=font-size:9px;color:#f0d060;margin-top:2px>⚡'+h.sk+'</div>'):'')+(h.passives&&Array.isArray(h.passives)&&h.passives.length?'<div style=font-size:8px;color:#8090b0;margin-top:1px>✨'+h.passives.map(function(x){return x.n+':'+x.desc}).join(' | ')+'</div>':'');d.onclick=function(){var id=parseInt(this.dataset.id);var h2=GH(id);if(h2)SM(h2)};ct.appendChild(d)}}
 
@@ -1389,86 +1075,6 @@ function UHL(){var ct=document.getElementById("hl");ct.innerHTML="";if(!G.hs.len
 
 
 
-document.getElementById("mtt").textContent=h.n;
-var cs='';if(h.cls!==void 0)cs=CLASS_NAMES[h.cls]||'';else cs=CLASS_NAMES[assignClass(h)]||'';
-var htm='<div class="tc mb"><div style=font-size:48px>'+h.i+'</div><div style=font-size:18px;font-weight:700;color:'+QC[h.q]+'>'+h.n+'</div><div style=display:inline-block;padding:2px 8px;background:'+QC[h.q]+';color:#fff;border-radius:4px;font-size:11px;margin-top:4px>'+QN[h.q]+'</div><div style=font-size:12px;margin-top:4px;color:'+CLASS_COL[(h.cls!==void 0?h.cls:assignClass(h))]+'><strong>'+cs+'</strong></div></div>';
-if(h.sk&&typeof h.sk==="object")htm+=qSR("怒气技能","⚡"+h.sk.n+"("+h.sk.d+")");else if(h.sk)htm+=qSR("技能","⚡"+h.sk);if(h.passives&&Array.isArray(h.passives)&&h.passives.length){var _psH="";for(var _psi2=0;_psi2<h.passives.length;_psi2++){_psH+=(_psi2>0?" / ":"")+h.passives[_psi2].n+"("+(FIND_SKILL_DESC(h.passives[_psi2].n)||h.passives[_psi2].d)+")"};htm+=qSR("被动技能",_psH)}var _ba=HERO_ATTR_BASE(h.q);var stb=(h.st||0);htm+=qSR("品质",QE[h.q]+QN[h.q])+qSR("职业",cs)+qSR("星级","⭐"+stb+1)+qSR("等级","Lv."+(h.lv||1))+qSR("攻击",h.a)+qSR("生命",h.h)+qSR("战力",PW(h))+qSR("经验",(h.exp||0)+"/"+(10+(h.lv||1)*3));htm+='<div style=margin-top:6px;padding:5px;background:rgba(0,0,0,.3);border-radius:6px;font-size:10px;color:#a08060><span style=color:#d4a017>📊战斗属性</span><table style=width:100%;font-size:9px;margin-top:3px><tr><td>暴击 '+(Math.min(95,_ba.crt+stb*2))+'%</td><td>暴抗 '+(_ba.crtRes+stb)+'%</td><td>闪避 '+(Math.min(80,_ba.dge+stb*2))+'%</td><td>精准 '+Math.min(100,_ba.acc+stb)+'%</td></tr><tr><td>吸血 '+(_ba.drain+stb)+'%</td><td>吸抗 '+(_ba.drainRes+stb)+'%</td><td>爆伤 '+(_ba.crtDmg+stb*3)+'%</td><td>爆抗 '+(_ba.crtDmgRes+stb)+'%</td></tr><tr><td>攻速 '+(_ba.spd+stb*5)+'</td><td colspan=3>减伤 '+Math.min(70,_ba.dmgRed+stb)+'%</td></tr></table></div>';
-document.getElementById("mbd").innerHTML=htm;document.getElementById("md").classList.add("s")}
-  var qns=["普通","优秀","稀有","传说","神话"];
-  var htm='<div class="tc mb"><div style=font-size:48px>'+eq.i+'</div><div style=font-size:18px;font-weight:700;color:'+QC[eq.q]+'>'+eq.n+'</div><div style=display:inline-block;padding:2px 8px;background:'+QC[eq.q]+';color:#fff;border-radius:4px;font-size:11px;margin-top:4px>'+qns[eq.q]+'</div></div>';
-  htm+='<div class="es">⚔攻击+'+eq.atk+' ❤生命+'+eq.hp+'</div>';
-  if(eq.lvl)htm+='<div class="es">Lv.'+eq.lvl+'</div>';
-  if(eq.sp)htm+='<div class="es" style=color:#ff0>🔥属性:'+eq.sp.n+'+'+eq.sp.v+'</div>';
-  htm+='<div class="es">💰分解可得:'+((eq.q+1)*5)+'金币</div>';
-  htm+='<div style=display:flex;gap:10px;justify-content:center;margin-top:15px>';
-  if(src==='backpack'){
-    htm+='<button class="bt" style="background:linear-gradient(135deg,#2a6a2a,#3a8a3a)" onclick="EQ_ACTION('+eq.id+',1)">✅装备</button>';
-    htm+='<button class="bt" style="font-size:11px;padding:7px 10px;background:linear-gradient(135deg,#5a5a2a,#7a7a3a)" onclick="EQ_LOCK('+eq.id+')">🔒上锁</button>';
-    htm+='<button class="bt" style="background:linear-gradient(135deg,#8a2a2a,#aa3a3a)" onclick="EQ_ACTION('+eq.id+',2)">🗑️分解</button>';
-  } else {
-    htm+='<button class="bt" style="background:linear-gradient(135deg,#6a5a2a,#8a7a3a)" onclick="EQ_ACTION('+eq.id+',3)">⬇️卸下</button>';
-    htm+='<button class="bt" style="background:linear-gradient(135deg,#8a2a2a,#aa3a3a)" onclick="EQ_ACTION('+eq.id+',2)">🗑️分解</button>';
-  }
-  htm+='<button class="bt" style="background:linear-gradient(135deg,#3a3a3a,#5a5a5a)" onclick="document.getElementById("md").classList.remove("s")">↩️取消</button>';
-  htm+='</div>';
-  document.getElementById("mtt").textContent='装备详情';
-  document.getElementById("mbd").innerHTML=htm;
-  document.getElementById("md").classList.add("s");
-}
-  document.getElementById("md").classList.remove("s");
-  if(act===2){
-    // Decompose - find equip
-    for(var z=0;z<G.eqb.length;z++){
-      if(G.eqb[z].id===id){
-        if(G.eqb[z].lk){ST("🔒已上锁，请先解锁",2e3);return}
-        G.g+=((G.eqb[z].q+1)*5);
-        ST("分解"+G.eqb[z].n+" 获得"+((G.eqb[z].q+1)*5)+"💰",2500);
-        G.eqb.splice(z,1);
-        SV();UEQ();
-        return;
-      }
-    }
-    // Check equipped slots
-    var ks=["w","a","h","b","r","p"];
-    for(var z=0;z<ks.length;z++){
-      if(G.eq[ks[z]]&&G.eq[ks[z]].id===id){
-        G.g+=((G.eq[ks[z]].q+1)*5);
-        ST("分解"+G.eq[ks[z]].n+" 获得"+((G.eq[ks[z]].q+1)*5)+"💰",2500);
-        G.eq[ks[z]]=null;
-        SV();UEQ();UA();
-        return;
-      }
-    }
-    ST("装备不存在",2000);
-    return;
-  }
-  if(act===1){
-    // Equip from backpack
-    var idx=-1;
-    for(var z=0;z<G.eqb.length;z++){if(G.eqb[z].id===id){idx=z;break}}
-    if(idx<0){ST("装备不存在",2000);return}
-    var eq=G.eqb[idx];
-    var sk=SK[eq.ti];
-    if(G.eq[sk])G.eqb.push(G.eq[sk]);
-    G.eq[sk]=eq;
-    G.eqb.splice(idx,1);
-    SV();UA();ST("装备"+eq.n,2000);
-    return;
-  }
-  if(act===3){
-    // Unequip from slot
-    var ks=["w","a","h","b","r","p"];
-    for(var z=0;z<ks.length;z++){
-      if(G.eq[ks[z]]&&G.eq[ks[z]].id===id){
-        G.eqb.push(G.eq[ks[z]]);
-        G.eq[ks[z]]=null;
-        SV();UA();ST("已卸下",2000);
-        return;
-      }
-    }
-    ST("装备不存在",2000);
-  }
-}
 
 
 
@@ -1478,59 +1084,13 @@ var TT=null;function ST(m,d){var el=document.getElementById("tt");el.textContent
 
 
 
-  var keep=[];var cnt=0;var locked=0;var gold=0;
-  for(var i=0;i<G.eqb.length;i++){
-    var e=G.eqb[i];
-    if(e.q===q){if(e.lk){locked++;keep.push(e)}else{cnt++;gold+=5+q*10}}
-    else{keep.push(e)}
-  }
-  if(cnt===0&&locked===0){ST("没有"+QN[q]+"装备可分解");return}
-  if(cnt===0){ST(QN[q]+"装备全部已上锁 (🔒"+locked+"件)",2e3);return}
-  G.eqb=keep;G.g+=gold;
-  ST("分解"+cnt+"件"+QN[q]+"装备 +"+gold+"💰"+(locked?"(🔒跳过"+locked+"件)":""),3000);
-  SV();UA()
-}
 
-  if(!confirm("确定分解所有"+QN[q]+"品质(含已装备)装备?"))return;
-  var keep=[];var cnt=0;var gold=0;
-  for(var i=0;i<G.eqb.length;i++){
-    var e=G.eqb[i];
-    if(e.q===q){cnt++;gold+=5+q*10}
-    else{keep.push(e)}
-  }
-  G.eqb=keep;G.g+=gold;
-  ST("分解"+cnt+"件+"+gold+"💰",3000);
-  SV();UA()
-}
 // ===== V4 NEW FEATURES =====
 
 // 1.扫荡系统 - 快速获取资源
 
 
 
-  if(!G.fm.length){ST("先上阵武将");return}
-  if(G.s<=1&&G.ss<=1){ST("至少通关1-1");return}
-  if(G.fighting){ST("战斗中");return}
-  if(!G.sw)G.sw=0;if(!G.swa)G.swa=0;
-  var td=new Date().toDateString();
-  if(G.swd!==td){G.sw=0;G.swa=0;G.swd=td}
-  if(mode===2){
-    if(G.swa>=5){ST("广告已达上限",2500);return}
-    G.swa++;runSwp();return
-  }
-  if(G.sw>=5){ST("免费已用完",3000);return}
-  G.sw++;runSwp();
-    var gold=0,eqC=0,expT=0,expP=0,stgL=Math.max(1,G.s);
-    for(var i=0;i<5;i++){
-      gold+=10+stgL*5+R(1,stgL*2);
-      for(var j=0;j<G.fm.length;j++){var h=GH(G.fm[j]);if(h)expT+=R(1,2);expS+=R(1,2)}
-      if(Math.random()<0.3){eqC++;G.eqb.push(GE(stgL))}
-    }
-    G.g+=gold;G.tb+=5;S_EXP(expP);ADD_EXP(expS);
-    for(var j=0;j<G.fm.length;j++){var h=GH(G.fm[j]);if(h){h.exp=(h.exp||0)+expT;while(h.exp>=10+(h.lv||1)*3){h.exp-=10+(h.lv||1)*3;h.lv=(h.lv||1)+1}}}
-    var msg="扫荡5次! +"+gold+"💰";if(eqC>0)msg+=" 🎁"+eqC+"件装备";if(expT>0)msg+=" +"+expT+"经验";ST(msg,3500);SV();UA()
-  }
-}
 
 
 // 2.秘境副本 - 专门刷经验和装备
@@ -1538,108 +1098,17 @@ var DG={}; // {started:0, stage:1, maxStage:1, energy:5, maxEnergy:5}
 
 
 
-  // Init dungeon state
-  if(!G.dg){G.dg={stage:1,dd:""}}
-  var td=new Date().toDateString();
-  if(G.dg.dd!==td){G.dg.dd=td;G.dg.today=0}
-  G.dg.today=G.dg.today||0;
-  if(G.dg.today>=3){ST("秘境每天限3次!",3000);return}
-  // Show modal
-  var stg=G.dg.stage||1;
-  var rec=200+stg*50;
-  document.getElementById("dgIcon").textContent=G.dg.today===2?"👾":"🏰";
-  document.getElementById("dgTitle").textContent=G.dg.today===2?"⚡精英秘境":"🏰秘境探险";
-  document.getElementById("dgStage").textContent=stg;
-  document.getElementById("dgToday").textContent=G.dg.today+"/3";
-  document.getElementById("dgRec").textContent=rec;
-  document.getElementById("dgBody").style.borderColor=G.dg.today===2?"#a060ff":"#6040a0";
-  document.getElementById("dgModal").classList.add("s");
-}
 
 
 
-  if(!G.fm.length){ST("请先上阵武将");return}
-  document.getElementById("dgModal").classList.remove("s");
-  var stg=G.dg.stage||1;
-  var isElite=(G.dg.today===2); // 3rd run = elite (0-indexed: 2)
-  var mhp=300+stg*120+(isElite?300:0);
-  var atk=60+stg*25+(isElite?40:0);
-  var boss={n:(isElite?"⚡精英":"秘境")+"守卫 Lv."+stg,i:isElite?"👾":"👹",at:atk,mhp:mhp,hp:mhp,isElite:isElite,isDg:true};
-  CE=boss;G.fighting=1;FH={};
-  for(var i=0;i<G.fm.length;i++){var id=G.fm[i];FH[id]={hp:HH(id),mhp:HH(id)}}
-  UBU();LG("🏰秘境 Lv."+stg+" 探险!");
-  if(BT)clearInterval(BT);BT=setInterval(DG_TICK,700);
-}
 
-  if(!G.fighting||!CE){if(BT){clearInterval(BT);BT=null}return}
-  for(var i=0;i<G.fm.length;i++){
-    var id=G.fm[i];var fh=FH[id];if(!fh||fh.hp<=0||CE.hp<=0)continue;
-    var atk=HA(id);var dmg=Math.max(1,atk+R(-Math.floor(atk*0.2),Math.floor(atk*0.2)));
-    if(Math.random()<0.12){dmg=Math.floor(dmg*1.8);SF("暴击!","c")}else{SF("-"+dmg,"d")}
-    CE.hp=Math.max(0,CE.hp-dmg);
-    var e2=document.querySelectorAll(".fhs .fb");if(e2[i]){e2[i].classList.remove("af");void e2[i].offsetWidth;e2[i].classList.add("af")}
-    if(CE.hp<=0)break;
-  }
-  if(CE&&CE.hp>0){
-    var al=[];for(var i=0;i<G.fm.length;i++){var fh=FH[G.fm[i]];if(fh&&fh.hp>0)al.push(G.fm[i])}
-    if(al.length>0){var t=PK(al);var ed=Math.max(1,CE.at+R(-4,4));FH[t].hp=Math.max(0,FH[t].hp-ed);if(FH[t])FH[t].an=Math.min(100,(FH[t].an||0)+10);SF("-"+ed,"d")}
-  }
-  UBU();
-  var stg=G.dg?G.dg.stage||1:1;
-  if(CE&&CE.hp<=0){
-    G.fighting=0;if(BT){clearInterval(BT);BT=null}
-    document.getElementById("eic").classList.add("ed2");
-    G.dg.stage=stg+1;
-    G.dg.today++;S_EXP(stg*5+R(1,10));
-    var goldR=80+stg*20+R(1,50)+(CE.isElite?80:0);
-    G.g+=goldR;S_EXP(stg*3+R(2,6));
-    for(var j=0;j<G.fm.length;j++){var h=GH(G.fm[j]);if(h){h.exp=(h.exp||0)+R(5,12);while(h.exp>=10+(h.lv||1)*3){h.exp-=10+(h.lv||1)*3;h.lv=(h.lv||1)+1}}}
-    var eq=GE(G.s+stg);G.eqb.push(eq);
-    G.j+=R(3,8);G.rt+=R(0,2);
-    var msg="🏰秘境通关! +"+goldR+"💰|"+eq.n;if(CE.isElite)msg+="|🎁精英!"
-    LG(msg);ST(msg,4000);
-    SV();UA();CE=null;
-    return;
-  }
-  var ad=1;for(var i=0;i<G.fm.length;i++){var fh=FH[G.fm[i]];if(fh&&fh.hp>0){ad=0;break}}
-  if(ad){G.fighting=0;if(BT){clearInterval(BT);BT=null}LG("秘境失败");ST("重整旗鼓",2000);SV();UA()}
-}
 
 
 
 
 // 3.吃经验书快速升级
-  if(G.g<200){ST("金币不足(200💰)");return}
-  if(!G.fm.length){ST("上阵武将才给吃书");return}
-  G.g-=200;
-  for(var j=0;j<G.fm.length;j++){
-    var h=GH(G.fm[j]);
-    if(h){
-      h.exp=(h.exp||0)+10;
-      while(h.exp>=10+(h.lv||1)*3){
-        h.exp-=10+(h.lv||1)*3;
-        h.lv=(h.lv||1)+1;
-      }
-    }
-  }
-  ST("全军+10经验",2000);
-  SV();UA();
-}
 
 // 4.卡关提示
-  var pw=FP();
-  var msgs=[];
-  if(G.fm.length<6)msgs.push("👥 上满6名武将提升战力");
-  if(!G.eq.w&&!G.eq.a&&!G.eq.h)msgs.push("🗡️ 装备能大幅提升属性");
-  var canMerge=0;var nameCount={};G.hs.forEach(function(h){nameCount[h.n]=(nameCount[h.n]||0)+1});for(var k in nameCount)if(nameCount[k]>1)canMerge=1;
-  if(canMerge)msgs.push("⭐ 有重复武将，去升星!");
-  var minLv=99;G.fm.forEach(function(id){var h=GH(id);if(h&&h.lv<minLv)minLv=h.lv});
-  if(minLv<3)msgs.push("📖 用经验书给主力升级");
-  if(G.g<500)msgs.push("💰 离线挂机攒金币强化");
-  msgs.push("⚡ 商店里可以强化攻击/生命");
-  if(!msgs.length||msgs.length>5)msgs.push("⚔️ 继续刷装备和升星");
-  ST("💡 建议: "+msgs.slice(0,3).join(" | "),6000);
-}
 
 // Modified UA to include dungeon info
 
