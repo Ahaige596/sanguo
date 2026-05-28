@@ -937,28 +937,32 @@ function SALVAGE_ALL(q){
 
 
 function SWEEP(mode){
-  if(!G.fm.length){ST("先上阵武将");return}
-  if(G.s<=1&&G.ss<=1){ST("至少通关1-1");return}
-  if(G.fighting){ST("战斗中");return}
+  if(!G.fm.length){ST("\u5148\u4E0A\u9635\u6B66\u5C06");return}
+  if(G.s<=1&&G.ss<=1){ST("\u81F3\u5C11\u901A\u51731-1");return}
+  if(G.fighting){ST("\u6218\u6597\u4E2D");return}
   if(!G.sw)G.sw=0;if(!G.swa)G.swa=0;
   var td=new Date().toDateString();
   if(G.swd!==td){G.sw=0;G.swa=0;G.swd=td}
+  var limit=5;
   if(mode===2){
-    if(G.swa>=5){ST("广告已达上限",2500);return}
+    if(G.swa>=limit){ST("\u5E7F\u544A\u5DF2\u8FBE\u4E0A\u9650",2500);return}
     G.swa++;runSwp();return
   }
-  if(G.sw>=5){ST("免费已用完",3000);return}
+  if(G.sw>=limit){ST("\u514D\u8D39\u5DF2\u7528\u5B8C",3000);return}
   G.sw++;runSwp();
-  function runSwp(){var expS=0;
-    var gold=0,eqC=0,expT=0,expP=0,stgL=Math.max(1,G.s);
+  function runSwp(){
+    var gold=0,eqC=0,expT=0,stgL=Math.max(1,G.s);
     for(var i=0;i<5;i++){
-      gold+=10+stgL*5+R(1,stgL*2);
-      for(var j=0;j<G.fm.length;j++){var h=GH(G.fm[j]);if(h)expT+=R(1,2);expS+=R(1,2)}
+      var baseGold=10+stgL*5+R(1,stgL*2);
+      gold+=baseGold*10;
+      for(var j=0;j<G.fm.length;j++){var h=GH(G.fm[j]);if(h)expT+=R(1,2)*10}
       if(Math.random()<0.3){eqC++;G.eqb.push(GE(stgL))}
     }
-    G.g+=gold;G.tb+=5;S_EXP(expP);ADD_EXP(expS);
+    G.g+=gold;G.tb+=5;
     for(var j=0;j<G.fm.length;j++){var h=GH(G.fm[j]);if(h){h.exp=(h.exp||0)+expT;while(h.exp>=10+(h.lv||1)*3){h.exp-=10+(h.lv||1)*3;h.lv=(h.lv||1)+1}}}
-    var msg="扫荡5次! +"+gold+"💰";if(eqC>0)msg+=" 🎁"+eqC+"件装备";if(expT>0)msg+=" +"+expT+"经验";ST(msg,3500);SV();UA()
+    var msg="\u626B\u83615\u6B21! +"+gold+"\uD83D\uDCB0  +"+expT+"\u7ECF\u9A8C";
+    if(eqC>0)msg+=" \uD83C\uDF8110\u4EF6\u88C5\u5907";
+    ST(msg,3500);SV();UA();
   }
 }
 
