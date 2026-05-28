@@ -118,6 +118,101 @@ function HERO_ATTR_BASE(q){var b={crt:1+q*1,crtRes:0,dge:1+q*1,acc:95,drain:0,dr
 function GH(id){for(var i=0;i<G.hs.length;i++)if(G.hs[i].id===id)return G.hs[i];return null}
 function ID(id){for(var i=0;i<G.fm.length;i++)if(G.fm[i]===id)return true;if(G.hs)G.hs.forEach(function(h){if(h.cls===void 0)h.cls=assignClass(h);});return false}
 function HA(id){var h=GH(id);if(!h)return 0;var skb=h.sk?1.15:1;var eqAtk=0;if(h.eq){for(var _k in h.eq){var _e=h.eq[_k];if(_e)eqAtk+=_e.atk||0}};var cam=CLASS_SPECS[assignClass(h)]?CLASS_SPECS[assignClass(h)].atkMod:1;var sb=GET_SET_BONUS(h);var sbAtk=sb&&sb.atkPct?(1+sb.atkPct/100):1;return Math.floor((h.a+eqAtk)*cam*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*skb*AB()*sbAtk)}
+
+var SETS={
+  "虎啸":{2:{atkPct:8},4:{atkPct:15,crt:10}},
+  "龙吟":{2:{atkPct:12},4:{crtDmg:25}},
+  "凤鸣":{2:{atkPct:20},4:{hpPct:15,dmgRed:15}},
+  "玄武":{2:{hpPct:12},4:{dmgRed:20,atkPct:10}},
+  "青龙":{2:{atkPct:10,crt:5},4:{crtDmg:15,atkPct:10}},
+  "白虎":{2:{atkPct:15},4:{hpPct:10,crt:10}},
+  "朱雀":{2:{crt:8},4:{crtDmg:20,atkPct:8}},
+  "炫火":{2:{atkPct:8,hpPct:8},4:{crt:5,crtDmg:10,dmgRed:10}},
+  "冰霜":{2:{hpPct:10,dmgRed:5},4:{hpPct:10,dmgRed:10}},
+  "雷霆":{2:{atkPct:12,crt:3},4:{atkPct:15,crtDmg:10}}
+};
+function GET_SET_BONUS(h){
+  if(!h||!h.eq)return null;
+  var sets={};
+  for(var _sk in h.eq){
+    var _e=h.eq[_sk];
+    if(_e&&_e.set){
+      if(!sets[_e.set])sets[_e.set]=0;
+      sets[_e.set]++;
+    }
+  }
+  var r={atkPct:0,hpPct:0,crt:0,crtDmg:0,dmgRed:0};
+  for(var sn in sets){
+    var c=sets[sn],cfg=SETS[sn];if(!cfg)continue;
+    if(c>=4&&cfg[4]){for(var k in cfg[4])r[k]=(r[k]||0)+cfg[4][k];}
+    if(c>=2&&cfg[2]){for(var k in cfg[2])r[k]=(r[k]||0)+cfg[2][k];}
+  }
+  return r.atkPct||r.hpPct||r.crt||r.crtDmg||r.dmgRed?r:null;
+}
+function HA(id){var h=GH(id);if(!h)return 0;var skb=h.sk?1.15:1;var eqAtk=0;if(h.eq){for(var _k in h.eq){var _e=h.eq[_k];if(_e)eqAtk+=_e.atk||0}};var cam=CLASS_SPECS[assignClass(h)]?CLASS_SPECS[assignClass(h)].atkMod:1;var sb=GET_SET_BONUS(h);var sbAtk=sb&&sb.atkPct?(1+sb.atkPct/100):1;return Math.floor((h.a+eqAtk)*cam*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*skb*AB()*sbAtk)}
+
+var SETS={
+  "虎啸":{2:{atkPct:8},4:{atkPct:15,crt:10}},
+  "龙吟":{2:{atkPct:12},4:{crtDmg:25}},
+  "凤鸣":{2:{atkPct:20},4:{hpPct:15,dmgRed:15}},
+  "玄武":{2:{hpPct:12},4:{dmgRed:20,atkPct:10}},
+  "青龙":{2:{atkPct:10,crt:5},4:{crtDmg:15,atkPct:10}},
+  "白虎":{2:{atkPct:15},4:{hpPct:10,crt:10}},
+  "朱雀":{2:{crt:8},4:{crtDmg:20,atkPct:8}},
+  "炫火":{2:{atkPct:8,hpPct:8},4:{crt:5,crtDmg:10,dmgRed:10}},
+  "冰霜":{2:{hpPct:10,dmgRed:5},4:{hpPct:10,dmgRed:10}},
+  "雷霆":{2:{atkPct:12,crt:3},4:{atkPct:15,crtDmg:10}}
+};
+function GET_SET_BONUS(h){
+  if(!h||!h.eq)return null;
+  var sets={};
+  for(var _sk in h.eq){
+    var _e=h.eq[_sk];
+    if(_e&&_e.set){
+      if(!sets[_e.set])sets[_e.set]=0;
+      sets[_e.set]++;
+    }
+  }
+  var r={atkPct:0,hpPct:0,crt:0,crtDmg:0,dmgRed:0};
+  for(var sn in sets){
+    var c=sets[sn],cfg=SETS[sn];if(!cfg)continue;
+    if(c>=4&&cfg[4]){for(var k in cfg[4])r[k]=(r[k]||0)+cfg[4][k];}
+    if(c>=2&&cfg[2]){for(var k in cfg[2])r[k]=(r[k]||0)+cfg[2][k];}
+  }
+  return r.atkPct||r.hpPct||r.crt||r.crtDmg||r.dmgRed?r:null;
+}
+function HA(id){var h=GH(id);if(!h)return 0;var skb=h.sk?1.15:1;var eqAtk=0;if(h.eq){for(var _k in h.eq){var _e=h.eq[_k];if(_e)eqAtk+=_e.atk||0}};var cam=CLASS_SPECS[assignClass(h)]?CLASS_SPECS[assignClass(h)].atkMod:1;var sb=GET_SET_BONUS(h);var sbAtk=sb&&sb.atkPct?(1+sb.atkPct/100):1;return Math.floor((h.a+eqAtk)*cam*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*skb*AB()*sbAtk)}
+
+var SETS={
+  "虎啸":{2:{atkPct:8},4:{atkPct:15,crt:10}},
+  "龙吟":{2:{atkPct:12},4:{crtDmg:25}},
+  "凤鸣":{2:{atkPct:20},4:{hpPct:15,dmgRed:15}},
+  "玄武":{2:{hpPct:12},4:{dmgRed:20,atkPct:10}},
+  "青龙":{2:{atkPct:10,crt:5},4:{crtDmg:15,atkPct:10}},
+  "白虎":{2:{atkPct:15},4:{hpPct:10,crt:10}},
+  "朱雀":{2:{crt:8},4:{crtDmg:20,atkPct:8}},
+  "炫火":{2:{atkPct:8,hpPct:8},4:{crt:5,crtDmg:10,dmgRed:10}},
+  "冰霜":{2:{hpPct:10,dmgRed:5},4:{hpPct:10,dmgRed:10}},
+  "雷霆":{2:{atkPct:12,crt:3},4:{atkPct:15,crtDmg:10}}
+};
+function GET_SET_BONUS(h){
+  if(!h||!h.eq)return null;
+  var sets={};
+  for(var _sk in h.eq){
+    var _e=h.eq[_sk];
+    if(_e&&_e.set){
+      if(!sets[_e.set])sets[_e.set]=0;
+      sets[_e.set]++;
+    }
+  }
+  var r={atkPct:0,hpPct:0,crt:0,crtDmg:0,dmgRed:0};
+  for(var sn in sets){
+    var c=sets[sn],cfg=SETS[sn];if(!cfg)continue;
+    if(c>=4&&cfg[4]){for(var k in cfg[4])r[k]=(r[k]||0)+cfg[4][k];}
+    if(c>=2&&cfg[2]){for(var k in cfg[2])r[k]=(r[k]||0)+cfg[2][k];}
+  }
+  return r.atkPct||r.hpPct||r.crt||r.crtDmg||r.dmgRed?r:null;
+}
 function HH(id){var h=GH(id);if(!h)return 0;var eqHp=0;if(h.eq){for(var _k in h.eq){var _e=h.eq[_k];if(_e)eqHp+=_e.hp||0}};var sb=GET_SET_BONUS(h);var sbHp=sb&&sb.hpPct?(1+sb.hpPct/100):1;return Math.floor((h.h+eqHp)*(1+(h.st||0)*0.3)*(1+(h.lv||1)*0.05)*HB()*sbHp)}
 function ME(s_){s_=s_||1;var bp=15+s_*8+Math.floor(s_/5)*15,bhe=80+s_*35+Math.floor(s_/3)*30;
 var p=[{n:"山贼",i:"👹"},{n:"黄巾兵",i:"🎭"},{n:"流寇",i:"🏴"},{n:"乱军",i:"⚔️"},{n:"山贼头目",i:"👺"},{n:"黄巾将领",i:"🗡️"},{n:"���卓余党",i:"👿"},{n:"南蛮勇士",i:"🦣"},{n:"西凉铁骑",i:"🐎"},{n:"虎豹骑",i:"🐯"}];
@@ -701,7 +796,7 @@ function RO(){var r=Math.random(),c=0,q=0;for(var i=0;i<5;i++){c+=RC[i];if(r<=c)
 
 function DM(){var gr={};G.hs.forEach(function(h){var k=h.n;if(!gr[k])gr[k]=[];gr[k].push(h)});var m=0;for(var k in gr){var a=gr[k];if(a.length<=1)continue;for(var i=1;i<a.length;i++){a[0].st=(a[0].st||0)+1;a[0].a=Math.floor(a[0].a*1.15);a[0].h=Math.floor(a[0].h*1.15);var idx=G.hs.indexOf(a[i]);if(idx>=0)G.hs.splice(idx,1);m++}}if(m>0){ST("合并"+m+"名",2500);SV();UA()}else{ST("无可合并",2000)}}
 
-function GE(stg){var qr=Math.random(),q=0;if(qr<0.5)q=0;else if(qr<0.75)q=1;else if(qr<0.9)q=2;else if(qr<0.98)q=3;else q=4;var ti=R(0,5);var p2=["破旧","普通","精良","锋利","坚固","闪亮","古老","传奇"];var nm=PK(p2)+ET[ti];var stgMul=1+Math.floor(stg/5)*0.2;var atk=Math.floor((10+R(1,5)*stgMul+stg*1.5)*(1+q*0.6));var hp=Math.floor((20+R(2,8)*stgMul+stg*2)*(1+q*0.6));var sp=null;if(q===4){var sr=Math.random();var si=R(0,9);if(sr<0.15){sp={n:["暴击","爆伤","吸血","连击","反击","穿透","格挡","闪避","减伤","回复"][si],v:R(5,15)+"%",t:3}}else if(sr<0.50){sp={n:["暴击","爆伤","吸血","连击","反击","穿透","格挡","闪避","减伤","回复"][si],v:R(3,8)+"%",t:2}}else{if(sr>=0.50){sp={n:["暴击","爆伤","吸血","连击","反击","穿透","格挡","闪避","减伤","回复"][si],v:R(1,3)+"%",t:1}}}}return{id:G.neid++,n:nm,i:EI[ti],ti:ti,atk:atk,hp:hp,q:q,sp:sp,eqLevel:1}}
+function GE(stg){var qr=Math.random(),q=0;if(qr<0.5)q=0;else if(qr<0.75)q=1;else if(qr<0.9)q=2;else if(qr<0.98)q=3;else q=4;var ti=R(0,5);var p2=["破旧","普通","精良","锋利","坚固","闪亮","古老","传奇"];var nm=PK(p2)+ET[ti];var stgMul=1+Math.floor(stg/5)*0.2;var atk=Math.floor((10+R(1,5)*stgMul+stg*1.5)*(1+q*0.6));var hp=Math.floor((20+R(2,8)*stgMul+stg*2)*(1+q*0.6));var sp=null;if(q===4){var sr=Math.random();var si=R(0,9);if(sr<0.15){sp={n:["暴击","爆伤","吸血","连击","反击","穿透","格挡","闪避","减伤","回复"][si],v:R(5,15)+"%",t:3}}else if(sr<0.50){sp={n:["暴击","爆伤","吸血","连击","反击","穿透","格挡","闪避","减伤","回复"][si],v:R(3,8)+"%",t:2}}else{if(sr>=0.50){sp={n:["暴击","爆伤","吸血","连击","反击","穿透","格挡","闪避","减伤","回复"][si],v:R(1,3)+"%",t:1}}}}var setNames=["\u864E\u5578","\u9F99\u541F","\u51E4\u9E23","\u7384\u6B66","\u9752\u9F99","\u767D\u864E","\u6731\u96C0","\u70AB\u706B","\u51B0\u971C","\u96F7\u9706"];return{id:G.neid++,n:nm,i:EI[ti],ti:ti,atk:atk,hp:hp,q:q,sp:sp,eqLevel:1,set:setNames[Math.floor(Math.random()*setNames.length)]}}
 var SK={0:"w",1:"a",2:"h",3:"b",4:"r",5:"p"};var SN=["武器","铠甲","头盔","战靴","护腕","玉佩"];
 function EI2(id){for(var z=0;z<G.eqb.length;z++){if(G.eqb[z].id===id){EQ_DIALOG(G.eqb[z],"backpack");return}}ST("装备不存在",2000)};
 
