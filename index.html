@@ -63,7 +63,7 @@ if(typeof PASSIVE_POOL==="undefined"){var _pp=[{n:"强攻",desc:"攻击+18%",sta
 var G={g:0,j:0,rt:10,s:1,ss:1,hs:[],fm:[],eqb:[],eq:{w:null,a:null,h:null,b:null,r:null,p:null},nid:1,neid:1,tb:0,tr:0,tg:0,tk:0,ls:0,lo:0,al:0,hl:0,auto:0,ach:{},lv:1,exp:0,nexp:10};
 if(typeof PASSIVE_POOL!==void 0&&G.hs&&G.hs.length){for(var _rr=0;_rr<G.hs.length;_rr++){MIGRATE_PASSIVES(G.hs[_rr]);if(G.hs[_rr].sk&&G.hs[_rr].sk.n){var _rrd=FIND_SKILL_DESC(G.hs[_rr].sk.n);if(_rrd&&G.hs[_rr].sk.d!==_rrd)G.hs[_rr].sk.d=_rrd;}}};
 
-var NPC_TITLES=["天帝","战神","鬼王","霸王","武圣","飞将","神机","天策","龙骧","虎威","麒麟","凤凰","苍狼","烈火","寒冰","雷霆","疾风","暴雨","破军","贪狼","七杀","天罡","地煞","白虎","朱雀","青龙","玄武","修罗","夜叉","明王","无双","绝世","凌霄","九霄","星辰","皓月","烈日","玄冥","太虚","混沌","神威","天罚","不败","纵横","无极","乾坤","天元","霸天","凌天","傲天","血战","铁骑","飞龙","猛虎","巨熊","神鹰","灵狐","玄龟","天马","金鹏"];
+var NPC_TITLES=["天帝","战神","鬼王","霸���","武圣","飞将","神机","天策","龙骧","虎威","麒麟","凤凰","苍狼","烈火","寒冰","雷霆","疾风","暴雨","破军","贪狼","七杀","天罡","地煞","白虎","朱雀","青龙","玄武","修罗","夜叉","明王","无双","绝世","凌霄","九霄","星辰","皓月","烈日","玄冥","太虚","混沌","神威","天罚","不败","纵横","无极","乾坤","天元","霸天","凌天","傲天","血战","铁骑","飞龙","猛虎","巨熊","神鹰","灵狐","玄龟","天马","金鹏"];
 
 
 
@@ -1521,7 +1521,7 @@ var DG={}; // {started:0, stage:1, maxStage:1, energy:5, maxEnergy:5}
 
 
 
-// 3.吃经验书快速升级
+// 3.吃经验��快速升级
 
 // 4.卡关提示
 
@@ -2187,7 +2187,20 @@ function init(){
 
 
   window.addEventListener('load',_dailyBoot);
-  }
+  
+  // Fix: move daily panel into #pr (ensure Battle tab has daily tasks)
+  try{
+    var _dp=document.getElementById('dailyPanel');
+    var _pr=document.getElementById('pr');
+    if(_dp && _pr && _dp.parentElement && _dp.parentElement.id!=='pr'){
+      _pr.appendChild(_dp);
+    }
+    var _dcp=document.getElementById('dailyChallengePanel');
+    if(_dcp && _pr && _dcp.parentElement && _dcp.parentElement.id!=='pr'){
+      _pr.appendChild(_dcp);
+    }
+  }catch(e){console.log('daily move fix:',e)}
+}
 
 function EQ_STRENGTHEN(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(ei<0)return;var eq=G.eqb[ei];if(!eq.eqLevel)eq.eqLevel=1;var maxLv=G.lv*2;if(eq.eqLevel>=maxLv){ST("已达等级上限Lv."+maxLv,1500);return}var cost=eq.eqLevel*50+(eq.q+1)*20;if(G.g<cost){ST("金币不足，需"+cost+"💰",1500);return}G.g-=cost;eq.eqLevel++;eq.atk=Math.floor(eq.atk*1.15);eq.hp=Math.floor(eq.hp*1.15);ST("⬆"+eq.n+"强化至Lv."+eq.eqLevel,1500);SV();UA();UEQ();showEqDetail(0,eq.id)}
 function DECOMPOSE(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(ei<0)return;var eq=G.eqb[ei];var g=[5,15,30,50,80][eq.q];G.g+=g;G.eqb.splice(ei,1);ST(QN[eq.q]+"装备已分解，获得"+g+"金币",1500);SV();UEQ();;var d=document.getElementById("epdetail");if(d)d.innerHTML=""}
