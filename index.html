@@ -17,7 +17,8 @@
 
 </div>
 </div><div id="pf" class="pn"><div class="ti">📋上阵阵容<span style="font-size:12px;color:#605040;font-weight:normal">(最多6人)</span></div><div class="sg" id="fsl"></div><div class="fc"><button class="bt bgn bs" id="bad">🤖自动编队</button><button class="bt br bs" id="bcf">🗑️清空</button></div><div class="ti">👥武将列表</div><div class="cg" id="hlf"></div>
-<div id="ph" class="pn"><div class="fc mb"><button class="bt bgn bs" id="bom">🔄一键升星</button><button class="bt bb bs" onclick="SHOW_ATTR_TABLE()">📊属性总表</button></div><div class="ti">👥所有武将</div><div class="cg" id="hl"></div></div><div id="pe" class="pn"><div class="ti">⚔装备栏</div><div class="esl" id="eqslots"><!-- rendered by UEQ --></div><div class="ti">装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div><div class="ti" style="margin-top:8px">装备强化</div><div class="sr"><span class="l">当前可强化至</span><span class="v" id="eqlCap">Lv.0</span></div><div class="sr"><span class="l">解锁上限</span><span class="v" id="eqlUnlock">Lv.1可升至Lv.2</span></div><div class="sr"><span style="font-size:10px;color:#605040">每级+15%属性，上限=玩家等级×2</span></div><div class="bptabs" id="bpt"></div><div class="bpgrid" id="ebg"></div></div<div id="pa" class="pn"><div id="ab"><!-- Arena rendered by ARENA_RENDER --><div class="fc" style="margin-top:8px"><button class="bt bg bs" onclick="ARENA_SHOW_REWARDS()">🏆奖励</button></div></div></div>
+<div id="ph" class="pn"><div class="fc mb"><button class="bt bgn bs" id="bom">🔄一键升星</button><button class="bt bb bs" onclick="SHOW_ATTR_TABLE()">📊属性总表</button></div><div class="ti">👥所有武将</div><div class="cg" id="hl"></div></div><div id="pe" class="pn"><div class="ti">⚔装备栏</div><div class="esl" id="eqslots"><!-- rendered by UEQ --></div><div class="ti">装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div><div class="ti" style="margin-top:8px">装备强化</div><div class="sr"><span class="l">当前可强化至</span><span class="v" id="eqlCap">Lv.0</span></div><div class="sr"><span class="l">解锁上限</span><span class="v" id="eqlUnlock">Lv.1可升至Lv.2</span></div><div class="sr"><span style="font-size:10px;color:#605040">每级+15%属性，上限=玩家等级×2</span></div><div class="bptabs" id="bpt"></div><div class="bpgrid" id="ebg"></div></div>
+<div id="pa" class="pn"><div id="ab"><!-- Arena rendered by ARENA_RENDER --><div class="fc" style="margin-top:8px"><button class="bt bg bs" onclick="ARENA_SHOW_REWARDS()">🏆奖励</button></div></div></div>
 
 <div id="prk" class="pn">
   <div id="rb"></div>
@@ -2158,24 +2159,15 @@ function DC_START_BATTLE(){
 function _dailyBoot(){
   setTimeout(function(){
     try{
-      // Move daily panels into #pr if needed (ps → pr relocation)
       var _pr=document.getElementById('pr');
       var _dp=document.getElementById('dailyPanel');
       var _dcp=document.getElementById('dailyChallengePanel');
-      // Only move if there's exactly one and it's not already in #pr
-      if(_dp && _pr && _dp.parentElement && _dp.parentElement.id!=='pr'){
-        _pr.appendChild(_dp);
-      }
-      if(_dcp && _pr && _dcp.parentElement && _dcp.parentElement.id!=='pr'){
-        _pr.appendChild(_dcp);
-      }
-      // Remove any duplicate dailyPanel that might be left in #ps
+      if(_dp && _pr && _dp.parentElement && _dp.parentElement.id!=='pr'){_pr.appendChild(_dp);}
+      if(_dcp && _pr && _dcp.parentElement && _dcp.parentElement.id!=='pr'){_pr.appendChild(_dcp);}
       var _ps=document.getElementById('ps');
-      if(_ps && _dp && _dp.parentElement===_pr){
-        var _dupDaily=_ps.querySelector('#dailyPanel');
-        if(_dupDaily)_dupDaily.remove();
-        var _dupDC=_ps.querySelector('#dailyChallengePanel');
-        if(_dupDC)_dupDC.remove();
+      if(_ps && _pr){
+        var _dup1=_ps.querySelector('#dailyPanel');if(_dup1)_dup1.remove();
+        var _dup2=_ps.querySelector('#dailyChallengePanel');if(_dup2)_dup2.remove();
       }
       DAILY_CHECK_RESET();
       var dp=document.getElementById('dailyTasks');
