@@ -1999,7 +1999,10 @@ function init(){
   document.getElementById("bob").onclick=SB;
   document.getElementById("boa").onclick=function(){G.auto=!G.auto;this.textContent=G.auto?"⏹️自动":"⏹️停止"/*will be overridden*/;if(G.auto)SB()};
   document.getElementById("br1").onclick=function(){DR(1)};document.getElementById("br10").onclick=function(){DR(10)};
-  document.getElementById("bom").onclick=DM;document.getElementById("bad").onclick=AD;document.getElementById("bcf").onclick=CF;
+  document.getElementById("bom").onclick=DM;
+  TW_INIT_RENDER();
+  DAILY_CHECK_RESET();
+document.getElementById("bad").onclick=AD;document.getElementById("bcf").onclick=CF;
   document.getElementById("sb1").onclick=B1;document.getElementById("sb2").onclick=B2;document.getElementById("scg").onclick=CG;
   document.getElementById("sua").onclick=UA2;document.getElementById("suh").onclick=UH2;
   document.getElementById("mcc").onclick=function(){document.getElementById("md").classList.remove("s")};document.getElementById("dgClose").onclick=function(){document.getElementById("dgModal").classList.remove("s")};document.getElementById("dgFight").onclick=DG_START;document.getElementById("dgModal").onclick=function(e){if(e.target===document.getElementById("dgModal"))document.getElementById("dgModal").classList.remove("s")};
