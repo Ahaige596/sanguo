@@ -10,7 +10,9 @@
   <div id="rb"></div>
 </div>
 
-<div class="md" <div id="pt" class="pn"><div class="ti">🏰通天塔</div><div style="font-size:12px;color:#806040;text-align:center;margin:4px 0"><span id="towerMaxFloor">最高:第1层</span> | <span id="towerDailyInfo">今日:3/3</span></div><div style="text-align:center;margin:8px 0"><div style="font-size:36px;font-weight:700;color:#f0d060" id="towerFloorDisplay">1</div><div style="font-size:11px;color:#a08060">当前层数</div></div><div id="towerMonsterInfo" style="text-align:center;margin:8px 0;padding:8px;background:rgba(0,0,0,.2);border-radius:8px"></div><div class="fc" style="margin-top:8px"><button class="bt bg bs" onclick="TOWER_ENTER()">⚔️挑战</button><button class="bt br bs" id="towerSweepBtn" onclick="TOWER_SWEEP()">🔄扫荡</button></div><div style="margin-top:6px;font-size:10px;color:#605040;text-align:center">⚡每5层BOSS战 | 每日3次免费</div></div><div class="md" id="nmModal" onclick="if(event.target===this)this.classList.remove('s')">
+<div class="md" <div id="pt" class="pn"><div class="ti">🏰通天塔</div><div style="font-size:12px;color:#806040;text-align:center;margin:4px 0"><span id="towerMaxFloor">最高:第1层</span> | <span id="towerDailyInfo">今日:3/3</span></div><div style="text-align:center;margin:8px 0"><div style="font-size:36px;font-weight:700;color:#f0d060" id="towerFloorDisplay">1</div><div style="font-size:11px;color:#a08060">当前层数</div></div><div id="towerMonsterInfo" style="text-align:center;margin:8px 0;padding:8px;background:rgba(0,0,0,.2);border-radius:8px"></div><div class="fc" style="margin-top:8px"><button class="bt bg bs" onclick="TOWER_ENTER()">⚔️挑战</button><button class="bt br bs" id="towerSweepBtn" onclick="TOWER_SWEEP()">🔄扫荡</button></div><div style="margin-top:6px;font-size:10px;color:#605040;text-align:center">⚡每5层BOSS战 | 每日3次免费</div></div>
+<div id="pd" class="pn"><div class="ti">每日任务</div><div id="dailyPanel" style="padding:8px"><div id="dailyTasks"></div></div><div class="ti" style="margin-top:12px">每日挑战</div><div id="dailyChallengePanel" style="padding:8px"><div id="dcPreview"><div style="font-size:12px;color:#806040;text-align:center;padding:16px">⚔️ 等待挑战...</div></div></div></div>
+<div class="md" id="nmModal" onclick="if(event.target===this)this.classList.remove('s')">
   <div class="mbx" style="max-width:320px">
     <button class="mc" onclick="document.getElementById('nmModal').classList.remove('s')">✖</button>
     <h2>📝修改昵称</h2>
@@ -1974,15 +1976,193 @@ function TOWER_TICK(){
 
 function TOWER_SWEEP(){var tw=G.tw;if(!tw||tw.maxFloor<=1){ST("\u672A\u901A\u5173\u591F\u5C42",2000);return;}if(G.fighting){ST("\u6218\u6597\u4E2D");return;}var maxS=Math.max(1,tw.maxFloor-1);if(tw.sweepFloor>=maxS){var td=new Date().toDateString();if(tw._sweepDate!==td){tw.sweepFloor=0;tw._sweepDate=td;}else{ST("\u4ECA\u65E5\u5DF2\u626B\u8361",2000);return;}}var st=tw.sweepFloor+1,en=Math.min(st+4,maxS),gd=0,ex=0,sd=0,jd=0;for(var f=st;f<=en;f++){gd+=10+f*3+R(1,5);ex+=R(2,5+f);if(f%5===0)jd+=5;if(Math.random()<0.2)sd++;}G.g=(G.g||0)+gd;G.j=(G.j||0)+jd;G.rt=(G.rt||0)+sd;tw.sweepFloor=en;for(var j=0;j<G.fm.length;j++){var h=GH(G.fm[j]);if(h)h.exp=(h.exp||0)+ex;}ST("\u626B\u8361"+st+"-"+en+"\u5C42 +"+gd+"\uD83D\uDCB0"+(jd>0?"+"+jd+"\uD83D\uDC8E":"")+(sd>0?"+\u62DB\u52DF\u4EE4x"+sd:""),4000);SV();UA();TOWER_RENDER();}
 
+
+// ===== 每日任务系统 =====
+function DAILY_CHECK_RESET(){
+  if(!G.daily){
+    G.daily={};
+    var d=new Date();
+    G.daily._date=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    G.daily.progress={};
+    G.daily.claimed={};
+  }
+  var td=new Date();
+  var ds=td.getFullYear()+'-'+(td.getMonth()+1)+'-'+td.getDate();
+  if(G.daily._date!==ds){
+    G.daily._date=ds;
+    G.daily.progress={};
+    G.daily.claimed={};
+    SV();
+  }
+}
+
+var DAILY_TASKS=[
+  {type:'fight',label:'出征战斗',icon:'⚔️',target:10,reward:{g:200,d:0,r:0}},
+  {type:'recruit',label:'招募武将',icon:'🎲',target:3,reward:{g:100,d:2,r:1}},
+  {type:'arena',label:'竞技挑战',icon:'⚔️',target:5,reward:{g:150,d:3,r:0}},
+  {type:'sweep',label:'扫荡关卡',icon:'🔄',target:5,reward:{g:100,d:1,r:0}}
+];
+
+function DAILY_RENDER(){
+  var dp=document.getElementById('dailyTasks');
+  if(!dp)return;
+  DAILY_CHECK_RESET();
+  var h='';
+  DAILY_TASKS.forEach(function(t,i){
+    var cur=G.daily&&G.daily.progress?G.daily.progress[t.type]||0:0;
+    var claimed=G.daily&&G.daily.claimed?G.daily.claimed[t.type]||false:false;
+    var done=cur>=t.target;
+    var barPct=Math.min(100,cur/t.target*100);
+    h+='<div style="background:rgba(0,0,0,.3);border:1px solid '+(claimed?'#40a040':(done?'#d4a017':'#3a2a0a'))+';border-radius:8px;padding:10px;margin-bottom:8px;display:flex;align-items:center;gap:10px">';
+    h+='<div style="font-size:24px">'+t.icon+'</div>';
+    h+='<div style="flex:1">';
+    h+='<div style="font-size:13px;color:#f0d060">'+t.label+'</div>';
+    h+='<div style="font-size:11px;color:#806040;margin:2px 0">'+cur+'/'+t.target+'</div>';
+    h+='<div style="height:5px;background:#1a0a00;border-radius:3px;overflow:hidden"><div style="height:100%;width:'+barPct+'%;background:linear-gradient(90deg,#8b6914,#d4a017);border-radius:3px;transition:width .3s"></div></div>';
+    h+='</div>';
+    h+='<div style="font-size:10px;color:#806040">';
+    if(t.reward.g>0)h+='💰'+t.reward.g+' ';
+    if(t.reward.d>0)h+='💎'+t.reward.d+' ';
+    if(t.reward.r>0)h+='📜'+t.reward.r+' ';
+    h+='</div>';
+    if(claimed){
+      h+='<div style="padding:6px 12px;background:#2a4a2a;color:#40a040;border-radius:5px;font-size:11px">已领</div>';
+    }else if(done){
+      h+='<button class="bt bs" style="background:linear-gradient(135deg,#8b6914,#d4a017);color:#1a0a00;padding:6px 12px;font-size:11px" onclick="DAILY_CLAIM('+i+')">领取</button>';
+    }else{
+      h+='<div style="padding:6px 12px;background:#1a1a0a;color:#605040;border-radius:5px;font-size:11px">进行中</div>';
+    }
+    h+='</div>';
+  });
+  dp.innerHTML=h;
+  // 渲染每日挑战BOSS
+  DC_RENDER_BOSS();
+}
+
+function DAILY_CLAIM(idx){
+  var t=DAILY_TASKS[idx];
+  if(!t)return;
+  DAILY_CHECK_RESET();
+  var cur=G.daily&&G.daily.progress?G.daily.progress[t.type]||0:0;
+  if(cur<t.target){ST('任务未完成',1500);return}
+  if(G.daily.claimed[t.type]){ST('已领取',1500);return}
+  if(!G.daily.claimed)G.daily.claimed={};
+  G.daily.claimed[t.type]=true;
+  if(t.reward.g>0)G.g=(G.g||0)+t.reward.g;
+  if(t.reward.d>0)G.j=(G.j||0)+t.reward.d;
+  if(t.reward.r>0)G.rt=(G.rt||0)+t.reward.r;
+  ST('领取'+t.label+'奖励成功！',2000);
+  SV();
+  DAILY_RENDER();
+  UA();
+}
+
+// ===== 每日挑战BOSS系统 =====
+var DC_BOSSES=[
+  {name:'华雄',icon:'👹',hp:500,atk:30,type:'tiger'},
+  {name:'颜良',icon:'💀',hp:800,atk:40,type:'bear'},
+  {name:'文丑',icon:'👺',hp:700,atk:35,type:'wolf'},
+  {name:'吕布',icon:'🐉',hp:1200,atk:60,type:'dragon'},
+  {name:'张角',icon:'⚡',hp:600,atk:50,type:'mage'}
+];
+
+function DC_GET_TODAY_BOSS(){
+  DAILY_CHECK_RESET();
+  if(!G.daily)G.daily={};
+  if(!G.daily.bossSeed)G.daily.bossSeed=Math.floor(Math.random()*DC_BOSSES.length);
+  var bIdx=G.daily.bossSeed%DC_BOSSES.length;
+  return DC_BOSSES[bIdx];
+}
+
+function DC_RENDER_BOSS(){
+  var panel=document.getElementById('dcPreview');
+  if(!panel)return;
+  DAILY_CHECK_RESET();
+  if(!G.daily)G.daily={};
+  if(!G.daily.bossDefeated)G.daily.bossDefeated=false;
+  if(G.daily.bossDefeated){
+    panel.innerHTML='<div style="text-align:center;padding:16px"><div style="font-size:48px">✅</div><div style="color:#40a040;font-size:14px;margin-top:8px">今日BOSS已击败！</div><div style="font-size:11px;color:#605040;margin-top:4px">明天再来挑战</div></div>';
+    return;
+  }
+  var boss=DC_GET_TODAY_BOSS();
+  var stg=G.s||1;
+  var scale=1+Math.floor(stg/10)*0.2;
+  var hp=Math.floor(boss.hp*scale);
+  var atk=Math.floor(boss.atk*scale);
+  panel.innerHTML='<div style="text-align:center;padding:12px;background:rgba(40,0,0,.3);border:1px solid #5a1a1a;border-radius:10px">'+
+    '<div style="font-size:48px;animation:pulse 2s infinite">'+boss.icon+'</div>'+
+    '<div style="font-size:16px;color:#ff6666;font-weight:700;margin:6px 0">'+boss.name+'</div>'+
+    '<div style="font-size:12px;color:#806040">HP: '+hp+' | ATK: '+atk+'</div>'+
+    '<button class="bt bg bs" style="margin-top:10px;background:linear-gradient(135deg,#8a1a1a,#cc2222);color:#fff" onclick="DC_START_BATTLE()">⚔️ 挑战BOSS</button>'+
+    '</div>';
+}
+
+function DC_START_BATTLE(){
+  DAILY_CHECK_RESET();
+  var hs=G.hs||[];
+  var team=hs.filter(function(h){return h&&(h.st&1)});
+  if(!team.length){ST('请先上阵武将！',1500);return}
+  if(G.daily&&G.daily.bossDefeated){ST('今日BOSS已击败',1500);return}
+  var boss=DC_GET_TODAY_BOSS();
+  var stg=G.s||1;
+  var scale=1+Math.floor(stg/10)*0.2;
+  var bhp=Math.floor(boss.hp*scale);
+  var batk=Math.floor(boss.atk*scale);
+  // 简单战斗模拟
+  var tHP=0,tATK=0;
+  team.forEach(function(h){
+    if(!h)return;
+    tHP+=h.h||0;
+    tATK+=h.a||0;
+  });
+  // 简单伤害公式
+  var dmg=tATK*1.5;
+  var bDmg=batk;
+  var rounds=Math.ceil(bhp/dmg);
+  var pDmg=rounds*bDmg;
+  if(tHP>pDmg||tATK>batk*2){
+    // 胜利
+    G.daily.bossDefeated=true;
+    var gReward=200+Math.floor(stg*10);
+    var dReward=5+Math.floor(stg*2);
+    G.g=(G.g||0)+gReward;
+    G.j=(G.j||0)+dReward;
+    // 给随机装备
+    var eqReward={id:G.nid++,n:boss.name+'的宝物',i:['🗡️','🛡️','👑','💍','📿','⚗️'][Math.floor(Math.random()*6)],q:2,ti:Math.floor(Math.random()*6),atk:10+Math.floor(Math.random()*15),hp:20+Math.floor(Math.random()*30),eqLevel:1,lk:0};
+    if(!G.eqb)G.eqb=[];
+    G.eqb.push(eqReward);
+    DAILY_PROGRESS('boss');
+    ST('🎉击败'+boss.name+'！获得💰'+gReward+' 💎'+dReward+' 🎁',3000);
+    SV();
+    UA();
+    DC_RENDER_BOSS();
+    DAILY_RENDER();
+  }else{
+    ST('💀不敌'+boss.name+'，提升实力再来！',2000);
+  }
+}
+
+// ===== 启动函数 =====
+function _dailyBoot(){
+  setTimeout(function(){
+    try{
+      DAILY_CHECK_RESET();
+      var dp=document.getElementById('dailyTasks');
+      if(dp)DAILY_RENDER();
+    }catch(e){console.log('dailyBoot err:',e)}
+  },500);
+}
+
 function init(){
   LD();OA();UA();UPDATE_NAME_DISPLAY();CE=ME(G.s);
   if(!G.name){setTimeout(function(){FORCE_NAME()},100)}
   document.querySelectorAll("#tb button").forEach(function(b){b.onclick=function(){document.querySelectorAll("#tb button").forEach(function(x){x.classList.remove("a")});document.querySelectorAll(".pn").forEach(function(p){p.classList.remove("a")});this.classList.add("a");document.getElementById("p"+this.dataset.tab).classList.add("a");if(this.dataset.tab==="f")UF();if(this.dataset.tab==='rk'){RSHP();return}if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()};if(this.dataset.tab==="e")UEQ();if(this.dataset.tab==="h")UHL();if(this.dataset.tab==="rk")RSHP();if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()}}});
   document.getElementById("bob").onclick=SB;
-  document.getElementById("boa").onclick=function(){G.auto=!G.auto;this.textContent=G.auto?"⏹️自动":"⏹️停止"/*will be overridden*/;if(G.auto)SB()};
+  document.getElementById("boa").onclick=function(){G.auto=!G.auto;this.textContent=G.auto?"⏹️自动":"⏹️停止"/*will be overridden*/;if(G.auto)SB()}if(this.dataset.tab==="t"){DAILY_RENDER()};;
   document.getElementById("br1").onclick=function(){DR(1)};document.getElementById("br10").onclick=function(){DR(10)};
   document.getElementById("bom").onclick=DM;
   TW_INIT_RENDER();
+  DAILY_CHECK_RESET();
   document.getElementById("bad").onclick=AD;document.getElementById("bcf").onclick=CF;
   document.getElementById("sb1").onclick=B1;document.getElementById("sb2").onclick=B2;document.getElementById("scg").onclick=CG;
   document.getElementById("sua").onclick=UA2;document.getElementById("suh").onclick=UH2;
@@ -1994,6 +2174,7 @@ function init(){
   G.hs.forEach(function(h){if(h&&!h.sk){var _p=SKILL_POOL[h.q];if(_p)h.sk=_p[Math.floor(Math.random()*_p.length)];}});G.eqb.forEach(function(e){if(e.lk===void 0)e.lk=0;});AS();IL();setInterval(UA,3000);
 
 
+  setTimeout(function(){try{DAILY_CHECK_RESET();DAILY_RENDER()}catch(e){}},500);
   }
 
 function EQ_STRENGTHEN(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(ei<0)return;var eq=G.eqb[ei];if(!eq.eqLevel)eq.eqLevel=1;var maxLv=G.lv*2;if(eq.eqLevel>=maxLv){ST("已达等级上限Lv."+maxLv,1500);return}var cost=eq.eqLevel*50+(eq.q+1)*20;if(G.g<cost){ST("金币不足，需"+cost+"💰",1500);return}G.g-=cost;eq.eqLevel++;eq.atk=Math.floor(eq.atk*1.15);eq.hp=Math.floor(eq.hp*1.15);ST("⬆"+eq.n+"强化至Lv."+eq.eqLevel,1500);SV();UA();UEQ();showEqDetail(0,eq.id)}
