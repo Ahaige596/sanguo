@@ -1403,7 +1403,7 @@ function ARENA_FIGHT(rnk){
   G.ar=G.ar||[];while(G.ar.length<100)G.ar.push(null);
   var targetIdx=rnk-1;
   var myIdx=G.ar.findIndex(function(ri){return ri&&ri.p&&ri.p.indexOf("你")>=0});
-  if(myIdx>=0&&targetIdx>=myIdx){ST("只能挑战排名高于自己的对手！");return}
+  if(myIdx>=0&&targetIdx>=myIdx){ST("只能挑战排名高于自己的对��！");return}
   G.af--;
   var _fh={};
   for(var fi=0;fi<G.fm.length;fi++){
@@ -2158,11 +2158,18 @@ function DC_START_BATTLE(){
 function _dailyBoot(){
   setTimeout(function(){
     try{
+      // Move daily panels into #pr if not already there
+      var _dp=document.getElementById('dailyPanel');
+      var _dcp=document.getElementById('dailyChallengePanel');
+      var _pr=document.getElementById('pr');
+      if(_dp && _pr && _dp.parentElement && _dp.parentElement.id!=='pr'){_pr.appendChild(_dp);}
+      if(_dcp && _pr && _dcp.parentElement && _dcp.parentElement.id!=='pr'){_pr.appendChild(_dcp);}
       DAILY_CHECK_RESET();
       var dp=document.getElementById('dailyTasks');
       if(dp)DAILY_RENDER();
     }catch(e){console.log('dailyBoot err:',e)}
   },500);
+}  },500);
 }
 
 function init(){
@@ -2188,20 +2195,7 @@ function init(){
 
   window.addEventListener('load',_dailyBoot);
   
-  // Fix: move daily panel into #pr (deferred)
-  setTimeout(function(){
-    try{
-      var _dp=document.getElementById('dailyPanel');
-      var _pr=document.getElementById('pr');
-      if(_dp && _pr && _dp.parentElement && _dp.parentElement.id!=='pr'){
-        _pr.appendChild(_dp);
-      }
-      var _dcp=document.getElementById('dailyChallengePanel');
-      if(_dcp && _pr && _dcp.parentElement && _dcp.parentElement.id!=='pr'){
-        _pr.appendChild(_dcp);
-      }
-    }catch(e){console.log('daily move fix:',e)}
-  },100);
+
 }
 
 function EQ_STRENGTHEN(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(ei<0)return;var eq=G.eqb[ei];if(!eq.eqLevel)eq.eqLevel=1;var maxLv=G.lv*2;if(eq.eqLevel>=maxLv){ST("已达等级上限Lv."+maxLv,1500);return}var cost=eq.eqLevel*50+(eq.q+1)*20;if(G.g<cost){ST("金币不足，需"+cost+"💰",1500);return}G.g-=cost;eq.eqLevel++;eq.atk=Math.floor(eq.atk*1.15);eq.hp=Math.floor(eq.hp*1.15);ST("⬆"+eq.n+"强化至Lv."+eq.eqLevel,1500);SV();UA();UEQ();showEqDetail(0,eq.id)}
