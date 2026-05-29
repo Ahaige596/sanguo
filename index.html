@@ -4,7 +4,7 @@
 .eqbtns{display:flex;gap:5px;flex-wrap:wrap;margin:5px 0;justify-content:center}
 
 @media(min-width:501px){.bf{flex-direction:row;justify-content:space-around;min-height:80px}.bf .fs2{width:auto}.bf .es2{width:auto}.fb{min-width:50px;padding:4px 6px}.fb .fi{font-size:20px}.fb .fn{font-size:9px;max-width:46px}.fb .fbar{width:44px;height:4px}.bhp{width:130px;height:10px}.eic{font-size:48px}.enm{font-size:14px}}</style></head><body><div id="head"><h1>⚔️ 三国神话</h1><span id="pnick" style="font-size:20px;color:#f0d060;font-weight:800;cursor:pointer;margin-left:6px;text-shadow:0 0 6px rgba(240,208,96,0.4);letter-spacing:1px" onclick="SHOW_NICKNAME_DIALOG()">🪪无名</span><div class="rbar"><span class="r" title="推图/扫荡获得"><span>💰</span><span class="rl">金币</span><span class="v" id="gld">0</span></span><span class="r" title="BOSS/兑换获得"><span>💎</span><span class="rl">钻石</span><span class="v" id="jde">0</span></span><span class="r" title="招募武将消耗"><span>📜</span><span class="rl">招募令</span><span class="v" id="rct">0</span></span><span class="r" title="当前等级进度"><span>🏆</span><span class="rl">关卡</span><span class="v" id="stg">1-1</span></span><span class="r"><span>⭐</span><span class="rl">等级</span><span class="v" id="plv">1</span></span><span class="r"><span>📊</span><span class="rl">经验</span><span class="v" id="expBar">0/10</span></span></span></div></div><div id="tb"><button class="a" data-tab="r">⚔️征战</button><button data-tab="f">📋阵容</button><button data-tab="h">👥武将</button><button data-tab="e">⚔️装备</button><button data-tab="s">🏪商店</button><button data-tab="a">⚔️竞技</button><button data-tab="rk">🏆排行</button></div><div id="pr" class="pn a"><div id="ba"><div class="bf"><div class="es2"><div class="eic" id="eic">👹</div><div class="enm" id="enm">山贼</div><div class="bhp"><div class="bf" id="ehp" style="width:100%"></div></div><div style="font-size:11px;color:#806040"><span id="eht">100/100</span></div></div><div class="vs">⚡</div><div class="fs2"><div style="font-size:11px;color:#80c080;margin-bottom:3px">🛡️我方</div><div class="fhs" id="fhs"></div></div></div><div style="font-size:11px;color:#504030;margin-top:2px;position:relative;z-index:1">关卡 <span id="stg2">1-1</span></div><div class="blog" id="blog">点击"出征"开始战斗</div><div class="binf"><span>战力:<span id="mypw">0</span></span><span>敌方:<span id="epw">0</span></span></div></div><div class="fc"><button class="bt bg" id="bob">⚔️出征</button><button class="bt bb bs" id="boa">▶️自动</button><button class="bt br bs" id="bol" onclick="G.lock=G.lock?0:1;this.textContent=G.lock?'🔒已锁定':'🔓锁定';ST(G.lock?'已锁定':'已解锁',2000);SV()">🔓锁定</button></div><div class="fc" style="margin-top:4px"><button class="bt bg bs" onclick="SWEEP(1)">🔄扫荡(免费)</button><button class="bt br bs" onclick="SWEEP(2)">📺广告扫荡</button><button class="bt bb bs" onclick="DG_ENTER()">🏰秘境</button><button class="bt bgn bs" onclick="EXP_BOOK()">📖经验书(200💰)</button></div>
-<div style="font-size:11px;color:#806040;text-align:center;margin:2px 0"><span id="swinfo" style="margin-right:12px">扫荡:0/5</span><span id="dginfo" style="margin-right:12px">秘���: 第1层 | 今日0/3</span><span style="cursor:pointer;color:#504030" onclick="ADVICE()">💡卡关了?</span></div><div style="font-size:11px;color:#504030;text-align:center;margin:4px 0" id="ofi"></div><div class="ti">🎲招募武将</div><div class="fc"><button class="bt br bs" id="br1">🆓x1(1📜)</button><button class="bt br" id="br10">🔥x10(10📜)</button></div><div class="ti">⭐新招募</div><div class="cg" id="newh"></div></div><div id="pf" class="pn"><div class="ti">📋上阵阵容<span style="font-size:12px;color:#605040;font-weight:normal">(最多6人)</span></div><div class="sg" id="fsl"></div><div class="fc"><button class="bt bgn bs" id="bad">🤖自动编队</button><button class="bt br bs" id="bcf">🗑️清空</button></div><div class="ti">👥武将列表</div><div class="cg" id="hlf"></div></div><div id="ph" class="pn"><div class="fc mb"><button class="bt bgn bs" id="bom">🔄一键升星</button><button class="bt bb bs" onclick="SHOW_ATTR_TABLE()">📊属性总表</button></div><div class="ti">👥所有武将</div><div class="cg" id="hl"></div></div><div id="pe" class="pn"><div class="ti">⚔装备栏</div><div class="esl" id="eqslots"><!-- rendered by UEQ --></div><div class="ti">装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div><div class="ti" style="margin-top:8px">装备强化</div><div class="sr"><span class="l">当前可强化至</span><span class="v" id="eqlCap">Lv.0</span></div><div class="sr"><span class="l">解锁上限</span><span class="v" id="eqlUnlock">Lv.1可升至Lv.2</span></div><div class="sr"><span style="font-size:10px;color:#605040">每级+15%属性，上限=玩家等级×2</span></div><div class="bptabs" id="bpt"></div><div class="bpgrid" id="ebg"></div></div><div id="ps" class="pn"><div class="ti">🏪商店</div><div class="fc"><button class="bt bg bs" id="sb1">📜x5(5000💰)</button><button class="bt bg bs" id="sb2">📜x10(100💎)</button></div><div class="ti">💰兑换</div><div class="fc"><button class="bt bg bs" id="scg">1000💰→10💎</button></div><div class="ti">⚡强化</div><div class="sr"><span class="l">攻击加成</span><span class="v" id="sab">x1.0</span></div><div class="sr"><span class="l">生命加成</span><span class="v" id="shb">x1.0</span></div><div class="fc mt"><button class="bt bb bs" id="sua">⬆️攻击</button><button class="bt bb bs" id="suh">⬆️生命</button></div><div class="ti">🏅成就</div><div class="sgp" id="achv"></div><div class="ti">📊总览</div><div class="sgp" id="sov"></div><div class="ti" style="margin-top:12px;color:#504030">📺广告位</div><div id="adslot" style="background:#0a0500;border:1px dashed #3a2a0a;border-radius:8px;padding:20px;text-align:center;color:#504030;font-size:12px;margin:8px 0">[ 横幅广告位 - 替换为你的广告代码 ]</div></div>
+<div style="font-size:11px;color:#806040;text-align:center;margin:2px 0"><span id="swinfo" style="margin-right:12px">扫荡:0/5</span><span id="dginfo" style="margin-right:12px">秘���: 第1层 | 今日0/3</span><span style="cursor:pointer;color:#504030" onclick="ADVICE()">💡卡关了?</span></div><div style="font-size:11px;color:#504030;text-align:center;margin:4px 0" id="ofi"></div><div class="ti">🎲招募武将</div><div class="fc"><button class="bt br bs" id="br1">🆓x1(1📜)</button><button class="bt br" id="br10">🔥x10(10📜)</button></div><div class="ti">⭐新招募</div><div class="cg" id="newh"></div></div><div id="pf" class="pn"><div class="ti">📋上阵阵容<span style="font-size:12px;color:#605040;font-weight:normal">(最多6人)</span></div><div class="sg" id="fsl"></div><div class="fc"><button class="bt bgn bs" id="bad">🤖自动编队</button><button class="bt br bs" id="bcf">🗑️清空</button></div><div class="ti">👥武将列表</div><div class="cg" id="hlf"></div></div><div id="ph" class="pn"><div class="fc mb"><button class="bt bgn bs" id="bom">🔄一键升星</button><button class="bt bb bs" onclick="SHOW_ATTR_TABLE()">📊属性总表</button></div><div class="ti">👥所有武将</div><div class="cg" id="hl"></div></div><div id="dailyPanel"></div><div id="pe" class="pn"><div class="ti">⚔装备栏</div><div class="esl" id="eqslots"><!-- rendered by UEQ --></div><div class="ti">装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div><div class="ti" style="margin-top:8px">装备强化</div><div class="sr"><span class="l">当前可强化至</span><span class="v" id="eqlCap">Lv.0</span></div><div class="sr"><span class="l">解锁上限</span><span class="v" id="eqlUnlock">Lv.1可升至Lv.2</span></div><div class="sr"><span style="font-size:10px;color:#605040">每级+15%属性，上限=玩家等级×2</span></div><div class="bptabs" id="bpt"></div><div class="bpgrid" id="ebg"></div></div><div id="ps" class="pn"><div class="ti">🏪商店</div><div class="fc"><button class="bt bg bs" id="sb1">📜x5(5000💰)</button><button class="bt bg bs" id="sb2">📜x10(100💎)</button></div><div class="ti">💰兑换</div><div class="fc"><button class="bt bg bs" id="scg">1000💰→10💎</button></div><div class="ti">⚡强化</div><div class="sr"><span class="l">攻击加成</span><span class="v" id="sab">x1.0</span></div><div class="sr"><span class="l">生命加成</span><span class="v" id="shb">x1.0</span></div><div class="fc mt"><button class="bt bb bs" id="sua">⬆️攻击</button><button class="bt bb bs" id="suh">⬆️生命</button></div><div class="ti">🏅成就</div><div class="sgp" id="achv"></div><div class="ti">📊总览</div><div class="sgp" id="sov"></div><div class="ti" style="margin-top:12px;color:#504030">📺广告位</div><div id="adslot" style="background:#0a0500;border:1px dashed #3a2a0a;border-radius:8px;padding:20px;text-align:center;color:#504030;font-size:12px;margin:8px 0">[ 横幅广告位 - 替换为你的广告代码 ]</div></div>
 <div id="pa" class="pn"><div id="ab"><!-- Arena rendered by ARENA_RENDER --><div class="fc" style="margin-top:8px"><button class="bt bg bs" onclick="ARENA_SHOW_REWARDS()">🏆奖励</button></div></div></div>
 <div id="prk" class="pn">
   <div id="rb"></div>
@@ -256,21 +256,12 @@ function ARENA_GEN_NPC(idx,seed){
 }
 function ARENA_GEN_TEAM(idx,seed){
   var nCount=Math.min(G.fm.length||1,Math.max(1,G.fm.length));
-  var maxHP=50000,maxAt=5000,sumHP=0,sumAt=0,count=0,minLv=999;
-  for(var fi=0;fi<G.fm.length;fi++){
-    var id=G.fm[fi];var _h=GH(id);
-    if(!_h)continue;
-    var hp=HH(id);var at=HA(id);
-    sumHP+=hp;sumAt+=at;count++;
-    if(hp>maxHP)maxHP=hp;if(at>maxAt)maxAt=at;
-    if((_h.lv||1)<minLv)minLv=_h.lv||1;
-  }
-  var avgHP=count>0?Math.floor(sumHP/count):2000;
-  var avgAt=count>0?Math.floor(sumAt/count):150;
-  // Linear multiplier: rank1=7.0, rank100=1.0, with smooth curve
-  var t=(100-idx)/100; // t=0.99 for rank1, t=0 for rank100
-  var rankMult=1.0+t*6.0; // rank1=7.0, rank100=1.0
-  var spdMult=1.0+t*1.5;
+  var chapterMult=1.0+Math.max(0,(G.s||1)-1)*0.4;
+  var t=(100-idx)/100;
+  var rankMult=1.0+t*5.0;
+  var baseHP=Math.floor(3000*chapterMult*rankMult);
+  var baseAt=Math.floor(200*chapterMult*rankMult);
+  var spdMult=1.0+t*1.0;
   var heroes=[];
   var h=ARENA_SHA("arena"+idx+seed);
   var baseQ=idx<3?4:(idx<5?3:(idx<10?2:(idx<30?1:0)));
@@ -278,13 +269,13 @@ function ARENA_GEN_TEAM(idx,seed){
     var rr=((h+ei*137)%100)/100;
     var q=Math.max(0,Math.min(4,Math.floor(baseQ+rr*1.5)));
     var title=NPC_TITLE();
-    var hpMult=1.2+rr*1.8;
-    var atMult=1.2+rr*1.8;
+    var hpMult=1.2+rr*1.5;
+    var atMult=1.2+rr*1.5;
     heroes.push({
       id:"e"+ei,n:title+" "+(idx<3?"\uD83D\uDC51NPC":"NPC")+ei,i:"\uD83D\uDC79",
-      hp:Math.floor(avgHP*rankMult*hpMult),
-      mhp:Math.floor(avgHP*rankMult*hpMult),
-      at:Math.max(1,Math.floor(avgAt*rankMult*atMult)),
+      hp:Math.floor(baseHP*hpMult),
+      mhp:Math.floor(baseHP*hpMult),
+      at:Math.max(1,Math.floor(baseAt*atMult)),
       isBoss:ei===0,q:q,
       crt:Math.floor(5+q*5),dge:Math.floor(3+q*3),crtDmg:150+q*10,dmgRed:q*3,
       spd:Math.floor(80*spdMult)+q*25,
@@ -481,7 +472,7 @@ function ARENA_TICK(){
       actions.push(e.n+" \u653B\u51FB "+GH(tid).n+" \u2212"+ed);
     }
     e.an=Math.min(100,(e.an||0)+30);
-    if(f2.hp<=0){var dh=GH(tid);if(dh)actions.push("\u2620 "+dh.n+" \u9635\u4EA1!");}
+    if(f2.hp<=0){var dh=GH(tid);if(dh)actions.push("\u2620 "+dh.n+" \u6218\u6597\u4E2D\u51FB\u5012!");}
   }
   // Show last 2-3 actions
   if(blog)blog.textContent=actions.slice(-3).join(" | ");
@@ -706,7 +697,7 @@ function TB(){
     var tgt=getFrontHero();if(!tgt)break;
     if(e.an>=100){e.an=0;var sd=Math.floor(e.at*2.0);var tgtFH2=FH[tgt];if(tgtFH2){var ultDmgRed=(tgtFH2.dmgRed||0);sd=Math.floor(sd*(1-ultDmgRed/100));tgtFH2.hp=Math.max(0,tgtFH2.hp-sd);tgtFH2.an=Math.min(100,(tgtFH2.an||0)+10)}if(e)e.an=Math.min(100,(e.an||0)+30);SF("大招!","c");LG(e.n+" 释放技能");}
     else{var ed=Math.max(1,Math.floor(e.at*0.6+Math.floor(Math.random()*7)-3));var tgtFH=FH[tgt];if(tgtFH){var eCrit=Math.random()<0.08;var eDmgRed=(tgtFH.dmgRed||0);ed=Math.floor(ed*(1-eDmgRed/100));var eDge=(tgtFH.dge||0)-5;if(eDge>0&&Math.random()*100<eDge){ed=Math.floor(ed*0.3);SF("闪避!","c")}if(eCrit){ed=Math.floor(ed*1.5);SF("暴击! "+ed,"c")}else{SF("-"+ed,"d")}tgtFH.hp=Math.max(0,tgtFH.hp-ed);tgtFH.an=Math.min(100,(tgtFH.an||0)+10)}if(e)e.an=Math.min(100,(e.an||0)+30);}
-    if(FH[tgt].hp<=0){var dh=GH(tgt);LG((dh?dh.n:"武将")+" 阵亡");}
+    if(FH[tgt].hp<=0){var dh=GH(tgt);LG((dh?dh.n:"武将")+" 战斗中击倒");}
   }
   var e3=document.querySelector(".es2");if(e3&&EE.some(function(x){return x.hp>0})&&G.fighting){e3.classList.remove("hs");void e3.offsetWidth;e3.classList.add("hs")}
   UBU();
@@ -1502,7 +1493,8 @@ function DAILY_CLAIM(idx){
 }
 function DAILY_RENDER(){
   if(!G.daily||!G.daily.tasks) return;
-  var tbBtn=document.querySelector('#tb button[data-tab="r"]');if(!tbBtn||!tbBtn.classList.contains('a')){var old=document.getElementById('dailyPanel');if(old)old.innerHTML='';return;}  var container=document.getElementById('dailyPanel');if(!container){container=document.createElement('div');container.id='dailyPanel';var inPr=document.getElementById('pr');if(inPr){inPr.insertBefore(container,inPr.firstChild);}}
+  var container=document.getElementById('dailyPanel');
+  if(!container) return;
   var td=new Date().toDateString();
   var expired=(G.daily.date!==td);
   var html='<div style="background:linear-gradient(145deg,#1a0a00,#2a1a0a);border:1px solid #5a3a0a;border-radius:10px;padding:12px;margin:10px 0">';
@@ -1778,7 +1770,7 @@ function DC_TICK(){
       actions.push(e.n+' \u653B\u51FB '+GH(tid).n+' -'+ed);
     }
     e.an=Math.min(100,(e.an||0)+30);
-    if(f2.hp<=0){var dh=GH(tid);if(dh) actions.push('\uD83D\uDC80 '+dh.n+' \u9635\u4EA1!');}
+    if(f2.hp<=0){var dh=GH(tid);if(dh) actions.push('\uD83D\uDC80 '+dh.n+' \u6218\u6597\u4E2D\u51FB\u5012!');}
   }
   if(blog) blog.textContent=actions.slice(-3).join(' | ');
   DC_RENDER_BATTLE();
@@ -1786,9 +1778,47 @@ function DC_TICK(){
 
 
 (function(){
-  function _dailyBoot(){
+  
+// ====== 装备进阶系统 ======
+function EQ_UPGRADE(id){
+  var ei=G.eqb.findIndex(function(e){return e.id===id});
+  if(ei<0||!ei){ST("\u88C5\u5907\u672A\u5728\u80CC\u5305",1500);return}
+  var eq=G.eqb[ei];
+  if(eq.lk){ST("\u5DF2\u9501\u5B9A\u8BF7\u5148\u89E3\u9501",1500);return}
+  if(!eq.eqLevel)eq.eqLevel=1;
+  var maxLv=G.lv*2||20;
+  if(eq.eqLevel<maxLv){ST("\u5148\u5F3A\u5316\u81F3\u7B49\u7EA7\u4E0A\u9650\u518D\u8FDB\u9636",1500);return}
+  var tgt=G.eqb.filter(function(be){return be.id!==id&&be.q===eq.q&&!be.lk});
+  if(tgt.length<1){ST("\u9700\u8981\u540C\u54C1\u8D28\u88C5\u59071\u4EF6\u4F5C\u4E3A\u6750\u6599",1500);return}
+  var mg=20*(eq.q+1);
+  if(G.g<mg){ST("\u91D1\u5E01\u4E0D\u8DB3\uFF0C\u9700"+mg+"\uD83D\uDCB0",1500);return}
+  var cmi=G.eqb.findIndex(function(e){return e.id===tgt[0].id});
+  if(cmi>=0)G.eqb.splice(cmi,1);
+  G.g-=mg;
+  if(!eq.star)eq.star=1;
+  eq.star++;
+  eq.atk=Math.floor(eq.atk*1.1);
+  eq.hp=Math.floor(eq.hp*1.1);
+  eq.n+=String.fromCharCode(9733);
+  ST(QN[eq.q]+"\u88C5\u5907\u8FDB\u9636\u81F3"+String.fromCharCode(11088)+eq.star+"\u661F!",1500);
+  SV();UA();UEQ();
+}
+function EQ_UPGRADE_ESL(heroId){
+  var h=GH(heroId);if(!h||!h.eq){ST("\u6B66\u5C06\u672A\u88C5\u5907",1500);return}
+  var sl=["w","a","h","b","r","p"];
+  var best=null,bestStar=0;
+  for(var zi=0;zi<6;zi++){
+    var eq=h.eq[sl[zi]];
+    if(!eq)continue;
+    if(!eq.star)eq.star=1;
+    if(eq.star>bestStar||!best){best=eq;bestStar=eq.star}
+  }
+  if(!best){ST("\u6CA1\u6709\u53EF\u8FDB\u9636\u7684\u88C5\u5907",1500);return}
+  EQ_UPGRADE(best.id);
+}
+function _dailyBoot(){
     if(typeof G==="undefined"||typeof DAILY_CHECK_RESET!=="function"){setTimeout(_dailyBoot,100);return;}
-    try{DAILY_CHECK_RESET();setTimeout(function(){var tb=document.querySelector('#tb button[data-tab="r"]');if(tb&&tb.classList.contains('a'))DAILY_RENDER();},200);}catch(e){}
+    try{DAILY_CHECK_RESET();DAILY_RENDER();setInterval(DAILY_RENDER,5000);}catch(e){}
   }
   if(document.readyState==="complete"){_dailyBoot();}
   else{window.addEventListener("load",_dailyBoot);}
@@ -1796,7 +1826,7 @@ function DC_TICK(){
 function init(){
   LD();OA();UA();UPDATE_NAME_DISPLAY();CE=ME(G.s);
   if(!G.name){setTimeout(function(){FORCE_NAME()},100)}
-  document.querySelectorAll("#tb button").forEach(function(b){b.onclick=function(){document.querySelectorAll("#tb button").forEach(function(x){x.classList.remove("a")});document.querySelectorAll(".pn").forEach(function(p){p.classList.remove("a")});this.classList.add("a");document.getElementById("p"+this.dataset.tab).classList.add("a");if(this.dataset.tab==="r")DAILY_RENDER();if(this.dataset.tab==="f")UF();if(this.dataset.tab==='rk'){RSHP();return}if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()};if(this.dataset.tab==="e")UEQ();if(this.dataset.tab==="h")UHL();if(this.dataset.tab==="rk")RSHP();if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()}}});
+  document.querySelectorAll("#tb button").forEach(function(b){b.onclick=function(){document.querySelectorAll("#tb button").forEach(function(x){x.classList.remove("a")});document.querySelectorAll(".pn").forEach(function(p){p.classList.remove("a")});this.classList.add("a");document.getElementById("p"+this.dataset.tab).classList.add("a");if(this.dataset.tab==="r"){DAILY_RENDER()}if(this.dataset.tab==="f")UF();if(this.dataset.tab==='rk'){RSHP();return}if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()};if(this.dataset.tab==="e")UEQ();if(this.dataset.tab==="h")UHL();if(this.dataset.tab==="rk")RSHP();if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()}}});
   document.getElementById("bob").onclick=SB;
   document.getElementById("boa").onclick=function(){G.auto=!G.auto;this.textContent=G.auto?"⏹️自动":"⏹️停止"/*will be overridden*/;if(G.auto)SB()};
   document.getElementById("br1").onclick=function(){DR(1)};document.getElementById("br10").onclick=function(){DR(10)};
