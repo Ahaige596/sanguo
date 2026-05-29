@@ -698,6 +698,8 @@ function TB(){
     }
     if(ae.hp<=0)LG(h.n+" 击败了 "+ae.n);if(fh.passives&&Array.isArray(fh.passives)){for(var _ppi=0;_ppi<fh.passives.length;_ppi++){var _pps=fh.passives[_ppi];if(!_pps||!_pps.t)continue;if(_pps.t==="dmg"&&ae.hp>0){var _ppDmg=Math.floor(getEffectiveAtk(id)*_pps.v*0.3);ae.hp=Math.max(0,ae.hp-_ppDmg);if(ae.hp<=0)LG(h.n+" 被动放倒 "+ae.n)}if(_pps.t==="heal"){fh.hp=Math.min(fh.mhp,fh.hp+Math.floor(fh.mhp*_pps.v*0.3));SF("被动回血","c")}if(_pps.t==="buff"){fh.atkBuff=(fh.atkBuff||1)*(_pps.v*0.3);SF("被动强化","c")}}}
   }
+
+  UBU();
   for(var i=0;i<EE.length;i++){
     var e=EE[i];if(!e||e.hp<=0)continue;if(e.stun){e.stun--;continue}
     
