@@ -2197,7 +2197,7 @@ function init(){
   G.hs.forEach(function(h){if(h&&!h.sk){var _p=SKILL_POOL[h.q];if(_p)h.sk=_p[Math.floor(Math.random()*_p.length)];}});G.eqb.forEach(function(e){if(e.lk===void 0)e.lk=0;});AS();IL();setInterval(UA,3000);
 
 
-  window.addEventListener('load',_dailyBoot);
+  setTimeout(_dailyBoot,1000);
   
 
 }
