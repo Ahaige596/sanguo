@@ -534,47 +534,33 @@ function SHOW_NICKNAME_DIALOG(){
 
 function FORCE_NAME(){
   if(G.name)return;
-  G._forceNameActive = true;
-  var d=document.getElementById("nmModal");
-  if(!d)return;
+  G._forceNameActive=true;
+  var d=document.getElementById("nmModal");if(!d)return;
   d.classList.add("s");
-  var closeBtn=d.querySelector(".mc");
-  if(closeBtn)closeBtn.style.display="none";
-  var title=d.querySelector("h2");
-  if(title)title.textContent="\u26a0\ufe0f \u8bf7\u8f93\u5165\u4f60\u7684\u540d\u5b57";
-  var saveBtn=d.querySelector("[onclick*='SAVE_NICKNAME']");
-  if(saveBtn)saveBtn.textContent="\u2705 \u786e\u5b9a";
-  var tip=d.querySelector("[style*='10px'][style*='504030']");
-  if(tip)tip.textContent="\u540d\u5b57\u5c06\u7528\u4e8e\u6e38\u620f\u6807\u8bc6\uff0c\u672a\u6765\u4e0d\u53ef\u4fee\u6539";
-  d.onclick=function(e){if(e.target===d)FORCE_NAME()
-  // Block game interactions if no name
-  var ol=document.getElementById("nameOverlay");
-  if(!ol){ol=document.createElement("div");ol.id="nameOverlay";ol.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;background:rgba(0,0,0,0.3);";document.body.appendChild(ol);}
+  var closeBtn=d.querySelector(".mc");if(closeBtn)closeBtn.style.display="none";
+  var title=d.querySelector("h2");if(title)title.textContent="\u26a0\ufe0f \u8bf7\u8f93\u5165\u4f60\u7684\u540d\u5b57";
+  var saveBtn=d.querySelector("[onclick*=SAVE_NICKNAME]");if(saveBtn)saveBtn.textContent="\u2705 \u786e\u5b9a";
+  var tip=d.querySelector("[style*=10px][style*=504030]");if(tip)tip.textContent="\u540d\u5b57\u5c06\u7528\u4e8e\u6e38\u620f\u6807\u8bc6\uff0c\u672a\u6765\u4e0d\u53ef\u4fee\u6539";
+  d.onclick=function(e){if(e.target===d)FORCE_NAME()};
+  var ol=document.getElementById("nmOverlay");if(!ol){ol=document.createElement("div");ol.id="nmOverlay";ol.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;background:rgba(0,0,0,0.6);";document.body.appendChild(ol);}
   ol.style.display="block";
-  document.querySelectorAll("#tb button, #bob, #boa, .bt").forEach(function(b){b.disabled=true;b.style.opacity="0.5";b.style.pointerEvents="none";});
-};
-  disableAllBtns();
-  var origSave = window.SAVE_NICKNAME;
-  window.SAVE_NICKNAME = function(){
-    var inp=document.getElementById("nmi");
-    if(!inp)return;
-    var v=inp.value.trim().substring(0,6);
-    if(!v){ST("\u540d\u5b57\u4e0d\u80fd\u4e3a\u7a7a\uff01");inp.focus();return}
-    var badwords=["\u6bdb\u6cfd\u4e1c","\u4e60\u8fd1\u5e73","\u5171\u4ea7\u515a","\u5171\u515a","\u6cd5\u8f6e\u529f","\u516d\u56db","\u5929\u5b89\u95e8","\u6c5f\u6cfd\u6c11","\u80e1\u9526\u6daf","\u5468\u6c38\u5eb7","\u8584\u718a\u6765","\u4ee4\u8ba1\u5212","\u674e\u514b\u5f3a","\u738b\u5c90\u5c71","\u5305\u5b50","\u72ec\u88c1","\u4e13\u5236","\u5171\u532a","\u66b4\u653f","fuck","\u8349\u4f60\u5988","\u64cd\u4f60\u5988","\u50bb\u903c","\u50bbB","\u5988\u7684","\u4ed6\u5988\u7684","\u53bb\u6b7b","\u5783\u573e","\u5e9f\u7269","\u6b7b\u5168\u5bb6","\u5c3c\u739b","\u6eda\u86cb","nmsl","cnm","\u8111\u6b8b","\u75af\u5b50","\u8d31\u4eba","\u5993\u5973","\u755c\u751f","\u72d7\u5a18"];
-    for(var bi=0;bi<badwords.length;bi++){if(v.indexOf(badwords[bi])>=0){ST("\u540d\u5b57\u5305\u542b\u4e0d\u5f53\u5185\u5bb9");return}}
-    G.name=v;
-    G.nrn=Date.now();
-    SV();
+  document.querySelectorAll("#tb button,#bob,#boa,.bt,#bol").forEach(function(e){e.style.pointerEvents="none";e.style.opacity="0.4";});
+  var origSave=window.SAVE_NICKNAME;
+  window.SAVE_NICKNAME=function(){
+    var inp=document.getElementById("nmi");if(!inp)return;
+    var v=inp.value.trim().substring(0,6);if(!v){ST("\u540d\u5b57\u4e0d\u80fd\u4e3a\u7a7a\uff01");inp.focus();return}
+    G.name=v;G.nrn=Date.now();SV();
     d.classList.remove("s");
     if(closeBtn)closeBtn.style.display="";
     d.onclick=function(e){if(e.target===d)d.classList.remove("s")};
-    window.SAVE_NICKNAME = origSave;
-    G._forceNameActive = false;
-    enableAllBtns();
-    UPDATE_NAME_DISPLAY();
-    ST("\u2705 \u6b22\u8fce\uff0c" + v + "\uff01");RU();RSV();
+    window.SAVE_NICKNAME=origSave;
+    G._forceNameActive=false;
+    var ol=document.getElementById("nmOverlay");if(ol)ol.style.display="none";
+    document.querySelectorAll("#tb button,#bob,#boa,.bt,#bol").forEach(function(e){e.style.pointerEvents="";e.style.opacity="";});
+    UPDATE_NAME_DISPLAY();ST("\u2705 \u6b22\u8fce\uff0c"+v+"\uff01");RU();RSV();
   };
 }
+
 
 function disableAllBtns(){
   document.querySelectorAll("#tb button").forEach(function(b){b.disabled=true;b.style.opacity="0.5";b.style.cursor="not-allowed"});
