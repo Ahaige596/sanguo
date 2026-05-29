@@ -10,7 +10,7 @@
   <div id="rb"></div>
 </div>
 
-<div class="md" <div id="pt" class="pn"><div class="ti">🏰通天塔</div><div style="font-size:12px;color:#806040;text-align:center;margin:4px 0"><span id="towerMaxFloor">最高:第1层</span> | <span id="towerDailyInfo">今日:3/3</span></div><div style="text-align:center;margin:8px 0"><div style="font-size:36px;font-weight:700;color:#f0d060" id="towerFloorDisplay">1</div><div style="font-size:11px;color:#a08060">当前层数</div></div><div id="towerMonsterInfo" style="text-align:center;margin:8px 0;padding:8px;background:rgba(0,0,0,.2);border-radius:8px"></div><div class="fc" style="margin-top:8px"><button class="bt bg bs" onclick="TOWER_ENTER()">⚔️挑战</button><button class="bt br bs" id="towerSweepBtn" onclick="TOWER_SWEEP()">🔄扫荡</button></div><div style="margin-top:6px;font-size:10px;color:#605040;text-align:center">⚡每5层BOSS战 | 每日3次免费</div></div>id="nmModal" onclick="if(event.target===this)this.classList.remove('s')">
+<div class="md" <div id="pt" class="pn"><div class="ti">🏰通天塔</div><div style="font-size:12px;color:#806040;text-align:center;margin:4px 0"><span id="towerMaxFloor">最高:第1层</span> | <span id="towerDailyInfo">今日:3/3</span></div><div style="text-align:center;margin:8px 0"><div style="font-size:36px;font-weight:700;color:#f0d060" id="towerFloorDisplay">1</div><div style="font-size:11px;color:#a08060">当前层数</div></div><div id="towerMonsterInfo" style="text-align:center;margin:8px 0;padding:8px;background:rgba(0,0,0,.2);border-radius:8px"></div><div class="fc" style="margin-top:8px"><button class="bt bg bs" onclick="TOWER_ENTER()">⚔️挑战</button><button class="bt br bs" id="towerSweepBtn" onclick="TOWER_SWEEP()">🔄扫荡</button></div><div style="margin-top:6px;font-size:10px;color:#605040;text-align:center">⚡每5层BOSS战 | 每日3次免费</div></div><div class="md" id="nmModal" onclick="if(event.target===this)this.classList.remove('s')">
   <div class="mbx" style="max-width:320px">
     <button class="mc" onclick="document.getElementById('nmModal').classList.remove('s')">✖</button>
     <h2>📝修改昵称</h2>
@@ -562,6 +562,7 @@ function FORCE_NAME(){
 }
 
 
+
 function disableAllBtns(){
   document.querySelectorAll("#tb button").forEach(function(b){b.disabled=true;b.style.opacity="0.5";b.style.cursor="not-allowed"});
   document.querySelectorAll(".mbx button.bt").forEach(function(b){b.disabled=false});
@@ -570,31 +571,24 @@ function enableAllBtns(){
   document.querySelectorAll("#tb button").forEach(function(b){b.disabled=false;b.style.opacity="";b.style.cursor=""});
 }
 function SAVE_NICKNAME(){
-  var i=document.getElementById("nmi");
-  if(!i)return;
-  var v=i.value.trim().substring(0,6);
-  if(!v){ST("昵称不能为空");return
-  // Unblock game
-  var ol=document.getElementById("nameOverlay");if(ol)ol.style.display="none";
-  document.querySelectorAll("#tb button, #bob, #boa, .bt").forEach(function(b){b.disabled=false;b.style.opacity="";b.style.pointerEvents="";});
-}
-  var badwords=["毛泽东","习近平","共产党","共党","法轮功","六四","天安门","郓小平","江泽民","胡锦涛","温家宝","周永康","薄熙来","令计划","赵紫阳","李克强","王岐山","惟尼","包子","独裁","专制","共匪","暴政","fuck","草你妈","操你妈","傻逼","傻B","妈的","他妈的","去死","垃圾","废物","死全家","尼玛","滚蛋","nmsl","cnm","wcnm","沙逼","烢笔","狗���","日你","狗屁","蠢货","脑残","疯子","变态","恶心","贱人","妓女","畜生","杂种","婁子","狗娘"];
-  for(var bi=0;bi<badwords.length;bi++){if(v.indexOf(badwords[bi])>=0){ST("昵称包含不当内容");return}}
+  var i=document.getElementById("nmi");if(!i)return;
+  var v=i.value.trim().substring(0,6);if(!v){ST("\u540d\u5b57\u4e0d\u80fd\u4e3a\u7a7a");i.focus();return}
+  var badwords=["\u6bdb\u6cfd\u4e1c","\u4e60\u8fd1\u5e73","\u5171\u4ea7\u515a","\u5171\u515a","\u6cd5\u8f6e\u529f","\u516d\u56db","\u5929\u5b89\u95e8","\u6c5f\u6cfd\u6c11","\u80e1\u9526\u6daf","\u5468\u6c38\u5eb7","\u8584\u718a\u6765","\u4ee4\u8ba1\u5212","\u674e\u514b\u5f3a","\u738b\u5c90\u5c71","\u5305\u5b50","\u72ec\u88c1","\u4e13\u5236","\u5171\u532a","\u66b4\u653f","fuck","\u8349\u4f60\u5988","\u64cd\u4f60\u5988","\u50bb\u903c","\u50bbB","\u5988\u7684","\u4ed6\u5988\u7684","\u53bb\u6b7b","\u5783\u573e","\u5e9f\u7269","\u6b7b\u5168\u5bb6","\u5c3c\u739b","\u6eda\u86cb","nmsl","cnm","\u8111\u6b8b","\u75af\u5b50","\u8d31\u4eba","\u5993\u5973","\u755c\u751f","\u72d7\u5a18"];
+  for(var bi=0;bi<badwords.length;bi++){if(v.indexOf(badwords[bi])>=0){ST("\u540d\u5b57\u5305\u542b\u4e0d\u5f53\u5185\u5bb9");return}}
   var ts=G.nrn||0;
   if(ts>0&&Date.now()-ts<259200000){
     var left=259200000-(Date.now()-ts);
     var h=Math.floor(left/3600000);
     var m=Math.floor((left%3600000)/60000);
-    ST("冷却中，剩余"+h+"小时"+m+"分");
-    return;
+    ST("\u51b7\u5374\u4e2d\uff0c\u5269\u4f59"+h+"\u5c0f\u65f6"+m+"\u5206");return;
   }
-  G.name=v;
-  G.nrn=Date.now();
-  SV();
-  document.getElementById("nmModal").classList.remove("s");
-  UPDATE_NAME_DISPLAY();
-  ST("✅ 昵称已修改（3天冷却）");
+  G.name=v;G.nrn=Date.now();SV();
+  var modal=document.getElementById("nmModal");if(modal)modal.classList.remove("s");
+  var ol=document.getElementById("nmOverlay");if(ol)ol.style.display="none";
+  document.querySelectorAll("#tb button,#bob,#boa,.bt,#bol").forEach(function(e){e.style.pointerEvents="";e.style.opacity="";});
+  UPDATE_NAME_DISPLAY();ST("\u2705 \u6635\u79f0\u5df2\u4fee\u6539\uff083\u5929\u51b7\u5374\uff09");RU();RSV();
 }
+
 function UPDATE_NAME_DISPLAY(){
   var el=document.getElementById("pnick");
   if(el)el.textContent=G.name||"无名";
