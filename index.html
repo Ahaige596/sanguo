@@ -1782,8 +1782,6 @@ function DC_TICK(){
   DC_RENDER_BATTLE();
 }
 
-// Force daily init before anything else
-if(typeof G!=="undefined"){DAILY_CHECK_RESET();}
 function init(){
   LD();OA();UA();UPDATE_NAME_DISPLAY();CE=ME(G.s);
   if(!G.name){setTimeout(function(){FORCE_NAME()},100)}
@@ -1799,7 +1797,7 @@ function init(){
   document.getElementById("dgFight").onclick=DG_START;
   document.getElementById("dgModal").onclick=function(e){if(e.target===document.getElementById("dgModal")){document.getElementById("dgModal").classList.remove("s")}};
   document.getElementById("md").onclick=function(e){if(e.target===document.getElementById("md"))document.getElementById("md").classList.remove("s")};
-  G.hs.forEach(function(h){if(h&&!h.sk){var _p=SKILL_POOL[h.q];if(_p)h.sk=_p[Math.floor(Math.random()*_p.length)];}});G.eqb.forEach(function(e){if(e.lk===void 0)e.lk=0;});AS();IL();setInterval(UA,3000);DAILY_RENDER();setInterval(function(){DAILY_RENDER()},5000);
+  G.hs.forEach(function(h){if(h&&!h.sk){var _p=SKILL_POOL[h.q];if(_p)h.sk=_p[Math.floor(Math.random()*_p.length)];}});G.eqb.forEach(function(e){if(e.lk===void 0)e.lk=0;});AS();IL();setInterval(UA,3000);DAILY_CHECK_RESET();requestAnimationFrame(function(){DAILY_RENDER();setInterval(DAILY_RENDER,5000)});
 
 
   }
