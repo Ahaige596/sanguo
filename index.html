@@ -1440,7 +1440,6 @@ var DG={}; // {started:0, stage:1, maxStage:1, energy:5, maxEnergy:5}
 
 
 
-
 // ====== 每日任务系统 ======
 var DAILY_TASKS = [
   {id:'fight', name:'\u5F81\u6218\u52C7\u58EB', desc:'\u63A8\u56FE\u80DC\u52293\u6B21', need:3, icon:'\u2694\uFE0F', rewards:{g:50,exp:5}},
@@ -1782,6 +1781,15 @@ function DC_TICK(){
   DC_RENDER_BATTLE();
 }
 
+// Self-init on page load
+(function(){
+  function _dailyBoot(){
+    if(typeof G==='undefined'||typeof DAILY_CHECK_RESET!=='function'){setTimeout(_dailyBoot,100);return;}
+    try{DAILY_CHECK_RESET();DAILY_RENDER();setInterval(DAILY_RENDER,5000);}catch(e){}
+  }
+  if(document.readyState==='complete'){_dailyBoot();}
+  else{window.addEventListener('load',_dailyBoot);}
+})();
 function init(){
   LD();OA();UA();UPDATE_NAME_DISPLAY();CE=ME(G.s);
   if(!G.name){setTimeout(function(){FORCE_NAME()},100)}
@@ -1797,7 +1805,7 @@ function init(){
   document.getElementById("dgFight").onclick=DG_START;
   document.getElementById("dgModal").onclick=function(e){if(e.target===document.getElementById("dgModal")){document.getElementById("dgModal").classList.remove("s")}};
   document.getElementById("md").onclick=function(e){if(e.target===document.getElementById("md"))document.getElementById("md").classList.remove("s")};
-  G.hs.forEach(function(h){if(h&&!h.sk){var _p=SKILL_POOL[h.q];if(_p)h.sk=_p[Math.floor(Math.random()*_p.length)];}});G.eqb.forEach(function(e){if(e.lk===void 0)e.lk=0;});AS();IL();setInterval(UA,3000);DAILY_CHECK_RESET();DAILY_RENDER();setInterval(DAILY_RENDER,5000);
+  G.hs.forEach(function(h){if(h&&!h.sk){var _p=SKILL_POOL[h.q];if(_p)h.sk=_p[Math.floor(Math.random()*_p.length)];}});G.eqb.forEach(function(e){if(e.lk===void 0)e.lk=0;});AS();IL();setInterval(UA,3000);DAILY_CHECK_RESET();
 
 
   }
