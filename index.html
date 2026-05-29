@@ -2158,12 +2158,25 @@ function DC_START_BATTLE(){
 function _dailyBoot(){
   setTimeout(function(){
     try{
-      // Move daily panels into #pr if not already there
+      // Move daily panels into #pr if needed (ps → pr relocation)
+      var _pr=document.getElementById('pr');
       var _dp=document.getElementById('dailyPanel');
       var _dcp=document.getElementById('dailyChallengePanel');
-      var _pr=document.getElementById('pr');
-      if(_dp && _pr && _dp.parentElement && _dp.parentElement.id!=='pr'){_pr.appendChild(_dp);}
-      if(_dcp && _pr && _dcp.parentElement && _dcp.parentElement.id!=='pr'){_pr.appendChild(_dcp);}
+      // Only move if there's exactly one and it's not already in #pr
+      if(_dp && _pr && _dp.parentElement && _dp.parentElement.id!=='pr'){
+        _pr.appendChild(_dp);
+      }
+      if(_dcp && _pr && _dcp.parentElement && _dcp.parentElement.id!=='pr'){
+        _pr.appendChild(_dcp);
+      }
+      // Remove any duplicate dailyPanel that might be left in #ps
+      var _ps=document.getElementById('ps');
+      if(_ps && _dp && _dp.parentElement===_pr){
+        var _dupDaily=_ps.querySelector('#dailyPanel');
+        if(_dupDaily)_dupDaily.remove();
+        var _dupDC=_ps.querySelector('#dailyChallengePanel');
+        if(_dupDC)_dupDC.remove();
+      }
       DAILY_CHECK_RESET();
       var dp=document.getElementById('dailyTasks');
       if(dp)DAILY_RENDER();
