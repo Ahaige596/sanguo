@@ -1786,7 +1786,7 @@ function DC_TICK(){
 (function(){
   function _dailyBoot(){
     if(typeof G==="undefined"||typeof DAILY_CHECK_RESET!=="function"){setTimeout(_dailyBoot,100);return;}
-    try{DAILY_CHECK_RESET();}catch(e){}
+    try{DAILY_CHECK_RESET();setTimeout(function(){var tb=document.querySelector('#tb button[data-tab="r"]');if(tb&&tb.classList.contains('a'))DAILY_RENDER();},200);}catch(e){}
   }
   if(document.readyState==="complete"){_dailyBoot();}
   else{window.addEventListener("load",_dailyBoot);}
