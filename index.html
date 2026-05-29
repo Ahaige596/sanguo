@@ -1502,6 +1502,7 @@ function DAILY_RENDER(){
   if(!G.daily||!G.daily.tasks) return;
   var container=document.getElementById('dailyPanel');
   if(!container) return;
+  var tbBtn=document.querySelector('#tb button[data-tab="r"]');if(tbBtn&&!tbBtn.classList.contains('a')){container.innerHTML='';return;}
   var td=new Date().toDateString();
   var expired=(G.daily.date!==td);
   var html='<div style="background:linear-gradient(145deg,#1a0a00,#2a1a0a);border:1px solid #5a3a0a;border-radius:10px;padding:12px;margin:10px 0">';
