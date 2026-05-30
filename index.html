@@ -1533,7 +1533,6 @@ var SHARD_NEED={0:30,1:40,2:40,3:50,4:50};
 var STAR_SHARD_COST=[0,10,20,40,80,160,320,640];
 function SWT(t){var b=document.querySelectorAll("#tb button");for(var i=0;i<b.length;i++){if(b[i].getAttribute("data-tab")===t){b[i].click();break;}}}
 function TW_INIT_RENDER(){if(!G.tw){G.tw={floor:1,maxFloor:1,dailyAttempts:3,sweepFloor:0};G.tw._date=new Date().toDateString();}var td=new Date().toDateString();if(G.tw._date!==td){G.tw._date=td;G.tw.dailyAttempts=3;G.tw.sweepFloor=0;}TOWER_RENDER();}
-  setTimeout(function(){try{DAILY_CHECK_RESET();DAILY_RENDER();}catch(e){}},500);
 function COMPOSE_HERO(name, q){
   // 在HP中查找
   var poolHero=null;
@@ -2011,6 +2010,7 @@ function DAILY_RENDER(){
   var dp=document.getElementById('dailyTasks');
   if(!dp)return;
   DAILY_CHECK_RESET();
+  setTimeout(function(){try{DAILY_CHECK_RESET();DAILY_RENDER()}catch(e){}},500);
   var h='<div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:2px">';
   DAILY_TASKS.forEach(function(t,i){
     var cur=G.daily&&G.daily.progress?G.daily.progress[t.type]||0:0;
@@ -2039,7 +2039,44 @@ function DAILY_RENDER(){
   h+='</div>';
   dp.innerHTML=h;
   DC_RENDER_BOSS();
-}function DC_RENDER_BOSS(){
+}
+
+function DAILY_CLAIM(idx){
+  var t=DAILY_TASKS[idx];
+  if(!t)return;
+  DAILY_CHECK_RESET();
+  var cur=G.daily&&G.daily.progress?G.daily.progress[t.type]||0:0;
+  if(cur<t.target){ST('任务未完成',1500);return}
+  if(G.daily.claimed[t.type]){ST('已领取',1500);return}
+  if(!G.daily.claimed)G.daily.claimed={};
+  G.daily.claimed[t.type]=true;
+  if(t.reward.g>0)G.g=(G.g||0)+t.reward.g;
+  if(t.reward.d>0)G.j=(G.j||0)+t.reward.d;
+  if(t.reward.r>0)G.rt=(G.rt||0)+t.reward.r;
+  ST('领取'+t.label+'奖励成功！',2000);
+  SV();
+  DAILY_RENDER();
+  UA();
+}
+
+// ===== 每日挑战BOSS系统 =====
+var DC_BOSSES=[
+  {name:'华雄',icon:'👹',hp:500,atk:30,type:'tiger'},
+  {name:'颜良',icon:'💀',hp:800,atk:40,type:'bear'},
+  {name:'文丑',icon:'👺',hp:700,atk:35,type:'wolf'},
+  {name:'吕布',icon:'🐉',hp:1200,atk:60,type:'dragon'},
+  {name:'张角',icon:'⚡',hp:600,atk:50,type:'mage'}
+];
+
+function DC_GET_TODAY_BOSS(){
+  DAILY_CHECK_RESET();
+  if(!G.daily)G.daily={};
+  if(!G.daily.bossSeed)G.daily.bossSeed=Math.floor(Math.random()*DC_BOSSES.length);
+  var bIdx=G.daily.bossSeed%DC_BOSSES.length;
+  return DC_BOSSES[bIdx];
+}
+
+function DC_RENDER_BOSS(){
   var panel=document.getElementById('dcPreview');
   if(!panel)return;
   DAILY_CHECK_RESET();
