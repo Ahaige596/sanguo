@@ -4,18 +4,14 @@
 .eqbtns{display:flex;gap:5px;flex-wrap:wrap;margin:5px 0;justify-content:center}
 
 @media(min-width:501px){.bf{flex-direction:row;justify-content:space-around;min-height:80px}.bf .fs2{width:auto}.bf .es2{width:auto}.fb{min-width:50px;padding:4px 6px}.fb .fi{font-size:20px}.fb .fn{font-size:9px;max-width:46px}.fb .fbar{width:44px;height:4px}.bhp{width:130px;height:10px}.eic{font-size:48px}.enm{font-size:14px}}</style></head><body><div id="head"><h1>⚔️ 三国神话</h1><span id="pnick" style="font-size:20px;color:#f0d060;font-weight:800;cursor:pointer;margin-left:6px;text-shadow:0 0 6px rgba(240,208,96,0.4);letter-spacing:1px" onclick="SHOW_NICKNAME_DIALOG()">🪪无名</span><div class="rbar"><span class="r" title="推图/扫荡获得"><span>💰</span><span class="rl">金币</span><span class="v" id="gld">0</span></span><span class="r" title="BOSS/兑换获得"><span>💎</span><span class="rl">钻石</span><span class="v" id="jde">0</span></span><span class="r" title="招募武将消耗"><span>📜</span><span class="rl">招募令</span><span class="v" id="rct">0</span></span><span class="r" title="当前等级进度"><span>🏆</span><span class="rl">关卡</span><span class="v" id="stg">1-1</span></span><span class="r"><span>⭐</span><span class="rl">等级</span><span class="v" id="plv">1</span></span><span class="r"><span>📊</span><span class="rl">经验</span><span class="v" id="expBar">0/10</span></span></span></div></div><div id="tb"><button class="a" data-tab="r">⚔️征战</button><button data-tab="f">📋阵容</button><button data-tab="h">👥武将</button><button data-tab="e">⚔️装备</button><button data-tab="s">🏪商店</button><button data-tab="a">⚔️竞技</button><button data-tab="t">🏰挑战</button><button data-tab="rk">🏆排行</button></div><div id="pr" class="pn a"><div id="ba"><div class="bf"><div class="es2"><div class="eic" id="eic">👹</div><div class="enm" id="enm">山贼</div><div class="bhp"><div class="bf" id="ehp" style="width:100%"></div></div><div style="font-size:11px;color:#806040"><span id="eht">100/100</span></div></div><div class="vs">⚡</div><div class="fs2"><div style="font-size:11px;color:#80c080;margin-bottom:3px">🛡️我方</div><div class="fhs" id="fhs"></div></div></div><div style="font-size:11px;color:#504030;margin-top:2px;position:relative;z-index:1">关卡 <span id="stg2">1-1</span></div><div class="blog" id="blog">点击"出征"开始战斗</div><div class="binf"><span>战力:<span id="mypw">0</span></span><span>敌方:<span id="epw">0</span></span></div></div><div class="fc"><button class="bt bg" id="bob">⚔️出征</button><button class="bt bb bs" id="boa">▶️自动</button><button class="bt br bs" id="bol" onclick="G.lock=G.lock?0:1;this.textContent=G.lock?'🔒已锁定':'🔓锁定';ST(G.lock?'已锁定':'已解锁',2000);SV()">🔓锁定</button></div><div class="fc" style="margin-top:4px"><button class="bt bg bs" onclick="SWEEP(1)">🔄扫荡(免费)</button><button class="bt br bs" onclick="SWEEP(2)">📺广告扫荡</button><button class="bt bb bs" onclick="DG_ENTER()">🏰秘境</button><button class="bt bgn bs" onclick="EXP_BOOK()">📖经验书(200💰)</button></div>
-<div style="font-size:11px;color:#806040;text-align:center;margin:2px 0"><span id="swinfo" style="margin-right:12px">扫荡:0/5</span><span id="dginfo" style="margin-right:12px">秘���: 第1层 | 今日0/3</span><span style="cursor:pointer;color:#504030" onclick="ADVICE()">💡卡关了?</span></div><div style="font-size:11px;color:#504030;text-align:center;margin:4px 0" id="ofi"></div><div class="ti">🎲招募武将</div><div class="fc"><button class="bt br bs" id="br1">🆓x1(1📜)</button><button class="bt br" id="br10">🔥x10(10📜)</button></div><div class="ti">⭐新招募</div><div class="cg" id="newh">
-    <!-- 每日任务 & 每日挑战 -->
-<div class="ti">每日任务</div><div id="dailyPanel" style="padding:8px"><div id="dailyTasks"></div></div><div class="ti" style="margin-top:12px">每日挑战</div><div id="dailyChallengePanel" style="padding:8px"><div id="dcPreview"><div style="font-size:12px;color:#806040;text-align:center;padding:16px">⚔️ 等待挑战...</div></div></div>
-  </div></div><div id="pf" class="pn"><div class="ti">📋上阵阵容<span style="font-size:12px;color:#605040;font-weight:normal">(最多6人)</span></div><div class="sg" id="fsl"></div><div class="fc"><button class="bt bgn bs" id="bad">🤖自动编队</button><button class="bt br bs" id="bcf">🗑️清空</button></div><div class="ti">👥武将列表</div><div class="cg" id="hlf"></div></div><div id="ph" class="pn"><div class="fc mb"><button class="bt bgn bs" id="bom">🔄一键升星</button><button class="bt bb bs" onclick="SHOW_ATTR_TABLE()">📊属性总表</button></div><div class="ti">👥所有武将</div><div class="cg" id="hl"></div></div><div id="pe" class="pn"><div class="ti">⚔装备栏</div><div class="esl" id="eqslots"><!-- rendered by UEQ --></div><div class="ti">装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div><div class="ti" style="margin-top:8px">装备强化</div><div class="sr"><span class="l">当前可强化至</span><span class="v" id="eqlCap">Lv.0</span></div><div class="sr"><span class="l">解锁上限</span><span class="v" id="eqlUnlock">Lv.1可升至Lv.2</span></div><div class="sr"><span style="font-size:10px;color:#605040">每级+15%属性，上限=玩家等级×2</span></div><div class="bptabs" id="bpt"></div><div class="bpgrid" id="ebg"></div></div><div id="ps" class="pn"><div class="ti">🏪商店</div><div class="fc"><button class="bt bg bs" id="sb1">📜x5(5000💰)</button><button class="bt bg bs" id="sb2">📜x10(100💎)</button></div><div class="ti">💰兑换</div><div class="fc"><button class="bt bg bs" id="scg">1000💰→10💎</button></div><div class="ti">⚡强化</div><div class="sr"><span class="l">攻击加成</span><span class="v" id="sab">x1.0</span></div><div class="sr"><span class="l">生命加成</span><span class="v" id="shb">x1.0</span></div><div class="fc mt"><button class="bt bb bs" id="sua">⬆️攻击</button><button class="bt bb bs" id="suh">⬆️生命</button></div><div class="ti">🏅成就</div><div class="sgp" id="achv"></div><div class="ti">📊总览</div><div class="sgp" id="sov"></div><div class="ti" style="margin-top:12px;color:#504030">📺广告位</div><div id="adslot" style="background:#0a0500;border:1px dashed #3a2a0a;border-radius:8px;padding:20px;text-align:center;color:#504030;font-size:12px;margin:8px 0">[ 横幅广告位 - 替换为你的广告代码 ]</div></div>
+<div style="font-size:11px;color:#806040;text-align:center;margin:2px 0"><span id="swinfo" style="margin-right:12px">扫荡:0/5</span><span id="dginfo" style="margin-right:12px">秘���: 第1层 | 今日0/3</span><span style="cursor:pointer;color:#504030" onclick="ADVICE()">💡卡关了?</span></div><div style="font-size:11px;color:#504030;text-align:center;margin:4px 0" id="ofi"></div><div class="ti">🎲招募武将</div><div class="fc"><button class="bt br bs" id="br1">🆓x1(1📜)</button><button class="bt br" id="br10">🔥x10(10📜)</button></div><div class="ti">⭐新招募</div><div class="cg" id="newh"></div></div><div id="pf" class="pn"><div class="ti">📋上阵阵容<span style="font-size:12px;color:#605040;font-weight:normal">(最多6人)</span></div><div class="sg" id="fsl"></div><div class="fc"><button class="bt bgn bs" id="bad">🤖自动编队</button><button class="bt br bs" id="bcf">🗑️清空</button></div><div class="ti">👥武将列表</div><div class="cg" id="hlf"></div></div><div id="ph" class="pn"><div class="fc mb"><button class="bt bgn bs" id="bom">🔄一键升星</button><button class="bt bb bs" onclick="SHOW_ATTR_TABLE()">📊属性总表</button></div><div class="ti">👥所有武将</div><div class="cg" id="hl"></div></div><div id="pe" class="pn"><div class="ti">⚔装备栏</div><div class="esl" id="eqslots"><!-- rendered by UEQ --></div><div class="ti">装备详情</div><div id="epdetail"><div class="epempty">点击装备查看详情</div></div><div class="ti" style="margin-top:8px">装备强化</div><div class="sr"><span class="l">当前可强化至</span><span class="v" id="eqlCap">Lv.0</span></div><div class="sr"><span class="l">解锁上限</span><span class="v" id="eqlUnlock">Lv.1可升至Lv.2</span></div><div class="sr"><span style="font-size:10px;color:#605040">每级+15%属性，上限=玩家等级×2</span></div><div class="bptabs" id="bpt"></div><div class="bpgrid" id="ebg"></div></div><div id="ps" class="pn"><div class="ti">🏪商店</div><div class="fc"><button class="bt bg bs" id="sb1">📜x5(5000💰)</button><button class="bt bg bs" id="sb2">📜x10(100💎)</button></div><div class="ti">💰兑换</div><div class="fc"><button class="bt bg bs" id="scg">1000💰→10💎</button></div><div class="ti">⚡强化</div><div class="sr"><span class="l">攻击加成</span><span class="v" id="sab">x1.0</span></div><div class="sr"><span class="l">生命加成</span><span class="v" id="shb">x1.0</span></div><div class="fc mt"><button class="bt bb bs" id="sua">⬆️攻击</button><button class="bt bb bs" id="suh">⬆️生命</button></div><div class="ti">🏅成就</div><div class="sgp" id="achv"></div><div class="ti">📊总览</div><div class="sgp" id="sov"></div><div class="ti" style="margin-top:12px;color:#504030">📺广告位</div><div id="adslot" style="background:#0a0500;border:1px dashed #3a2a0a;border-radius:8px;padding:20px;text-align:center;color:#504030;font-size:12px;margin:8px 0">[ 横幅广告位 - 替换为你的广告代码 ]</div></div>
 <div id="pa" class="pn"><div id="ab"><!-- Arena rendered by ARENA_RENDER --><div class="fc" style="margin-top:8px"><button class="bt bg bs" onclick="ARENA_SHOW_REWARDS()">🏆奖励</button></div></div></div>
 <div id="prk" class="pn">
   <div id="rb"></div>
 </div>
 
 <div class="md" <div id="pt" class="pn"><div class="ti">🏰通天塔</div><div style="font-size:12px;color:#806040;text-align:center;margin:4px 0"><span id="towerMaxFloor">最高:第1层</span> | <span id="towerDailyInfo">今日:3/3</span></div><div style="text-align:center;margin:8px 0"><div style="font-size:36px;font-weight:700;color:#f0d060" id="towerFloorDisplay">1</div><div style="font-size:11px;color:#a08060">当前层数</div></div><div id="towerMonsterInfo" style="text-align:center;margin:8px 0;padding:8px;background:rgba(0,0,0,.2);border-radius:8px"></div><div class="fc" style="margin-top:8px"><button class="bt bg bs" onclick="TOWER_ENTER()">⚔️挑战</button><button class="bt br bs" id="towerSweepBtn" onclick="TOWER_SWEEP()">🔄扫荡</button></div><div style="margin-top:6px;font-size:10px;color:#605040;text-align:center">⚡每5层BOSS战 | 每日3次免费</div></div>
-
-
+<div id="pd" class="pn"><div class="ti">每日任务</div><div id="dailyPanel" style="padding:8px"><div id="dailyTasks"></div></div><div class="ti" style="margin-top:12px">每日挑战</div><div id="dailyChallengePanel" style="padding:8px"><div id="dcPreview"><div style="font-size:12px;color:#806040;text-align:center;padding:16px">⚔️ 等待挑战...</div></div></div></div>
 <div class="md" id="nmModal" onclick="if(event.target===this)this.classList.remove('s')">
   <div class="mbx" style="max-width:320px">
     <button class="mc" onclick="document.getElementById('nmModal').classList.remove('s')">✖</button>
@@ -2011,33 +2007,32 @@ function DAILY_RENDER(){
   var dp=document.getElementById('dailyTasks');
   if(!dp)return;
   DAILY_CHECK_RESET();
-  var h='';
+  var h='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px">';
   DAILY_TASKS.forEach(function(t,i){
     var cur=G.daily&&G.daily.progress?G.daily.progress[t.type]||0:0;
     var claimed=G.daily&&G.daily.claimed?G.daily.claimed[t.type]||false:false;
     var done=cur>=t.target;
     var barPct=Math.min(100,cur/t.target*100);
-    h+='<div style="background:rgba(0,0,0,.3);border:1px solid '+(claimed?'#40a040':(done?'#d4a017':'#3a2a0a'))+';border-radius:8px;padding:10px;margin-bottom:8px;display:flex;align-items:center;gap:10px">';
-    h+='<div style="font-size:24px">'+t.icon+'</div>';
-    h+='<div style="flex:1">';
-    h+='<div style="font-size:13px;color:#f0d060">'+t.label+'</div>';
-    h+='<div style="font-size:11px;color:#806040;margin:2px 0">'+cur+'/'+t.target+'</div>';
-    h+='<div style="height:5px;background:#1a0a00;border-radius:3px;overflow:hidden"><div style="height:100%;width:'+barPct+'%;background:linear-gradient(90deg,#8b6914,#d4a017);border-radius:3px;transition:width .3s"></div></div>';
-    h+='</div>';
-    h+='<div style="font-size:10px;color:#806040">';
+    h+='<div style="background:rgba(0,0,0,.3);border:1px solid '+(claimed?'#40a040':(done?'#d4a017':'#3a2a0a'))+';border-radius:8px;padding:8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px">';
+    h+='<div style="font-size:22px">'+t.icon+'</div>';
+    h+='<div style="font-size:12px;color:#f0d060">'+t.label+'</div>';
+    h+='<div style="font-size:10px;color:#806040">'+cur+'/'+t.target+'</div>';
+    h+='<div style="width:100%;height:4px;background:#1a0a00;border-radius:2px;overflow:hidden"><div style="height:100%;width:'+barPct+'%;background:linear-gradient(90deg,#8b6914,#d4a017);border-radius:2px;transition:width .3s"></div></div>';
+    h+='<div style="font-size:9px;color:#806040">';
     if(t.reward.g>0)h+='💰'+t.reward.g+' ';
     if(t.reward.d>0)h+='💎'+t.reward.d+' ';
     if(t.reward.r>0)h+='📜'+t.reward.r+' ';
     h+='</div>';
     if(claimed){
-      h+='<div style="padding:6px 12px;background:#2a4a2a;color:#40a040;border-radius:5px;font-size:11px">已领</div>';
+      h+='<div style="padding:4px 10px;background:#2a4a2a;color:#40a040;border-radius:4px;font-size:10px">已领</div>';
     }else if(done){
-      h+='<button class="bt bs" style="background:linear-gradient(135deg,#8b6914,#d4a017);color:#1a0a00;padding:6px 12px;font-size:11px" onclick="DAILY_CLAIM('+i+')">领取</button>';
+      h+='<button class="bt bs" style="background:linear-gradient(135deg,#8b6914,#d4a017);color:#1a0a00;padding:4px 10px;font-size:10px" onclick="DAILY_CLAIM('+i+')">领取</button>';
     }else{
-      h+='<div style="padding:6px 12px;background:#1a1a0a;color:#605040;border-radius:5px;font-size:11px">进行中</div>';
+      h+='<div style="padding:4px 10px;background:#1a1a0a;color:#605040;border-radius:4px;font-size:10px">进行中</div>';
     }
     h+='</div>';
   });
+  h+='</div>';
   dp.innerHTML=h;
   // 渲染每日挑战BOSS
   DC_RENDER_BOSS();
@@ -2146,7 +2141,16 @@ function DC_START_BATTLE(){
   }
 }
 
-
+// ===== 启动函数 =====
+function _dailyBoot(){
+  setTimeout(function(){
+    try{
+      DAILY_CHECK_RESET();
+      var dp=document.getElementById('dailyTasks');
+      if(dp)DAILY_RENDER();
+    }catch(e){console.log('dailyBoot err:',e)}
+  },500);
+}
 
 function init(){
   LD();OA();UA();UPDATE_NAME_DISPLAY();CE=ME(G.s);
