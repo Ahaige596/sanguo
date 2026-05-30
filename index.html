@@ -507,6 +507,34 @@ function _ARENA_SKILL(casterId,target,sk,atk){
   else if(sk.t=="buff"){var _fh2=window._aFH&&window._aFH[casterId];if(_fh2)_fh2.atkBuff=(_fh2.atkBuff||1)*sk.v;}
 }
 function ARENA_DAILY(){var today=Math.floor(Date.now()/86400000);if(!G.afr||G.afr<today){G.af=G.armx||5;G.afr=today}}
+// ====== 竞技场奖励 ======
+function ARENA_CALC_REWARD(type){var idx=G.ar?G.ar.findIndex(function(x){return x&&x.p&&x.p.indexOf("你")>=0}):-1;var rank=idx>=0?idx+1:0;if(rank<=0){RU();RSV();ST("未��与排名，无奖励");return}var gold=0,dia=0,recruit=0;if(type==='daily'){if(rank===1){gold=5000;dia=50;recruit=5}else if(rank<=3){gold=3000;dia=30;recruit=3}else if(rank<=10){gold=2000;dia=15;recruit=2}else if(rank<=30){gold=1000;dia=8;recruit=1}else if(rank<=50){gold=500;dia=5}else{gold=200;dia=2}}else{if(rank===1){gold=20000;dia=200;recruit=20}else if(rank<=3){gold=12000;dia=100;recruit=10}else if(rank<=10){gold=6000;dia=50;recruit=5}else if(rank<=30){gold=3000;dia=20;recruit=3}else if(rank<=50){gold=1000;dia=10;recruit=1}else{gold=500;dia=5}}G.g=(G.g||0)+gold;G.j=(G.j||0)+dia;G.rt=(G.rt||0)+recruit;var label=type==='daily'?'🏆日奖励':'🏆周奖励';ST(label+' #'+rank+'：💰'+gold+' 💎'+dia+' 📜'+recruit,4000);SV();}
+// ====== 排名奖励面板 ======
+function ARENA_SHOW_REWARDS(){var idx=G.ar?G.ar.findIndex(function(x){return x&&x.p&&x.p.indexOf("你")>=0}):-1;var rank=idx>=0?idx+1:0;var h='<div style="padding:8px;font-size:12px;color:#a08060">';h+='<h3 style="color:#f0d060;margin-bottom:10px;text-align:center">🏆排名奖励</h3>';h+='<div style="margin-bottom:8px;text-align:center;font-size:14px;color:#f0a040">当前'+(rank>0?'#'+rank:'未参战')+'</div>';h+='<hr style="border:1px solid #3a2a0a;margin:8px 0">';h+='<div style="font-size:13px;color:#d4a017;margin-bottom:6px">📅每日（21:00结算）</div>';h+='<div style="font-size:11px;line-height:1.7">#1: 💰5000 💎50 📜5<br>#2-3: 💰3000 💎30 📜3<br>#4-10: 💰2000 💎15 📜2<br>#11-30: 💰1000 💎8 📜1<br>#31-50: 💰500 💎5<br>#51-100: 💰200 💎2</div>';h+='<hr style="border:1px solid #3a2a0a;margin:8px 0">';h+='<div style="font-size:13px;color:#f0a040;margin-bottom:6px">📅周排名（周日21:00结算）</div>';h+='<div style="font-size:11px;line-height:1.7">#1: 💰20000 💎200 📜20<br>#2-3: 💰12000 💎100 📜10<br>#4-10: 💰6000 💎50 📜5<br>#11-30: 💰3000 💎20 📜3<br>#31-50: 💰1000 💎10 📜1<br>#51-100: 💰500 💎5</div>';h+='<div style="text-align:center;margin-top:10px">';h+='<button class="bt bg bs" onclick="ARENA_CALC_REWARD('+String.fromCharCode(39)+'daily'+String.fromCharCode(39)+')">📥领日奖励</button>';h+='<button class="bt bb bs" onclick="ARENA_CALC_REWARD('+String.fromCharCode(39)+'weekly'+String.fromCharCode(39)+')" style="margin-left:6px">📥领周奖励</button>';h+='</div></div>';var d=document.getElementById("md");if(!d){d=document.createElement("div");d.id="md";d.className="md";d.onclick=function(e){if(e.target===this)this.classList.remove("s")};document.body.appendChild(d)}d.innerHTML='<div class="mbx" style="max-width:360px">'+h+'<button class="mc" onclick="this.parentElement.parentElement.classList.remove(\'s\')">✖</button></div>';d.classList.add("s");}
+
+//========== End Arena ==========
+
+
+function SHOW_NICKNAME_DIALOG(){
+  var d=document.getElementById("nmModal");
+  if(!d)return;
+  var i=document.getElementById("nmi");
+  if(!i)return;
+  i.value=G.name||"";
+  var ts=G.nrn||0;
+  var cd=document.getElementById("nmcd");
+  if(cd){
+    if(ts>0){
+      var left=259200000-(Date.now()-ts);
+      if(left>0){
+        var h=Math.floor(left/3600000);
+        var m=Math.floor((left%3600000)/60000);
+        cd.textContent="⏳冷却中 "+h+"小时"+m+"分";
+        cd.style.display="block";
+      }else{cd.style.display="none"}
+    }else{cd.style.display="none"}
+  }
+  d.classList.add("s");
 }
 
 function FORCE_NAME(){
@@ -1505,6 +1533,7 @@ var SHARD_NEED={0:30,1:40,2:40,3:50,4:50};
 var STAR_SHARD_COST=[0,10,20,40,80,160,320,640];
 function SWT(t){var b=document.querySelectorAll("#tb button");for(var i=0;i<b.length;i++){if(b[i].getAttribute("data-tab")===t){b[i].click();break;}}}
 function TW_INIT_RENDER(){if(!G.tw){G.tw={floor:1,maxFloor:1,dailyAttempts:3,sweepFloor:0};G.tw._date=new Date().toDateString();}var td=new Date().toDateString();if(G.tw._date!==td){G.tw._date=td;G.tw.dailyAttempts=3;G.tw.sweepFloor=0;}TOWER_RENDER();}
+  setTimeout(function(){try{DAILY_CHECK_RESET();DAILY_RENDER();}catch(e){}},500);
 function COMPOSE_HERO(name, q){
   // 在HP中查找
   var poolHero=null;
@@ -2009,10 +2038,8 @@ function DAILY_RENDER(){
   });
   h+='</div>';
   dp.innerHTML=h;
-  // render daily boss
   DC_RENDER_BOSS();
-}
-function DC_RENDER_BOSS(){
+}function DC_RENDER_BOSS(){
   var panel=document.getElementById('dcPreview');
   if(!panel)return;
   DAILY_CHECK_RESET();
@@ -2081,7 +2108,20 @@ function DC_START_BATTLE(){
 }
 
 // ===== 启动函数 =====
-if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()};if(this.dataset.tab==="e")UEQ();if(this.dataset.tab==="h")UHL();if(this.dataset.tab==="rk")RSHP();if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()}if(this.dataset.tab==="t"){DAILY_RENDER()}}});
+function _dailyBoot(){
+  setTimeout(function(){
+    try{
+      DAILY_CHECK_RESET();
+      var dp=document.getElementById('dailyTasks');
+      if(dp)DAILY_RENDER();
+    }catch(e){console.log('dailyBoot err:',e)}
+  },500);
+}
+
+function init(){
+  LD();OA();UA();UPDATE_NAME_DISPLAY();CE=ME(G.s);
+  if(!G.name){setTimeout(function(){FORCE_NAME()},100)}
+  document.querySelectorAll("#tb button").forEach(function(b){b.onclick=function(){document.querySelectorAll("#tb button").forEach(function(x){x.classList.remove("a")});document.querySelectorAll(".pn").forEach(function(p){p.classList.remove("a")});this.classList.add("a");document.getElementById("p"+this.dataset.tab).classList.add("a");if(this.dataset.tab==="f")UF();if(this.dataset.tab==='rk'){RSHP();return}if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()};if(this.dataset.tab==="e")UEQ();if(this.dataset.tab==="h")UHL();if(this.dataset.tab==="rk")RSHP();if(this.dataset.tab==="a"){ARENA_DAILY();ARENA_REFRESH();ARENA_RENDER()}if(this.dataset.tab==="t"){DAILY_RENDER()}}});
   document.getElementById("bob").onclick=SB;
   document.getElementById("boa").onclick=function(){G.auto=!G.auto;this.textContent=G.auto?"⏹️自动":"⏹️停止"/*will be overridden*/;if(G.auto)SB()}
   document.getElementById("br1").onclick=function(){DR(1)};document.getElementById("br10").onclick=function(){DR(10)};
