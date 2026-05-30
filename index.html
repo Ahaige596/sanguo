@@ -2010,7 +2010,7 @@ function DAILY_RENDER(){
   var dp=document.getElementById('dailyTasks');
   if(!dp)return;
   DAILY_CHECK_RESET();
-  var h='<div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:2px">';
+  var h='<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px;padding:2px">';
   DAILY_TASKS.forEach(function(t,i){
     var cur=G.daily&&G.daily.progress?G.daily.progress[t.type]||0:0;
     var claimed=G.daily&&G.daily.claimed?G.daily.claimed[t.type]||false:false;
