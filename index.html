@@ -2010,7 +2010,6 @@ function DAILY_RENDER(){
   var dp=document.getElementById('dailyTasks');
   if(!dp)return;
   DAILY_CHECK_RESET();
-  setTimeout(function(){try{DAILY_CHECK_RESET();DAILY_RENDER()}catch(e){}},500);
   var h='<div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:2px">';
   DAILY_TASKS.forEach(function(t,i){
     var cur=G.daily&&G.daily.progress?G.daily.progress[t.type]||0:0;
@@ -2165,6 +2164,8 @@ function init(){
   document.getElementById("bom").onclick=DM;
   TW_INIT_RENDER();
   DAILY_CHECK_RESET();
+  // auto-render daily after init
+  setTimeout(function(){try{DAILY_CHECK_RESET();DAILY_RENDER()}catch(e){}},500);
   document.getElementById("bad").onclick=AD;document.getElementById("bcf").onclick=CF;
   document.getElementById("sb1").onclick=B1;document.getElementById("sb2").onclick=B2;document.getElementById("scg").onclick=CG;
   document.getElementById("sua").onclick=UA2;document.getElementById("suh").onclick=UH2;
