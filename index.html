@@ -2172,23 +2172,39 @@ function SOUND_LEVELUP(){for(var i=0;i<3;i++){setTimeout(function(n){return func
 function SOUND_COIN(){_playTone(1200+Math.random()*400,0.06,'sine',0.04)}
 // ====== 背景音乐 ======
 var _bgmInterval=null;
-var _bgmOn=false;
+var _bgmOn=true; // 默认开启
 var _bgmNotes=[
-  [262,0.4],[294,0.3],[330,0.4],[349,0.2],[392,0.6],[330,0.3],[294,0.3],[262,0.4],
-  [294,0.3],[330,0.4],[392,0.3],[440,0.2],[392,0.6],[330,0.4],[294,0.3],[262,0.4],
-  [330,0.3],[392,0.4],[440,0.3],[523,0.5],[392,0.3],[440,0.3],[523,0.4],[587,0.3],
-  [523,0.5],[440,0.3],[392,0.4],[330,0.3],[294,0.4],[262,0.5],[262,0.3],[330,0.4],
-  [392,0.3],[523,0.5],[440,0.3],[392,0.4],[330,0.3],[294,0.2],[330,0.3],[392,0.5],
-  [523,0.4],[440,0.3],[392,0.3],[330,0.5],[294,0.3],[262,0.4],[330,0.3],[392,0.5]
+  // 更柔和的中国风旋律 - 宫商角徵羽五声音阶
+  // 主题段落 - C宫调
+  [523,0.6],[587,0.4],[659,0.6],[784,0.4],[659,0.4],[587,0.4],[523,0.6],[523,0.3],
+  [659,0.5],[784,0.4],[880,0.5],[784,0.4],[659,0.4],[587,0.4],[523,0.8],[523,0.3],
+  [587,0.4],[523,0.4],[440,0.5],[523,0.4],[587,0.6],[659,0.4],[587,0.5],[523,0.4],
+  [440,0.6],[523,0.4],[587,0.4],[659,0.6],[523,0.8],[440,0.4],[392,0.5],[392,0.3],
+  // 过渡段
+  [392,0.4],[440,0.4],[523,0.6],[440,0.4],[392,0.4],[330,0.4],[294,0.6],[294,0.3],
+  [330,0.5],[392,0.4],[440,0.5],[523,0.5],[440,0.3],[392,0.4],[330,0.8],[330,0.3],
+  // 主题再现
+  [523,0.6],[587,0.4],[659,0.6],[784,0.4],[659,0.4],[587,0.4],[523,0.6],[523,0.3],
+  [659,0.5],[784,0.4],[880,0.5],[784,0.4],[659,0.4],[784,0.4],[880,0.7],[784,0.3],
+  [659,0.5],[587,0.4],[523,0.6],[440,0.4],[392,0.6],[440,0.4],[523,0.5],[587,0.4],
+  [523,0.7],[440,0.4],[392,0.5],[330,0.5],[294,0.6],[330,0.4],[392,0.5],[330,0.4],
+  [294,0.6],[262,0.4],[294,0.4],[330,0.5],[392,0.5],[440,0.4],[523,0.8],[523,0.4]
 ];
 var _bgmIdx=0;
 function _playBgmNote(){if(!_bgmOn||!_audioCtx)return;var n=_bgmNotes[_bgmIdx];if(!n){_bgmIdx=0;n=_bgmNotes[0]}
-  _playTone(n[0],n[1]*0.9,'triangle',0.03);
+  _playTone(n[0],n[1]*0.85,'triangle',0.025);
+  // 偶尔加个和声
+  if(_bgmIdx%4===0){_playTone(n[0]/2,n[1]*0.7,'sine',0.015)}
   _bgmIdx=(_bgmIdx+1)%_bgmNotes.length;
   _bgmInterval=setTimeout(_playBgmNote,n[1]*1000)}
-function BGM_START(){if(_bgmOn)return;_bgmOn=true;_getAC();_bgmIdx=0;_playBgmNote()}
+function BGM_START(){if(_bgmOn&&_bgmStarted)return;_bgmOn=true;_bgmStarted=true;_getAC();_bgmIdx=0;_playBgmNote()}
 function BGM_STOP(){_bgmOn=false;if(_bgmInterval){clearTimeout(_bgmInterval);_bgmInterval=null}}
 function BGM_TOGGLE(){if(_bgmOn){BGM_STOP()}else{BGM_START()}var el=document.getElementById('bgmBtn');if(el)el.textContent=_bgmOn?'🔊':'🔇'}
+// 用户首次点击时自动激活音频
+var _bgmStarted=false;
+function _tryStartBGM(){if(_bgmStarted)return;_bgmStarted=true;BGM_START();document.removeEventListener('click',_tryStartBGM);document.removeEventListener('touchstart',_tryStartBGM)}
+document.addEventListener('click',_tryStartBGM);
+document.addEventListener('touchstart',_tryStartBGM);
 
 function init(){
   LD();OA();UA();UPDATE_NAME_DISPLAY();CE=ME(G.s);
@@ -2212,7 +2228,6 @@ function init(){
 
 
   setTimeout(function(){try{DAILY_CHECK_RESET();DAILY_RENDER()}catch(e){}},500);
-  setTimeout(function(){BGM_START()},1000);
   }
 
 function EQ_STRENGTHEN(id){var ei=G.eqb.findIndex(function(e){return e.id===id});if(ei<0)return;var eq=G.eqb[ei];if(!eq.eqLevel)eq.eqLevel=1;var maxLv=G.lv*2;if(eq.eqLevel>=maxLv){ST("已达等级上限Lv."+maxLv,1500);return}var cost=eq.eqLevel*50+(eq.q+1)*20;if(G.g<cost){ST("金币不足，需"+cost+"💰",1500);return}G.g-=cost;eq.eqLevel++;eq.atk=Math.floor(eq.atk*1.15);eq.hp=Math.floor(eq.hp*1.15);ST("⬆"+eq.n+"强化至Lv."+eq.eqLevel,1500);SV();UA();UEQ();showEqDetail(0,eq.id)}
